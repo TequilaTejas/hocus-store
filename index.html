@@ -1302,6 +1302,126 @@
     .sk-nav-brand .sk-nav-bn, .sk-nav-brand strong{font-size:13.5px;}
     .signin{padding:7px 10px;}
   }
+  /* ===== MERCH: home section ===== */
+  .merch-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:960px){.merch-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.merch-grid{grid-template-columns:1fr;}}
+  .mcard{position:relative; border:1px solid var(--line); border-radius:5px; background:var(--surface); overflow:hidden; display:flex; flex-direction:column; cursor:pointer; transition:transform .26s var(--ease-out), border-color .2s var(--ease-out), box-shadow .26s var(--ease-out);}
+  @media(hover:hover){ .mcard:hover{transform:translateY(-5px); border-color:rgba(180,185,200,.3); box-shadow:0 18px 40px rgba(0,0,0,.5);} }
+  .mc-art{position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .mc-art::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px) 0 0/15px 15px,
+              linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));}
+  .mc-art svg{width:62%; height:62%; position:relative; z-index:1; filter:drop-shadow(0 14px 28px rgba(0,0,0,.5)); transition:transform .4s var(--ease-out);}
+  @media(hover:hover){ .mcard:hover .mc-art svg{transform:scale(1.06);} }
+  .mc-tag{position:absolute; top:12px; left:12px; z-index:2; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:4px 9px; border-radius:3px; background:#f5c451; color:#241a02;}
+  .mc-off{position:absolute; top:12px; right:12px; z-index:2; font-size:12px; font-weight:800; background:#fff; color:#0b0d12; padding:4px 9px; border-radius:4px;}
+  .mc-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:6px; border-top:1px solid rgba(255,255,255,.05);}
+  .mc-cat{font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--mut); font-weight:600;}
+  .mc-title{font-family:var(--font-display); font-size:16px; font-weight:700; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .mc-foot{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:2px;}
+  .mc-price{display:flex; align-items:baseline; gap:7px; font-variant-numeric:tabular-nums;}
+  .mc-now{font-size:18px; font-weight:800; color:#fff;}
+  .mc-mrp{font-size:12px; color:var(--mut); text-decoration:line-through;}
+  .mc-rate{font-size:11px; color:#f5c451; font-weight:600; border:1px solid var(--line); background:var(--surface2); padding:3px 8px; border-radius:4px; white-space:nowrap;}
+  .merch-filters{display:none; gap:8px; flex-wrap:wrap; margin:0 0 18px;}
+  .merch-filters.on{display:flex;}
+  .mf-chip{border:1px solid var(--line); background:var(--surface2); color:var(--ink-2); padding:8px 16px; font-size:12px; font-weight:600; border-radius:99px; cursor:pointer; transition:border-color .15s var(--ease-out), background-color .15s var(--ease-out), color .15s var(--ease-out);}
+  .mf-chip:hover{border-color:var(--line-2); color:#fff;}
+  .mf-chip.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff;}
+  /* nav bag */
+  .sk-nav-bag{position:relative; display:flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:8px; background:#1a1a1a; border:1px solid rgba(255,255,255,.1); color:rgba(255,255,255,.85); cursor:pointer; flex:0 0 auto;}
+  .sk-nav-bag:hover{background:#222;}
+  .sk-nav-bag svg{width:18px; height:18px;}
+  .sk-bag-badge{position:absolute; top:-6px; right:-6px; min-width:17px; height:17px; padding:0 4px; border-radius:9px; background:var(--brand); color:#1a1308; font-size:10px; font-weight:800; display:none; align-items:center; justify-content:center; border:2px solid var(--bg);}
+  .sk-bag-badge.show{display:flex;}
+
+  /* ===== MERCH: SKU detail page (Myntra-style anatomy) ===== */
+  .mp-wrap{display:grid; grid-template-columns:1.02fr 1fr; gap:36px; align-items:start;}
+  @media(max-width:860px){ .mp-wrap{grid-template-columns:1fr;} }
+  .mp-gallery{position:sticky; top:76px;}
+  @media(max-width:860px){ .mp-gallery{position:static;} }
+  .mp-main{position:relative; aspect-ratio:1/1; border:1px solid var(--line); border-radius:5px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .mp-main::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px) 0 0/15px 15px,
+              linear-gradient(180deg, transparent 55%, rgba(0,0,0,.4));}
+  .mp-main svg{width:64%; height:64%; position:relative; z-index:1; filter:drop-shadow(0 18px 36px rgba(0,0,0,.55));}
+  .mp-thumbs{display:flex; gap:8px; margin-top:10px;}
+  .mp-thumb{width:64px; height:64px; border:1px solid var(--line); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; transition:border-color .15s var(--ease-out);}
+  .mp-thumb svg{width:70%; height:70%;}
+  .mp-thumb:hover{border-color:var(--line-2);}
+  .mp-thumb.on{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand);}
+  .mp-brand{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--brand);}
+  .mp-name{font-family:var(--font-display); font-size:clamp(22px,2.6vw,30px); font-weight:800; letter-spacing:-.02em; line-height:1.1; margin:6px 0 4px;}
+  .mp-sub{font-size:13px; color:var(--mut);}
+  .mp-rate-row{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:4px; padding:6px 10px; margin-top:12px; font-size:13px; cursor:pointer;}
+  .mp-rate-row b{color:#fff;} .mp-rate-row .st{color:#f5c451;} .mp-rate-row .cnt{color:var(--mut); font-size:12px; border-left:1px solid var(--line); padding-left:8px;}
+  .mp-hr{border:none; border-top:1px solid var(--line); margin:16px 0;}
+  .mp-price-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; font-variant-numeric:tabular-nums;}
+  .mp-now{font-size:28px; font-weight:800; color:#fff; letter-spacing:-.02em;}
+  .mp-mrp{font-size:15px; color:var(--mut);} .mp-mrp s{text-decoration:line-through;}
+  .mp-offpct{font-size:15px; font-weight:700; color:#7fe0a6;}
+  .mp-tax{font-size:12px; color:var(--success); font-weight:600; margin-top:2px;}
+  .mp-lbl{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); margin:18px 0 10px; display:flex; align-items:center; justify-content:space-between;}
+  .mp-lbl .lnk{font-size:12px; color:var(--brand); cursor:pointer; text-transform:none; letter-spacing:0; font-weight:600;}
+  .mp-lbl .lnk:hover{text-decoration:underline;}
+  .mp-swatches{display:flex; gap:10px;}
+  .mp-sw{width:44px; height:44px; border-radius:6px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .15s var(--ease-out), transform .12s var(--ease-out);}
+  .mp-sw span{width:28px; height:28px; border-radius:4px; border:1px solid rgba(255,255,255,.18);}
+  .mp-sw:hover{border-color:var(--line-2);}
+  .mp-sw.on{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand);}
+  .mp-sw-name{font-size:12px; color:var(--mut); margin-top:8px;}
+  .mp-sizes{display:flex; gap:10px; flex-wrap:wrap;}
+  .mp-sz{min-width:48px; height:48px; padding:0 10px; border-radius:50px; border:1px solid var(--line-2); background:transparent; color:var(--ink-2); font-size:13px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:border-color .15s var(--ease-out), background-color .15s var(--ease-out), color .15s var(--ease-out), transform .12s var(--ease-out);}
+  .mp-sz:hover{border-color:#fff; color:#fff;}
+  .mp-sz.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff;}
+  .mp-sz.out{opacity:.35; cursor:not-allowed; text-decoration:line-through;}
+  .mp-sz:active{transform:scale(.95);}
+  .mp-ctas{display:flex; gap:10px; margin-top:20px;}
+  .mp-ctas .btn{flex:1.4; padding:15px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;}
+  .mp-ctas .btn.ghost{flex:1;}
+  .mp-offers{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:14px 16px; margin-top:16px;}
+  .mp-offer{display:flex; gap:10px; font-size:12.5px; color:var(--ink-2); line-height:1.5; padding:5px 0;}
+  .mp-offer .ic{color:var(--brand); flex:0 0 auto;}
+  .mp-offer b{color:#fff;}
+  .mp-pin-row{display:flex; gap:8px; margin-top:4px;}
+  .mp-pin-row .field-like{flex:1; display:flex; align-items:center; border:1px solid var(--line); background:var(--surface2); border-radius:4px; padding:0 12px; height:44px;}
+  .mp-pin-row input{flex:1; background:transparent; border:none; color:#fff; font-size:13px; outline:none; font-family:inherit;}
+  .mp-pin-row .btn.ghost{padding:0 18px; display:flex; align-items:center;}
+  .mp-pin-result{display:none; margin-top:10px; font-size:12.5px; color:var(--ink-2); line-height:1.7;}
+  .mp-pin-result.on{display:block;}
+  .mp-pin-result b{color:#fff;}
+  .mp-pin-result .ok{color:var(--success); font-weight:600;}
+  .mp-specs{display:grid; grid-template-columns:1fr 1fr; gap:12px 24px; margin-top:4px;}
+  @media(max-width:520px){ .mp-specs{grid-template-columns:1fr;} }
+  .mp-spec .k{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); margin-bottom:2px;}
+  .mp-spec .v{font-size:13px; color:var(--ink); border-bottom:1px solid var(--line); padding-bottom:8px;}
+  .mp-body-copy{font-size:13px; color:var(--ink-2); line-height:1.65; margin:0;}
+  .mp-trust{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px;}
+  @media(max-width:520px){ .mp-trust{grid-template-columns:1fr;} }
+  .mp-trust-i{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:12px; font-size:11.5px; color:var(--ink-2); display:flex; align-items:center; gap:9px; line-height:1.35;}
+  .mp-trust-i svg{flex:0 0 auto; color:var(--brand);}
+  /* ratings block */
+  .mp-rating-grid{display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:18px;}
+  .mp-rating-big{text-align:center;}
+  .mp-rating-big .n{font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1;}
+  .mp-rating-big .s{color:#f5c451; font-size:14px;}
+  .mp-rating-big .c{font-size:11px; color:var(--mut); margin-top:4px;}
+  .mp-bars{display:flex; flex-direction:column; gap:6px;}
+  .mp-bar-row{display:flex; align-items:center; gap:10px; font-size:11px; color:var(--mut); font-variant-numeric:tabular-nums;}
+  .mp-bar-row .tr{flex:1; height:5px; background:var(--line); border-radius:3px; overflow:hidden;}
+  .mp-bar-row .fl{height:100%; background:var(--brand); border-radius:3px;}
+  .mp-review{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:14px 16px; margin-top:10px;}
+  .mp-review .hd{display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:6px;}
+  .mp-review .pill{background:var(--success); color:#fff; font-size:11px; font-weight:700; padding:1px 7px; border-radius:3px;}
+  .mp-review .who{color:var(--mut);}
+  .mp-review p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.55;}
+  /* size chart modal */
+  .szc-table{width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums;}
+  .szc-table th{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); font-weight:600; text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);}
+  .szc-table td{padding:9px 10px; border-bottom:1px solid var(--line); color:var(--ink-2);}
+  .szc-table tr td:first-child{color:#fff; font-weight:700;}
+  .szc-note{font-size:11.5px; color:var(--mut); margin-top:10px; line-height:1.5;}
 </style>
 </head>
 <body>
@@ -1352,6 +1472,10 @@
 
     <!-- RIGHT: region + sign in -->
     <div class="sk-nav-right">
+      <div class="sk-nav-bag kbtn" id="navBag" role="button" tabindex="0" aria-label="Shopping bag">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="sk-bag-badge" id="bagBadge">0</span>
+      </div>
       <div class="region" id="region">
         <div class="sk-nav-region kbtn" id="regionToggle" role="button" tabindex="0" aria-label="Region, currency and language">
           <span id="navFlagEmoji" style="font-size:18px; line-height:1;">&#127482;&#127480;</span>
@@ -1781,6 +1905,20 @@
         <button class="view-more-btn" id="viewMoreBtn">View more gift cards</button>
       </div>
 
+      <!-- ===== MERCH STORE (below gift cards so it never competes with card sales) ===== -->
+      <div class="sec-head" style="margin-top:56px;" id="merchSection">
+        <div>
+          <div class="sec-over">Merch</div>
+          <div class="sec-h">Official Horcus merch</div>
+          <p class="sec-sub" style="margin:6px 0 0;">Tees, hoodies and gear from the squad. Printed on order, shipped worldwide.</p>
+        </div>
+      </div>
+      <div class="merch-filters" id="merchFilters"><!-- filled by JS --></div>
+      <div class="merch-grid" id="merchGrid"><!-- filled by JS --></div>
+      <div style="display:flex; justify-content:center; margin-top:32px;">
+        <button class="view-more-btn" id="merchMoreBtn">View all merch</button>
+      </div>
+
       <!-- ===== STATS BAND: fans served · avg discount · value sold · rating ===== -->
 
       <!-- ===== CREATOR SHOWCASE (hidden for now) ===== -->
@@ -2092,6 +2230,110 @@
   </div>
 </section>
 
+<!-- ============ 2b. MERCH SKU DETAIL ============ -->
+<section class="screen" id="merchpdp">
+  <div class="frame">
+    <div class="pad">
+      <div class="crumb"><span class="crumb-link" id="mpBackHome">Home</span> <span class="crumb-sep">/</span> <span class="crumb-link" id="mpBackMerch">Merch</span> <span class="crumb-sep">/</span> <span class="crumb-cur" id="mpCrumb">Product</span></div>
+
+      <div class="mp-wrap" style="margin-top:18px;">
+        <!-- LEFT: gallery -->
+        <div class="mp-gallery">
+          <div class="mp-main" id="mpMain"></div>
+          <div class="mp-thumbs" id="mpThumbs"></div>
+        </div>
+
+        <!-- RIGHT: buy box -->
+        <div>
+          <div class="mp-brand">Horcus Merch</div>
+          <div class="mp-name" id="mpName">Product</div>
+          <div class="mp-sub" id="mpSubtitle">Official creator merchandise</div>
+          <div class="mp-rate-row" id="mpRateRow"><b id="mpRating">4.6</b><span class="st">&#9733;</span><span class="cnt" id="mpRatingCount">1.2k ratings</span></div>
+
+          <hr class="mp-hr">
+          <div class="mp-price-row">
+            <span class="mp-now" id="mpNow">€29</span>
+            <span class="mp-mrp">MRP <s id="mpMrp">€39</s></span>
+            <span class="mp-offpct" id="mpOff">(26% OFF)</span>
+          </div>
+          <div class="mp-tax">inclusive of all taxes</div>
+
+          <div class="mp-offers">
+            <div class="mp-offer"><span class="ic">&#9679;</span><div><b>Bundle deal:</b> add any gift card to this order and get an extra <b>5% off</b> the merch.</div></div>
+            <div class="mp-offer"><span class="ic">&#9679;</span><div><b>Free shipping</b> on orders above €50. Standard shipping €4.99.</div></div>
+          </div>
+
+          <div id="mpColorBlock">
+            <div class="mp-lbl">Colour <span id="mpSwName" style="color:var(--mut); text-transform:none; letter-spacing:0; font-weight:500;"></span></div>
+            <div class="mp-swatches" id="mpSwatches"></div>
+          </div>
+
+          <div id="mpSizeBlock">
+            <div class="mp-lbl">Select size <span class="lnk" id="mpSizeChart">Size chart &#8250;</span></div>
+            <div class="mp-sizes" id="mpSizes"></div>
+          </div>
+
+          <div class="mp-lbl">Quantity</div>
+          <div class="qstep" style="width:max-content;"><span class="q-btn" id="mpQtyMinus">&minus;</span><span class="q-val" id="mpQtyVal">1</span><span class="q-btn" id="mpQtyPlus">+</span></div>
+
+          <div class="mp-ctas">
+            <div class="btn" id="mpAddBag">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              Add to bag
+            </div>
+            <div class="btn ghost" id="mpBuyNow">Buy now</div>
+          </div>
+
+          <div class="mp-lbl" style="margin-top:22px;">Delivery options</div>
+          <div class="mp-pin-row">
+            <div class="field-like"><input id="mpPin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" autocomplete="off"></div>
+            <div class="btn ghost" id="mpPinCheck">Check</div>
+          </div>
+          <div class="mp-pin-result" id="mpPinResult"></div>
+
+          <div class="mp-trust">
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>100% original, printed on order</div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>7-day easy returns &amp; size exchange</div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cash on delivery available</div>
+          </div>
+
+          <div class="mp-lbl" style="margin-top:24px;">Product details</div>
+          <div class="mp-specs" id="mpSpecs"></div>
+
+          <div class="mp-lbl" style="margin-top:22px;">Size &amp; fit</div>
+          <p class="mp-body-copy" id="mpFitCopy"></p>
+
+          <div class="mp-lbl" style="margin-top:22px;">Material &amp; care</div>
+          <p class="mp-body-copy" id="mpCareCopy"></p>
+        </div>
+      </div>
+
+      <!-- ===== RATINGS & REVIEWS ===== -->
+      <div style="margin-top:56px; max-width:640px;">
+        <div class="sec-h" style="font-size:22px;">Ratings &amp; reviews</div>
+        <div class="mp-rating-grid">
+          <div class="mp-rating-big"><div class="n" id="mpRatingBig">4.6</div><div class="s">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="c" id="mpRatingBigCount">1.2k verified buyers</div></div>
+          <div class="mp-bars" id="mpBars"></div>
+        </div>
+        <div class="mp-review">
+          <div class="hd"><span class="pill">5 &#9733;</span><span class="who">Riya &middot; Verified buyer</span></div>
+          <p>Fabric is way thicker than the usual creator merch. Print survived 6 washes so far, zero cracking. Size runs true.</p>
+        </div>
+        <div class="mp-review">
+          <div class="hd"><span class="pill">4 &#9733;</span><span class="who">Daniel &middot; Verified buyer</span></div>
+          <p>Fit is great and shipping was quick. Wish there were more colourways, but the gold print on black looks clean at LANs.</p>
+        </div>
+      </div>
+
+      <!-- ===== SIMILAR MERCH ===== -->
+      <div style="margin-top:56px;">
+        <div class="sec-h" style="font-size:22px;">You might also like</div>
+        <div class="merch-grid" id="mpSimilar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 3. CHECKOUT ============ -->
 <section class="screen" id="checkout">
   <div class="frame">
@@ -2228,6 +2470,46 @@
     </div>
   </div>
 </section>
+<!-- size chart modal -->
+<div class="gmodal" id="sizeModal">
+  <div class="co-box" style="max-width:420px;">
+    <div class="co-head"><span>Size chart</span><span class="co-x" id="sizeClose">&times;</span></div>
+    <div style="padding:16px 18px 18px;">
+      <table class="szc-table" id="sizeTable"></table>
+      <div class="szc-note">Measured flat across the garment, in inches. Between sizes? Size up for the classic streetwear fit.</div>
+    </div>
+  </div>
+</div>
+
+<!-- merch checkout modal -->
+<div class="gmodal" id="mcoModal">
+  <div class="co-box">
+    <div class="co-head"><span>Checkout</span><span class="co-x" id="mcoClose">&times;</span></div>
+    <div style="padding:16px 18px 18px;">
+      <div style="display:flex; gap:12px; align-items:center; border:1px solid var(--line); border-radius:5px; padding:12px;">
+        <div id="mcoThumb" style="width:54px; height:54px; border-radius:4px; overflow:hidden; display:flex; align-items:center; justify-content:center; flex:0 0 auto;"></div>
+        <div style="min-width:0;">
+          <div style="font-size:13px; font-weight:700;" id="mcoTitle">Item</div>
+          <div class="muted" id="mcoVariant">Size M &middot; Black &middot; Qty 1</div>
+        </div>
+        <div style="margin-left:auto; font-weight:800; font-variant-numeric:tabular-nums;" id="mcoPrice">€29.00</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="lbl">Deliver to</div>
+        <div style="border:1px solid var(--line); border-radius:5px; padding:12px; font-size:12.5px; color:var(--ink-2); line-height:1.6;">
+          <b style="color:#fff;">Alex Gamer</b> &middot; Home<br>221B Baker Street, Frankfurt 60311<br><span class="muted">Arrives in 4–6 days &middot; Free 7-day returns</span>
+        </div>
+      </div>
+      <div style="margin-top:14px; border-top:1px solid var(--line); padding-top:12px; font-size:13px;">
+        <div class="co-line" style="display:flex; justify-content:space-between; padding:3px 0;"><span>Subtotal</span><span id="mcoSub">€29.00</span></div>
+        <div class="co-line" style="display:flex; justify-content:space-between; padding:3px 0;"><span>Shipping</span><span id="mcoShip">€4.99</span></div>
+        <div class="co-total" style="display:flex; justify-content:space-between; padding:8px 0 0; font-weight:800; font-size:15px;"><span>Total</span><span id="mcoTotal">€33.99</span></div>
+      </div>
+      <div class="btn" id="mcoPay" style="margin-top:14px;">Pay €33.99</div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">Copied!</div>
 
 <script>
@@ -3543,6 +3825,375 @@
     // store order
     if(o.orderNo) addFakeOrder(o);
   };
+
+  /* ================================================================
+     MERCH STORE
+     ================================================================ */
+  var MERCH = [
+    { id:'ace-tee', name:'Ace Logo Tee', cat:'Tees', type:'tee', price:29, mrp:39, rating:4.6, ratings:'1.2k', tag:'Bestseller',
+      sub:'Heavyweight oversized cotton tee',
+      colors:[{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'},{n:'Horcus Gold',hex:'#E6A93C',ink:'#221806'},{n:'Bone',hex:'#E8E2D4',ink:'#221806'}],
+      sizes:['S','M','L','XL','XXL'], out:['XXL'],
+      specs:{'Fabric':'240 GSM combed cotton','Fit':'Oversized','Neck':'Ribbed crew neck','Sleeve':'Drop shoulder','Print':'High-density chest crest','Country of origin':'India'},
+      fit:'Boxy, street-style cut with dropped shoulders. The model is 6′0″ with a 38″ chest and wears size M. If you prefer a regular fit, go one size down.',
+      care:'100% combed ring-spun cotton, pre-shrunk. Machine wash cold inside out, tumble dry low, do not iron directly on the print.' },
+    { id:'clutch-tee', name:'Clutch Washed Tee', cat:'Tees', type:'tee', price:32, mrp:45, rating:4.5, ratings:'640', tag:'',
+      sub:'Acid-washed vintage tee',
+      colors:[{n:'Washed Grey',hex:'#6d7178',ink:'#f2f2f2'},{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'}],
+      sizes:['S','M','L','XL','XXL'], out:[],
+      specs:{'Fabric':'220 GSM cotton','Fit':'Relaxed','Neck':'Crew neck','Sleeve':'Half sleeve','Print':'Back spellout + chest hit','Country of origin':'India'},
+      fit:'Relaxed through the chest and waist with a slightly cropped length. True to size.',
+      care:'Garment-dyed cotton — each wash is unique and fades beautifully over time. Wash cold with like colours.' },
+    { id:'radiant-tee', name:'Radiant Tee', cat:'Tees', type:'tee', price:29, mrp:35, rating:4.7, ratings:'880', tag:'',
+      sub:'Classic fit everyday tee',
+      colors:[{n:'Maroon',hex:'#5c1f28',ink:'#F5CD79'},{n:'Jet Black',hex:'#1b1d22',ink:'#ffffff'}],
+      sizes:['S','M','L','XL'], out:[],
+      specs:{'Fabric':'200 GSM cotton','Fit':'Regular','Neck':'Crew neck','Sleeve':'Half sleeve','Print':'Minimal chest crest','Country of origin':'India'},
+      fit:'Classic regular fit — not slim, not oversized. True to size.',
+      care:'Soft-washed cotton jersey. Machine wash cold, hang dry to keep the shape.' },
+    { id:'crew-hoodie', name:'Horcus Crew Hoodie', cat:'Hoodies', type:'hoodie', price:59, mrp:79, rating:4.8, ratings:'2.1k', tag:'Fan favourite',
+      sub:'400 GSM fleece pullover hoodie',
+      colors:[{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'},{n:'Horcus Gold',hex:'#E6A93C',ink:'#221806'}],
+      sizes:['S','M','L','XL','XXL'], out:[],
+      specs:{'Fabric':'400 GSM brushed fleece','Fit':'Oversized','Hood':'Double-layer with drawcords','Pocket':'Kangaroo pocket','Print':'Embroidered crest','Country of origin':'India'},
+      fit:'Heavy, structured oversized fit. The model is 5′10″ and wears size L for the baggy look. Size down for a regular fit.',
+      care:'80% cotton, 20% polyester fleece. Machine wash cold inside out, do not bleach, dry flat. The embroidery needs no special care.' },
+    { id:'duelist-hoodie', name:'Duelist Zip Hoodie', cat:'Hoodies', type:'hoodie', price:64, mrp:89, rating:4.6, ratings:'740', tag:'',
+      sub:'Full-zip hoodie with side pockets',
+      colors:[{n:'Charcoal',hex:'#33363c',ink:'#ffffff'},{n:'Midnight Navy',hex:'#1d2438',ink:'#F5CD79'}],
+      sizes:['S','M','L','XL','XXL'], out:['S'],
+      specs:{'Fabric':'360 GSM loopback fleece','Fit':'Regular','Hood':'Scuba hood','Closure':'YKK full zip','Print':'Sleeve spellout','Country of origin':'India'},
+      fit:'Regular athletic fit — sits at the hip with ribbed cuffs. True to size.',
+      care:'Loopback cotton fleece. Zip up before washing, machine wash cold, tumble dry low.' },
+    { id:'snapback', name:'Crest Snapback Cap', cat:'Accessories', type:'cap', price:24, mrp:32, rating:4.4, ratings:'510', tag:'',
+      sub:'Flat-brim snapback, one size',
+      colors:[{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'},{n:'Horcus Gold',hex:'#E6A93C',ink:'#221806'}],
+      sizes:['One size'], out:[],
+      specs:{'Material':'Cotton twill','Fit':'Adjustable snapback','Brim':'Flat, 7 cm','Print':'3D embroidered crest','Sweatband':'Moisture-wicking','Country of origin':'India'},
+      fit:'Adjustable snap closure fits head sizes 54–62 cm.',
+      care:'Spot clean only with a damp cloth. Do not machine wash — it will lose the brim shape.' },
+    { id:'sipper', name:'Clutch Steel Sipper', cat:'Accessories', type:'bottle', price:19, mrp:25, rating:4.5, ratings:'330', tag:'',
+      sub:'1L insulated steel bottle',
+      colors:[{n:'Brushed Steel',hex:'#9aa2ad',ink:'#22262c'},{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'}],
+      sizes:[], out:[],
+      specs:{'Material':'Double-wall 304 steel','Capacity':'1 litre','Insulation':'12h cold / 6h hot','Lid':'Leak-proof flip sipper','Finish':'Laser-etched crest','Country of origin':'India'},
+      fit:'Fits standard cup holders and side bottle pockets. 26 cm tall.',
+      care:'Hand wash with warm soapy water. Not dishwasher or microwave safe.' },
+    { id:'stickers', name:'Sticker Pack Vol. 1', cat:'Accessories', type:'stickers', price:9, mrp:12, rating:4.9, ratings:'1.8k', tag:'',
+      sub:'12 die-cut vinyl stickers',
+      colors:[{n:'Multi',hex:'#2a2210',ink:'#E6A93C'}],
+      sizes:[], out:[],
+      specs:{'Material':'Matte vinyl','Count':'12 stickers','Size':'5–8 cm each','Finish':'Waterproof, UV-safe','Adhesive':'Removable, no residue','Country of origin':'India'},
+      fit:'Sized for laptops, water bottles and monitor bezels.',
+      care:'Waterproof and dishwasher-safe once applied. Peels off clean without residue.' }
+  ];
+
+  var SIZE_CHARTS = {
+    tee:    {cols:['Size','Chest','Length','Shoulder'], rows:[['S','40"','27"','18"'],['M','42"','28"','19"'],['L','44"','29"','20"'],['XL','46"','30"','21"'],['XXL','48"','31"','22"']]},
+    hoodie: {cols:['Size','Chest','Length','Shoulder'], rows:[['S','42"','26"','19"'],['M','44"','27"','20"'],['L','46"','28"','21"'],['XL','48"','29"','22"'],['XXL','50"','30"','23"']]}
+  };
+
+  /* ---- product art (inline SVG mockups; swap for photos later) ---- */
+  function merchSVG(p, ci, view){
+    var c = p.colors[ci] || p.colors[0];
+    var body = c.hex, ink = c.ink;
+    var edge = 'stroke="rgba(255,255,255,.2)" stroke-width="2" stroke-linejoin="round"';
+    var disp = 'font-family:var(--font-display),sans-serif;font-weight:800;';
+    var crest = function(x,y,r){ return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="'+ink+'" stroke-width="3"/>'+
+      '<text x="'+x+'" y="'+(y+r*0.42)+'" text-anchor="middle" fill="'+ink+'" style="'+disp+'font-size:'+(r*1.2)+'px;">H</text>'; };
+    var word = function(x,y,s){ return '<text x="'+x+'" y="'+y+'" text-anchor="middle" fill="'+ink+'" style="'+disp+'font-size:'+s+'px;letter-spacing:.18em;">HORCUS</text>'; };
+    var g = '';
+    if(p.type==='tee' || p.type==='hoodie'){
+      var garment = '<path d="M60,42 L84,30 C88,44 112,44 116,30 L140,42 L160,78 L137,90 L137,170 L63,170 L63,90 L40,78 Z" fill="'+body+'" '+edge+'/>';
+      if(p.type==='hoodie'){
+        garment += '<path d="M78,36 C78,16 122,16 122,36 C114,30 86,30 78,36 Z" fill="'+body+'" '+edge+'/>' +
+                   '<path d="M92,44 l0,22 M108,44 l0,22" stroke="'+ink+'" stroke-width="3" stroke-linecap="round" fill="none"/>' +
+                   '<path d="M74,138 L126,138 L120,166 L80,166 Z" fill="rgba(0,0,0,.14)" stroke="rgba(255,255,255,.14)" stroke-width="2"/>';
+      }
+      if(view===1){ g = garment + word(100,86,15) + '<text x="100" y="128" text-anchor="middle" fill="'+ink+'" style="'+disp+'font-size:34px;">07</text>'; }
+      else { g = garment + crest(100,92,17) + (p.type==='tee' ? word(100,126,9) : ''); }
+    } else if(p.type==='cap'){
+      g = '<path d="M46,112 C46,58 154,58 154,112 Z" fill="'+body+'" '+edge+'/>' +
+          '<path d="M42,112 L158,112 C182,113 184,126 156,124 L48,118 C40,117 38,113 42,112 Z" fill="'+body+'" '+edge+'/>' +
+          '<path d="M100,58 L100,112" stroke="rgba(0,0,0,.2)" stroke-width="2"/>' + crest(100,92,14);
+    } else if(p.type==='bottle'){
+      g = '<rect x="70" y="52" width="60" height="118" rx="16" fill="'+body+'" '+edge+'/>' +
+          '<rect x="82" y="30" width="36" height="24" rx="7" fill="'+body+'" '+edge+'/>' +
+          (view===1 ? word(100,116,10) : crest(100,105,16));
+    } else { /* stickers */
+      g = '<g transform="rotate(-8 78 88)"><rect x="46" y="56" width="64" height="64" rx="12" fill="#1b1d22" '+edge+'/>'+crest(78,88,17)+'</g>' +
+          '<g transform="rotate(7 130 128)"><rect x="98" y="96" width="64" height="64" rx="12" fill="'+body+'" '+edge+'/>' +
+          '<text x="130" y="134" text-anchor="middle" fill="'+ink+'" style="'+disp+'font-size:13px;letter-spacing:.1em;">GG!</text></g>';
+      if(view===1){ g += '<g transform="rotate(-4 100 40)"><rect x="70" y="20" width="60" height="34" rx="9" fill="#33363c" '+edge+'/>'+ '<text x="100" y="42" text-anchor="middle" fill="#fff" style="'+disp+'font-size:11px;letter-spacing:.14em;">CLUTCH</text></g>'; }
+    }
+    if(view===2){ // print close-up
+      g = '<rect x="30" y="30" width="140" height="140" rx="10" fill="'+body+'" '+edge+'/>' + crest(100,96,34) + word(100,152,12);
+    }
+    if(view===3){ // brand flat
+      g = '<rect x="30" y="55" width="140" height="90" rx="10" fill="#111318" '+edge+'/>' +
+          '<text x="100" y="98" text-anchor="middle" fill="#E6A93C" style="'+disp+'font-size:19px;letter-spacing:.16em;">HORCUS</text>' +
+          '<text x="100" y="122" text-anchor="middle" fill="rgba(255,255,255,.55)" style="font-size:9px;letter-spacing:.34em;">OFFICIAL MERCH</text>';
+    }
+    return '<svg viewBox="0 0 200 200" aria-hidden="true">'+g+'</svg>';
+  }
+  function artBG(p, ci){
+    var c = p.colors[ci] || p.colors[0];
+    return 'background:radial-gradient(75% 75% at 50% 32%, rgba(255,255,255,.10), transparent 65%), var(--surface2);' +
+           'box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); --glow:'+c.hex+';';
+  }
+
+  /* ---- home grid + filters ---- */
+  var merchGridEl = document.getElementById('merchGrid');
+  var merchFiltersEl = document.getElementById('merchFilters');
+  var merchMoreBtn = document.getElementById('merchMoreBtn');
+  var merchExpanded = false, merchFilter = 'All';
+  var MERCH_PREVIEW_COUNT = 4;
+
+  function merchCard(p){
+    var offPct = Math.round((1 - p.price/p.mrp)*100);
+    return '<div class="mcard" role="button" tabindex="0" data-mid="'+p.id+'" aria-label="'+p.name+'">'+
+      '<div class="mc-art" style="'+artBG(p,0)+'">'+
+        (p.tag ? '<span class="mc-tag">'+p.tag+'</span>' : '')+
+        '<span class="mc-off">-'+offPct+'%</span>'+
+        merchSVG(p,0,0)+
+      '</div>'+
+      '<div class="mc-body">'+
+        '<div class="mc-cat">'+p.cat+'</div>'+
+        '<div class="mc-title">'+p.name+'</div>'+
+        '<div class="mc-foot">'+
+          '<div class="mc-price"><span class="mc-now">€'+p.price+'</span><span class="mc-mrp">€'+p.mrp+'</span></div>'+
+          '<span class="mc-rate">'+p.rating+' ★ <span style="color:var(--mut);font-weight:500;">('+p.ratings+')</span></span>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+  function renderMerchGrid(){
+    var list = MERCH.filter(function(p){ return merchFilter==='All' || p.cat===merchFilter; });
+    var visible = merchExpanded ? list : list.slice(0, MERCH_PREVIEW_COUNT);
+    merchGridEl.innerHTML = visible.map(merchCard).join('');
+    var hidden = list.length - visible.length;
+    merchMoreBtn.textContent = merchExpanded ? 'Show less' : 'View all merch ('+MERCH.length+')';
+    merchMoreBtn.style.display = (!merchExpanded && hidden<=0) ? 'none' : '';
+  }
+  function renderMerchFilters(){
+    var cats = ['All','Tees','Hoodies','Accessories'];
+    merchFiltersEl.innerHTML = cats.map(function(c){
+      var n = c==='All' ? MERCH.length : MERCH.filter(function(p){return p.cat===c;}).length;
+      return '<span class="mf-chip'+(merchFilter===c?' on':'')+'" data-cat="'+c+'">'+c+' <span style="opacity:.6;">'+n+'</span></span>';
+    }).join('');
+  }
+  merchMoreBtn.addEventListener('click', function(){
+    merchExpanded = !merchExpanded;
+    // filters only surface in the expanded catalogue view — the compact home strip stays clean
+    merchFiltersEl.classList.toggle('on', merchExpanded);
+    if(!merchExpanded){ merchFilter='All'; renderMerchFilters(); }
+    renderMerchGrid();
+    if(!merchExpanded) document.getElementById('merchSection').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  merchFiltersEl.addEventListener('click', function(e){
+    var chip = e.target.closest('.mf-chip'); if(!chip) return;
+    merchFilter = chip.getAttribute('data-cat');
+    renderMerchFilters(); renderMerchGrid();
+  });
+  function handleMerchCardActivate(e){
+    var card = e.target.closest('.mcard'); if(!card) return;
+    if(e.type==='keydown' && e.key!=='Enter' && e.key!==' ') return;
+    if(e.type==='keydown') e.preventDefault();
+    openMerchPDP(card.getAttribute('data-mid'));
+  }
+  merchGridEl.addEventListener('click', handleMerchCardActivate);
+  merchGridEl.addEventListener('keydown', handleMerchCardActivate);
+  renderMerchFilters(); renderMerchGrid();
+
+  /* ---- bag ---- */
+  var bagCount = 0, bagBadge = document.getElementById('bagBadge');
+  function bagAdd(n){
+    bagCount += n;
+    bagBadge.textContent = bagCount;
+    bagBadge.classList.toggle('show', bagCount>0);
+  }
+  document.getElementById('navBag').addEventListener('click', function(){
+    toast(bagCount===0 ? 'Your bag is empty' : bagCount+' item'+(bagCount>1?'s':'')+' in your bag');
+  });
+
+  /* ---- SKU detail page ---- */
+  var mCur=null, mColor=0, mSize=null, mQty=1, mView=0;
+  var mpMain=document.getElementById('mpMain'), mpThumbs=document.getElementById('mpThumbs');
+
+  function renderGallery(){
+    mpMain.setAttribute('style', artBG(mCur, mColor));
+    mpMain.innerHTML = merchSVG(mCur, mColor, mView);
+    mpThumbs.innerHTML = [0,1,2,3].map(function(v){
+      return '<div class="mp-thumb'+(v===mView?' on':'')+'" data-v="'+v+'" style="'+artBG(mCur,mColor)+'">'+merchSVG(mCur,mColor,v)+'</div>';
+    }).join('');
+  }
+  mpThumbs.addEventListener('click', function(e){
+    var t = e.target.closest('.mp-thumb'); if(!t) return;
+    mView = parseInt(t.getAttribute('data-v'),10); renderGallery();
+  });
+
+  function renderSwatches(){
+    document.getElementById('mpSwatches').innerHTML = mCur.colors.map(function(c,i){
+      return '<div class="mp-sw'+(i===mColor?' on':'')+'" data-i="'+i+'" title="'+c.n+'"><span style="background:'+c.hex+';"></span></div>';
+    }).join('');
+    document.getElementById('mpSwName').textContent = '· '+mCur.colors[mColor].n;
+  }
+  document.getElementById('mpSwatches').addEventListener('click', function(e){
+    var s = e.target.closest('.mp-sw'); if(!s) return;
+    mColor = parseInt(s.getAttribute('data-i'),10);
+    renderSwatches(); renderGallery();
+  });
+
+  function renderSizes(){
+    var block = document.getElementById('mpSizeBlock');
+    if(!mCur.sizes.length){ block.style.display='none'; return; }
+    block.style.display='';
+    document.getElementById('mpSizeChart').style.display = SIZE_CHARTS[mCur.type] ? '' : 'none';
+    document.getElementById('mpSizes').innerHTML = mCur.sizes.map(function(s){
+      var out = mCur.out.indexOf(s)>=0;
+      return '<span class="mp-sz'+(s===mSize?' on':'')+(out?' out':'')+'" data-s="'+s+'">'+s+'</span>';
+    }).join('');
+  }
+  document.getElementById('mpSizes').addEventListener('click', function(e){
+    var s = e.target.closest('.mp-sz'); if(!s || s.classList.contains('out')) return;
+    mSize = s.getAttribute('data-s'); renderSizes();
+  });
+
+  function openMerchPDP(id){
+    mCur = MERCH.filter(function(p){return p.id===id;})[0]; if(!mCur) return;
+    mColor=0; mQty=1; mView=0;
+    mSize = mCur.sizes.length===1 ? mCur.sizes[0] : null;   // auto-pick "One size"
+    var offPct = Math.round((1 - mCur.price/mCur.mrp)*100);
+    document.getElementById('mpCrumb').textContent = mCur.name;
+    document.getElementById('mpName').textContent = mCur.name;
+    document.getElementById('mpSubtitle').textContent = mCur.sub;
+    document.getElementById('mpRating').textContent = mCur.rating;
+    document.getElementById('mpRatingCount').textContent = mCur.ratings+' ratings';
+    document.getElementById('mpNow').textContent = '€'+mCur.price;
+    document.getElementById('mpMrp').textContent = '€'+mCur.mrp;
+    document.getElementById('mpOff').textContent = '('+offPct+'% OFF)';
+    document.getElementById('mpQtyVal').textContent = mQty;
+    document.getElementById('mpSpecs').innerHTML = Object.keys(mCur.specs).map(function(k){
+      return '<div class="mp-spec"><div class="k">'+k+'</div><div class="v">'+mCur.specs[k]+'</div></div>';
+    }).join('');
+    document.getElementById('mpFitCopy').textContent = mCur.fit;
+    document.getElementById('mpCareCopy').textContent = mCur.care;
+    document.getElementById('mpRatingBig').textContent = mCur.rating;
+    document.getElementById('mpRatingBigCount').textContent = mCur.ratings+' verified buyers';
+    var dist = [72,18,6,2,2];
+    document.getElementById('mpBars').innerHTML = dist.map(function(p,i){
+      return '<div class="mp-bar-row"><span>'+(5-i)+' ★</span><span class="tr"><span class="fl" style="width:'+p+'%; display:block;"></span></span><span>'+p+'%</span></div>';
+    }).join('');
+    var similar = MERCH.filter(function(p){return p.id!==mCur.id;})
+      .sort(function(a,b){ return (b.cat===mCur.cat?1:0)-(a.cat===mCur.cat?1:0); }).slice(0,4);
+    document.getElementById('mpSimilar').innerHTML = similar.map(merchCard).join('');
+    document.getElementById('mpPinResult').classList.remove('on');
+    document.getElementById('mpPin').value='';
+    renderSwatches(); renderSizes(); renderGallery();
+    goScreen('merchpdp');
+  }
+  document.getElementById('mpSimilar').addEventListener('click', handleMerchCardActivate);
+  document.getElementById('mpSimilar').addEventListener('keydown', handleMerchCardActivate);
+  document.getElementById('mpBackHome').addEventListener('click', function(){ goScreen('home'); });
+  document.getElementById('mpBackMerch').addEventListener('click', function(){
+    goScreen('home');
+    setTimeout(function(){ document.getElementById('merchSection').scrollIntoView({behavior:'smooth'}); }, 350);
+  });
+
+  /* qty */
+  document.getElementById('mpQtyMinus').addEventListener('click', function(){ if(mQty>1){ mQty--; document.getElementById('mpQtyVal').textContent=mQty; } });
+  document.getElementById('mpQtyPlus').addEventListener('click', function(){ if(mQty<5){ mQty++; document.getElementById('mpQtyVal').textContent=mQty; } else toast('Max 5 per order'); });
+
+  /* size chart modal */
+  var sizeModal = document.getElementById('sizeModal');
+  document.getElementById('mpSizeChart').addEventListener('click', function(){
+    var ch = SIZE_CHARTS[mCur.type]; if(!ch) return;
+    document.getElementById('sizeTable').innerHTML =
+      '<tr>'+ch.cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>'+
+      ch.rows.map(function(r){return '<tr>'+r.map(function(v){return '<td>'+v+'</td>';}).join('')+'</tr>';}).join('');
+    sizeModal.classList.add('open');
+  });
+  document.getElementById('sizeClose').addEventListener('click', function(){ sizeModal.classList.remove('open'); });
+  sizeModal.addEventListener('click', function(e){ if(e.target===sizeModal) sizeModal.classList.remove('open'); });
+
+  /* pincode check */
+  document.getElementById('mpPinCheck').addEventListener('click', function(){
+    var pin = document.getElementById('mpPin').value.trim();
+    var res = document.getElementById('mpPinResult');
+    if(!/^[0-9]{5,6}$/.test(pin)){ toast('Enter a valid pincode'); res.classList.remove('on'); return; }
+    var eta = new Date(); eta.setDate(eta.getDate()+5);
+    var day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][eta.getDay()];
+    var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][eta.getMonth()];
+    res.innerHTML = '<span class="ok">&#10003; Delivers to '+pin+'</span><br>Get it by <b>'+day+', '+eta.getDate()+' '+mon+'</b> &middot; Cash on delivery available<br>Easy 7-day returns &amp; free size exchange';
+    res.classList.add('on');
+  });
+
+  /* add to bag / buy now */
+  function requireSize(){
+    if(mCur.sizes.length && !mSize){ toast('Select a size first'); return false; }
+    return true;
+  }
+  document.getElementById('mpAddBag').addEventListener('click', function(){
+    if(!requireSize()) return;
+    bagAdd(mQty);
+    toast('Added to bag — '+mCur.name+(mSize?' · '+mSize:''));
+  });
+
+  var mcoModal = document.getElementById('mcoModal');
+  document.getElementById('mpBuyNow').addEventListener('click', function(){
+    if(!requireSize()) return;
+    var sub = mCur.price*mQty, ship = sub>=50?0:4.99, total = sub+ship;
+    document.getElementById('mcoThumb').setAttribute('style', artBG(mCur,mColor)+'width:54px;height:54px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;');
+    document.getElementById('mcoThumb').innerHTML = merchSVG(mCur,mColor,0);
+    document.getElementById('mcoTitle').textContent = mCur.name;
+    document.getElementById('mcoVariant').textContent = (mSize?'Size '+mSize+' · ':'')+mCur.colors[mColor].n+' · Qty '+mQty;
+    document.getElementById('mcoSub').textContent = '€'+sub.toFixed(2);
+    document.getElementById('mcoShip').textContent = ship===0 ? 'FREE' : '€'+ship.toFixed(2);
+    document.getElementById('mcoTotal').textContent = '€'+total.toFixed(2);
+    document.getElementById('mcoPay').textContent = 'Pay €'+total.toFixed(2);
+    mcoModal.classList.add('open');
+  });
+  document.getElementById('mcoClose').addEventListener('click', function(){ mcoModal.classList.remove('open'); });
+  mcoModal.addEventListener('click', function(e){ if(e.target===mcoModal) mcoModal.classList.remove('open'); });
+
+  /* merch order confirmation (reuses the confirm screen, swaps codes for a delivery timeline) */
+  var confDefaults = {
+    title: document.getElementById('confirmTitle').textContent,
+    sub:   document.getElementById('confirmSub').textContent
+  };
+  var _rcBeforeMerch = renderConfirmation;
+  renderConfirmation = function(o){       // gift-card orders restore the default copy
+    document.getElementById('confirmTitle').textContent = confDefaults.title;
+    document.getElementById('confirmSub').textContent = confDefaults.sub;
+    _rcBeforeMerch(o);
+  };
+  document.getElementById('mcoPay').addEventListener('click', function(){
+    mcoModal.classList.remove('open');
+    var sub = mCur.price*mQty, ship = sub>=50?0:4.99;
+    var sc = document.getElementById('successCheck');
+    if(sc){ sc.classList.remove('go'); void sc.offsetWidth; sc.classList.add('go'); }
+    document.getElementById('confirmTitle').textContent = 'Order placed!';
+    document.getElementById('confirmSub').textContent = 'Your merch goes to print today. Tracking details will land in your email once it ships.';
+    document.getElementById('confirmOrderNo').textContent = fakeOrderNo();
+    document.getElementById('confirmAmountPaid').textContent = '€'+(sub+ship).toFixed(2);
+    document.getElementById('confirmOrderId').textContent = fakeOrderId().slice(0,26)+'...';
+    document.getElementById('confirmItems').innerHTML =
+      '<div class="cf-item">'+
+        '<div class="cf-item-ic" style="'+artBG(mCur,mColor)+'width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:4px;">'+merchSVG(mCur,mColor,0)+'</div>'+
+        '<div><div class="cf-item-name">'+mCur.name+'</div>'+
+        '<div class="cf-item-desc">'+(mSize?'Size '+mSize+' · ':'')+mCur.colors[mColor].n+' · Qty '+mQty+'</div></div>'+
+      '</div>';
+    document.getElementById('confirmBulk').style.display='none';
+    var eta = new Date(); eta.setDate(eta.getDate()+6);
+    var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][eta.getMonth()];
+    document.getElementById('confirmCodes').innerHTML =
+      '<div style="border:1px solid var(--line); border-radius:5px; padding:16px; font-size:13px; line-height:2; color:var(--ink-2);">'+
+        '<span style="color:var(--success); font-weight:700;">&#9679; Order confirmed</span> &mdash; today<br>'+
+        '<span style="color:var(--mut);">&#9675; Printed &amp; packed</span> &mdash; 1–2 days<br>'+
+        '<span style="color:var(--mut);">&#9675; Delivered</span> &mdash; by <b style="color:#fff;">'+eta.getDate()+' '+mon+'</b>'+
+      '</div>';
+    goScreen('confirm');
+  });
 
 })();
 </script>
