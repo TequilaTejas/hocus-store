@@ -3868,7 +3868,7 @@
       fit:'Classic regular fit — not slim, not oversized. True to size.',
       care:'100% combed ring-spun cotton, pre-shrunk. Machine wash cold inside out, tumble dry low, do not iron directly on the print.' };
     for(var k in o) base[k]=o[k];
-    base.img = 'assets/merch/'+base.id+'-card.jpg';
+    if(!base.img) base.img = 'assets/merch/'+base.id+'-card.jpg';
     return base;
   }
   var MERCH = [
@@ -3878,9 +3878,11 @@
     tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870', acc:true,
       sub:'Indian server moment. You know the one.',
       photos:['assets/merch/ping-999-flat.jpg','assets/merch/ping-999-card.jpg','assets/merch/ping-999-art.jpg'] }),
+    // dark-store image variation (thedarkstore.in style): garment fills the frame, edges melt into the page
     tee({ id:'signature', name:'Signature Script Tee', price:29, mrp:39, rating:4.7, ratings:'980',
+      img:'assets/merch/signature-hero-dark.jpg',
       sub:'Hydraflick’s autograph, across your chest',
-      photos:['assets/merch/signature-flat.jpg','assets/merch/signature-card.jpg','assets/merch/signature-art.jpg'] }),
+      photos:['assets/merch/signature-hero-dark.jpg','assets/merch/signature-detail-dark.jpg','assets/merch/signature-model-dark.jpg','assets/merch/signature-art.jpg'] }),
     tee({ id:'gg-easy', name:'GG… Easy. Tee', price:34, mrp:45, rating:4.8, ratings:'2.3k', tag:'Fan favourite',
       sub:'“GG…” up front. “easy.” on the back.',
       colors:[{n:'Jet Black',hex:'#1b1d22'}],
