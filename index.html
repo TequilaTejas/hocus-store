@@ -4274,7 +4274,9 @@
   function bagCount(){ return bag.reduce(function(s,b){return s+b.qty;},0); }
   function bagSubtotal(){ return bag.reduce(function(s,b){return s+b.price*b.qty;},0); }
   function renderBadge(){ var c=bagCount(); bagBadge.textContent=c; bagBadge.classList.toggle('show', c>0); }
+  function saveBag(){ try{ localStorage.setItem('horcus_bag', JSON.stringify(bag)); }catch(e){} }
   function renderBag(){
+    saveBag();
     renderBadge();
     var n=bagCount(), sub=bagSubtotal();
     document.getElementById('cartHdN').textContent = n+' item'+(n===1?'':'s');
@@ -4331,6 +4333,9 @@
     closeCart();
     checkoutBag();
   });
+  // restore a saved bag so it survives a refresh
+  try{ var _sb=localStorage.getItem('horcus_bag'); if(_sb){ bag=JSON.parse(_sb)||[]; } }catch(e){ bag=[]; }
+  renderBag();
 
   /* ---- SKU detail page ---- */
   var mCur=null, mColor=0, mSize=null, mQty=1, mView=0;
