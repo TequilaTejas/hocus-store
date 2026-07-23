@@ -1426,23 +1426,84 @@
   @media(max-width:520px){ .mp-trust{grid-template-columns:1fr;} }
   .mp-trust-i{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:12px; font-size:11.5px; color:var(--ink-2); display:flex; align-items:center; gap:9px; line-height:1.35;}
   .mp-trust-i svg{flex:0 0 auto; color:var(--brand);}
-  /* ratings block */
-  .mp-rating-grid{display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:18px;}
-  .mp-rating-big{text-align:center;}
-  .mp-rating-big .n{font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1;}
-  .mp-rating-big .s{color:#f5c451; font-size:14px;}
-  .mp-rating-big .c{font-size:11px; color:var(--mut); margin-top:4px;}
-  .mp-bars{display:flex; flex-direction:column; gap:9px; width:100%;}
-  .mp-bar-row{display:grid; grid-template-columns:32px 1fr 38px; align-items:center; gap:12px; font-size:11px; color:var(--mut); font-variant-numeric:tabular-nums;}
-  .mp-bar-row .k{white-space:nowrap;}
-  .mp-bar-row .tr{height:7px; width:100%; background:var(--line); border-radius:99px; overflow:hidden;}
-  .mp-bar-row .fl{display:block; height:100%; min-width:7px; background:linear-gradient(90deg,var(--brand),var(--brand-2)); border-radius:99px;}
-  .mp-bar-row .pct{text-align:right;}
-  .mp-review{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:14px 16px; margin-top:10px;}
-  .mp-review .hd{display:flex; align-items:center; gap:8px; font-size:12px; margin-bottom:6px;}
-  .mp-review .pill{background:var(--success); color:#fff; font-size:11px; font-weight:700; padding:1px 7px; border-radius:3px;}
-  .mp-review .who{color:var(--mut);}
-  .mp-review p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.55;}
+  /* ===== ratings & reviews (revamped) ===== */
+  .rv{margin-top:56px; max-width:820px;}
+  .rv-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;}
+  .rv-write{background:transparent; border:1px solid var(--line-2); color:var(--ink); font-family:inherit; font-size:12.5px; font-weight:600; padding:9px 15px; border-radius:6px; cursor:pointer; transition:border-color .15s var(--ease-out), background-color .15s var(--ease-out);}
+  .rv-write:hover{border-color:var(--brand); background:rgba(var(--brand-rgb),.1);}
+  /* summary */
+  .rv-summary{display:grid; grid-template-columns:auto 1.3fr 1fr; gap:26px; align-items:start; border:1px solid var(--line); border-radius:8px; background:var(--surface); padding:20px 22px;}
+  @media(max-width:720px){ .rv-summary{grid-template-columns:1fr; gap:20px;} }
+  .rv-score{text-align:center; padding-right:22px; border-right:1px solid var(--line);}
+  @media(max-width:720px){ .rv-score{border-right:none; border-bottom:1px solid var(--line); padding:0 0 18px;} }
+  .rv-score-n{font-family:var(--font-display); font-size:52px; font-weight:800; line-height:1; letter-spacing:-.02em;}
+  .rv-stars{display:inline-flex; gap:2px; margin-top:6px;}
+  .rv-star{width:15px; height:15px; position:relative; display:inline-block;}
+  .rv-star svg{width:15px; height:15px; position:absolute; inset:0;}
+  .rv-star .bg{color:var(--line-2);} .rv-star .fg{color:#f5c451; overflow:hidden; position:absolute;}
+  .rv-score-c{font-size:11.5px; color:var(--mut); margin-top:7px;}
+  .rv-rec{font-size:11.5px; color:var(--ink-2); margin-top:10px;}
+  .rv-rec b{color:var(--success); font-weight:700; font-size:13px;}
+  /* distribution bars — clickable filter */
+  .rv-bars{display:flex; flex-direction:column; gap:8px; width:100%;}
+  .rv-bar{display:grid; grid-template-columns:30px 1fr 42px; align-items:center; gap:12px; font-size:11px; color:var(--mut); font-variant-numeric:tabular-nums; background:none; border:none; padding:3px 4px; border-radius:5px; cursor:pointer; font-family:inherit; text-align:left; transition:background-color .14s var(--ease-out);}
+  .rv-bar:hover{background:var(--surface2);}
+  .rv-bar.on{background:rgba(var(--brand-rgb),.12);}
+  .rv-bar .k{white-space:nowrap; display:flex; align-items:center; gap:2px;}
+  .rv-bar .k b{color:var(--ink-2); font-weight:600;}
+  .rv-bar .tr{height:7px; width:100%; background:var(--line); border-radius:99px; overflow:hidden;}
+  .rv-bar .fl{display:block; height:100%; min-width:7px; background:linear-gradient(90deg,var(--brand),var(--brand-2)); border-radius:99px; transition:width .5s var(--ease-out);}
+  .rv-bar .pct{text-align:right;}
+  /* sub-scores (fit / quality / value) */
+  .rv-subs{display:flex; flex-direction:column; gap:14px;}
+  .rv-sub .sl{display:flex; justify-content:space-between; font-size:11px; color:var(--mut); margin-bottom:6px;}
+  .rv-sub .sl b{color:var(--ink); font-weight:600;}
+  .rv-sub .meter{height:6px; background:var(--line); border-radius:99px; position:relative; overflow:hidden;}
+  .rv-sub .meter i{position:absolute; top:0; bottom:0; left:0; background:linear-gradient(90deg,var(--brand),var(--brand-2)); border-radius:99px; transition:width .5s var(--ease-out);}
+  .rv-sub.fit .meter{overflow:visible; background:var(--line);}
+  .rv-sub.fit .meter::before{content:""; position:absolute; left:50%; top:-3px; bottom:-3px; width:1px; background:var(--line-2);}
+  .rv-sub.fit .knob{position:absolute; top:50%; width:11px; height:11px; border-radius:50%; background:var(--brand); transform:translate(-50%,-50%); box-shadow:0 0 0 3px var(--surface); transition:left .5s var(--ease-out);}
+  .rv-sub.fit .ends{display:flex; justify-content:space-between; font-size:10px; color:var(--mut); margin-top:6px;}
+  /* highlight chips */
+  .rv-highlights{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  .rv-chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); border:1px solid var(--line); background:var(--surface); border-radius:99px; padding:7px 13px;}
+  .rv-chip b{color:var(--brand-2); font-weight:600;}
+  /* controls */
+  .rv-controls{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:22px; padding-bottom:6px;}
+  .rv-filters{display:flex; gap:6px; flex-wrap:wrap;}
+  .rv-fchip{font-size:12px; font-weight:600; color:var(--ink-2); border:1px solid var(--line); background:var(--surface); border-radius:99px; padding:6px 13px; cursor:pointer; transition:.14s var(--ease-out);}
+  .rv-fchip:hover{border-color:var(--line-2);}
+  .rv-fchip.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff;}
+  .rv-sort{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mut);}
+  .rv-sort select{font-family:inherit; font-size:12.5px; color:var(--ink); background:var(--surface2); border:1px solid var(--line); border-radius:6px; padding:7px 10px; cursor:pointer;}
+  /* review cards */
+  .rv-list{display:flex; flex-direction:column; gap:12px; margin-top:16px;}
+  .rv-card{border:1px solid var(--line); border-radius:8px; background:var(--surface); padding:16px 18px; animation:screenIn .3s var(--ease-out);}
+  .rv-c-top{display:flex; align-items:center; gap:11px;}
+  .rv-av{width:36px; height:36px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#0b0d12;}
+  .rv-who{min-width:0;}
+  .rv-name{font-size:13px; font-weight:700; display:flex; align-items:center; gap:7px;}
+  .rv-verified{display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:600; color:var(--success);}
+  .rv-verified svg{width:12px; height:12px;}
+  .rv-sub-meta{font-size:11px; color:var(--mut); margin-top:2px;}
+  .rv-c-stars{margin-left:auto; display:inline-flex; gap:1px; flex:0 0 auto;}
+  .rv-c-stars svg{width:13px; height:13px; color:#f5c451;}
+  .rv-title{font-size:13.5px; font-weight:700; margin:12px 0 5px;}
+  .rv-body{margin:0; font-size:13px; color:var(--ink-2); line-height:1.6;}
+  .rv-photos{display:flex; gap:8px; margin-top:12px;}
+  .rv-photo{width:60px; height:60px; border-radius:6px; overflow:hidden; border:1px solid var(--line); cursor:pointer; flex:0 0 auto; transition:border-color .15s var(--ease-out), transform .15s var(--ease-out);}
+  .rv-photo:hover{border-color:var(--brand); transform:scale(1.04);}
+  .rv-photo img{width:100%; height:100%; object-fit:cover;}
+  .rv-c-foot{display:flex; align-items:center; gap:14px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);}
+  .rv-help{display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:11.5px; color:var(--mut); background:transparent; border:1px solid var(--line); border-radius:6px; padding:6px 11px; cursor:pointer; transition:.14s var(--ease-out);}
+  .rv-help:hover{border-color:var(--line-2); color:var(--ink);}
+  .rv-help.on{border-color:var(--brand); color:var(--brand-2); background:rgba(var(--brand-rgb),.1);}
+  .rv-help svg{width:13px; height:13px;}
+  .rv-date{margin-left:auto; font-size:11px; color:var(--mut);}
+  .rv-empty{text-align:center; color:var(--mut); font-size:13px; padding:28px; border:1px dashed var(--line); border-radius:8px;}
+  .rv-more{width:100%; margin-top:14px; padding:13px; background:var(--surface2); border:1px solid var(--line); border-radius:8px; color:var(--ink-2); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s var(--ease-out);}
+  .rv-more:hover{border-color:var(--line-2); color:#fff;}
+  .rv-more[hidden]{display:none;}
   /* PDP collapsible info blocks */
   .mp-acc{border:1px solid var(--line); border-radius:5px; background:var(--surface); margin-top:12px; overflow:hidden;}
   .mp-acc-h{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; cursor:pointer; user-select:none;
@@ -2363,20 +2424,44 @@
       </div>
 
       <!-- ===== RATINGS & REVIEWS ===== -->
-      <div style="margin-top:56px; max-width:640px;">
-        <div class="sec-h" style="font-size:22px;">Ratings &amp; reviews</div>
-        <div class="mp-rating-grid">
-          <div class="mp-rating-big"><div class="n" id="mpRatingBig">4.6</div><div class="s">&#9733;&#9733;&#9733;&#9733;&#9733;</div><div class="c" id="mpRatingBigCount">1.2k verified buyers</div></div>
-          <div class="mp-bars" id="mpBars"></div>
+      <div class="rv" id="mpReviews">
+        <div class="rv-head">
+          <div class="sec-h" style="font-size:22px; margin:0;">Ratings &amp; reviews</div>
+          <button class="rv-write" id="rvWrite">＋ Write a review</button>
         </div>
-        <div class="mp-review">
-          <div class="hd"><span class="pill">5 &#9733;</span><span class="who">Riya &middot; Verified buyer</span></div>
-          <p>Fabric is way thicker than the usual creator merch. Print survived 6 washes so far, zero cracking. Size runs true.</p>
+
+        <!-- summary: score + distribution + sub-scores -->
+        <div class="rv-summary">
+          <div class="rv-score">
+            <div class="rv-score-n" id="rvScoreN">4.6</div>
+            <div class="rv-stars" id="rvScoreStars"></div>
+            <div class="rv-score-c" id="rvScoreCount">1,240 ratings</div>
+            <div class="rv-rec"><b id="rvRecPct">94%</b> would recommend</div>
+          </div>
+          <div class="rv-bars" id="rvBars"></div>
+          <div class="rv-subs" id="rvSubs"></div>
         </div>
-        <div class="mp-review">
-          <div class="hd"><span class="pill">4 &#9733;</span><span class="who">Daniel &middot; Verified buyer</span></div>
-          <p>Fit is great and shipping was quick. Wish there were more colourways, but the gold print on black looks clean at LANs.</p>
+
+        <!-- AI-style highlight chips distilled from reviews -->
+        <div class="rv-highlights" id="rvHighlights"></div>
+
+        <!-- controls: filter by star + sort -->
+        <div class="rv-controls">
+          <div class="rv-filters" id="rvFilters"></div>
+          <div class="rv-sort">
+            <label for="rvSortSel">Sort</label>
+            <select id="rvSortSel">
+              <option value="helpful">Most helpful</option>
+              <option value="recent">Most recent</option>
+              <option value="high">Highest rated</option>
+              <option value="low">Lowest rated</option>
+              <option value="photos">With photos</option>
+            </select>
+          </div>
         </div>
+
+        <div class="rv-list" id="rvList"></div>
+        <button class="rv-more" id="rvMore">Show more reviews</button>
       </div>
 
       <!-- ===== SIMILAR MERCH ===== -->
@@ -4169,6 +4254,134 @@
     mSize = s.getAttribute('data-s'); renderSizes();
   });
 
+  /* ================= REVIEWS ENGINE ================= */
+  var STAR = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/></svg>';
+  function bigStars(v){
+    var out=''; for(var i=1;i<=5;i++){
+      var f = Math.max(0, Math.min(1, v-(i-1)))*100;
+      out += '<span class="rv-star"><span class="bg">'+STAR+'</span><span class="fg" style="width:'+f+'%">'+STAR+'</span></span>';
+    } return out;
+  }
+  function rowStars(n){ var o=''; for(var i=0;i<5;i++) o+='<span style="color:'+(i<n?'#f5c451':'var(--line-2)')+'">'+STAR+'</span>'; return o; }
+  var AV_COLORS=['#E6A93C','#7fb0e6','#8ee0a6','#e69ac0','#c0a6e6','#e6b87f'];
+
+  var REVIEW_POOL = [
+    {name:'Riya Menon', s:5, size:'M', ago:'3 days ago', rec:true, help:47, ph:1,
+      title:'Better than store-brand tees', body:'Fabric is way thicker than the usual creator merch. Print survived 6 washes so far, zero cracking. Size runs true — ordered my usual M and it fits perfect.'},
+    {name:'Daniel Okafor', s:4, size:'L', ago:'1 week ago', rec:true, help:31, ph:0,
+      title:'Clean at LANs', body:'Fit is great and shipping was quick. Wish there were more colourways, but the gold print on black looks clean under event lighting.'},
+    {name:'Aarav Shah', s:5, size:'L', ago:'2 weeks ago', rec:true, help:22, ph:1,
+      title:'Print quality is unreal', body:'The print has a slight texture to it, feels premium. Washed inside out and it still looks brand new. Highly recommend sizing up if you want the oversized look.'},
+    {name:'Mia Chen', s:5, size:'S', ago:'2 weeks ago', rec:true, help:18, ph:0,
+      title:'Soft and true to size', body:'Softest tee I own now. I am usually between S and M, went with S and it is a great regular fit. Delivery was 4 days to Bangalore.'},
+    {name:'Kabir Rao', s:4, size:'XL', ago:'3 weeks ago', rec:true, help:12, ph:0,
+      title:'Solid, runs a touch large', body:'Good weight cotton, seams are neat. Runs slightly large so factor that in. Colour is a deep true black, not washed grey.'},
+    {name:'Sofia Ruiz', s:5, size:'M', ago:'1 month ago', rec:true, help:9, ph:1,
+      title:'Worth every rupee', body:'Second Hydraflick tee I have bought. Consistent quality across both. The COD option made it easy for my brother to order too.'},
+    {name:'Ishaan Verma', s:3, size:'M', ago:'1 month ago', rec:false, help:5, ph:0,
+      title:'Nice tee, slow delivery', body:'No complaints about the shirt itself — comfy and the print is sharp. Took 9 days to arrive though, a bit longer than the estimate showed.'},
+    {name:'Lena Fischer', s:5, size:'L', ago:'1 month ago', rec:true, help:4, ph:0,
+      title:'My go-to now', body:'Wear it twice a week and it has held up beautifully. No pilling, no fading. The drop-shoulder cut is exactly what I wanted.'},
+    {name:'Tomás Silva', s:2, size:'S', ago:'2 months ago', rec:false, help:3, ph:0,
+      title:'Sizing chart could be clearer', body:'Shirt quality is fine but the S was tighter than I expected around the chest. Check the measurements twice before ordering.'},
+  ];
+
+  var rvFilter=0, rvSort='helpful', rvShown=3, rvHelpSet={};
+  function rvReviews(){
+    // buyer photos reuse this product's shots
+    var photos = (mCur.photos||[mCur.img]).slice(0,3);
+    return REVIEW_POOL.map(function(r,i){
+      return {
+        id: mCur.id+'-'+i, name:r.name, initials:r.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2),
+        color: AV_COLORS[i%AV_COLORS.length], s:r.s, size:r.size, ago:r.ago, rec:r.rec,
+        help:r.help, order:i, title:r.title, body:r.body,
+        photos: r.ph ? photos.slice(0, 1+(i%2)) : []
+      };
+    });
+  }
+  function rvDist(){
+    var v=mCur.rating;
+    // plausible distribution that averages near the score
+    var p5=Math.round((v-3)/2*100); p5=Math.max(40,Math.min(82,p5));
+    var p4=Math.round((100-p5)*0.62), p3=Math.round((100-p5-p4)*0.6), p2=Math.round((100-p5-p4-p3)*0.5);
+    var p1=100-p5-p4-p3-p2;
+    return [p5,p4,p3,p2,p1];
+  }
+  function renderReviews(){
+    rvFilter=0; rvSort='helpful'; rvShown=3; rvHelpSet={};
+    document.getElementById('rvSortSel').value='helpful';
+    document.getElementById('rvScoreN').textContent = mCur.rating.toFixed(1);
+    document.getElementById('rvScoreStars').innerHTML = bigStars(mCur.rating);
+    document.getElementById('rvScoreCount').textContent = mCur.ratings+' ratings';
+    var dist = rvDist();
+    var rec = Math.min(98, Math.round(dist[0]+dist[1]*0.9));
+    document.getElementById('rvRecPct').textContent = rec+'%';
+    document.getElementById('rvBars').innerHTML = dist.map(function(p,i){
+      var star=5-i;
+      return '<button class="rv-bar" data-star="'+star+'"><span class="k"><b>'+star+'</b>'+STAR.replace('viewBox','width="11" height="11" style="color:#f5c451" viewBox')+'</span>'+
+        '<span class="tr"><span class="fl" style="width:'+p+'%"></span></span><span class="pct">'+p+'%</span></button>';
+    }).join('');
+    // sub-scores
+    var fitPos = mCur.type==='hoodie'||/oversiz/i.test(mCur.fit||'') ? 68 : (/regular|classic/i.test(mCur.fit||'')?50:54);
+    var q=Math.round(mCur.rating/5*100), val=Math.round((mCur.rating-0.2)/5*100);
+    document.getElementById('rvSubs').innerHTML =
+      '<div class="rv-sub fit"><div class="sl"><span>Fit</span><b>'+(fitPos>60?'Runs large':fitPos<45?'Runs small':'True to size')+'</b></div>'+
+        '<div class="meter"><span class="knob" style="left:'+fitPos+'%"></span></div>'+
+        '<div class="ends"><span>Runs small</span><span>Runs large</span></div></div>'+
+      '<div class="rv-sub"><div class="sl"><span>Print &amp; quality</span><b>'+(q/20).toFixed(1)+'/5</b></div><div class="meter"><i style="width:'+q+'%"></i></div></div>'+
+      '<div class="rv-sub"><div class="sl"><span>Value for money</span><b>'+(val/20).toFixed(1)+'/5</b></div><div class="meter"><i style="width:'+val+'%"></i></div></div>';
+    // highlight chips
+    document.getElementById('rvHighlights').innerHTML =
+      ['<b>92%</b> praise print quality','<b>True to size</b> for most','<b>Thick fabric</b>','Fast delivery']
+      .map(function(t){return '<span class="rv-chip">'+t+'</span>';}).join('');
+    // filters
+    var data=rvReviews();
+    var counts=[0,0,0,0,0]; data.forEach(function(r){counts[5-r.s]++;});
+    document.getElementById('rvFilters').innerHTML =
+      '<span class="rv-fchip on" data-f="0">All ('+data.length+')</span>'+
+      [5,4,3,2,1].map(function(st){var c=counts[5-st]; return c?'<span class="rv-fchip" data-f="'+st+'">'+st+' ★ ('+c+')</span>':'';}).join('');
+    applyReviewView();
+  }
+  function applyReviewView(){
+    var data=rvReviews();
+    if(rvFilter) data=data.filter(function(r){return r.s===rvFilter;});
+    var s=rvSort;
+    data.sort(function(a,b){
+      if(s==='recent') return a.order-b.order;
+      if(s==='high') return b.s-a.s || a.order-b.order;
+      if(s==='low') return a.s-b.s || a.order-b.order;
+      if(s==='photos') return (b.photos.length?1:0)-(a.photos.length?1:0) || b.help-a.help;
+      return b.help-a.help; // helpful
+    });
+    var list=document.getElementById('rvList');
+    if(!data.length){ list.innerHTML='<div class="rv-empty">No reviews match this filter yet.</div>'; document.getElementById('rvMore').hidden=true; return; }
+    var shown=data.slice(0,rvShown);
+    list.innerHTML=shown.map(reviewCard).join('');
+    document.getElementById('rvMore').hidden = rvShown>=data.length;
+    document.getElementById('rvMore').textContent='Show more reviews ('+(data.length-rvShown)+')';
+  }
+  function reviewCard(r){
+    var helped=rvHelpSet[r.id];
+    return '<div class="rv-card">'+
+      '<div class="rv-c-top">'+
+        '<div class="rv-av" style="background:'+r.color+'">'+r.initials+'</div>'+
+        '<div class="rv-who"><div class="rv-name">'+r.name+
+          '<span class="rv-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Verified</span></div>'+
+          '<div class="rv-sub-meta">Size bought: '+r.size+(r.rec?' · Recommends this':'')+'</div></div>'+
+        '<div class="rv-c-stars">'+rowStars(r.s)+'</div>'+
+      '</div>'+
+      '<div class="rv-title">'+r.title+'</div>'+
+      '<p class="rv-body">'+r.body+'</p>'+
+      (r.photos.length? '<div class="rv-photos">'+r.photos.map(function(p){return '<div class="rv-photo"><img src="'+p+'" alt="buyer photo" loading="lazy"></div>';}).join('')+'</div>':'')+
+      '<div class="rv-c-foot">'+
+        '<button class="rv-help'+(helped?' on':'')+'" data-id="'+r.id+'">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.3a2 2 0 002-1.7l1.4-9a2 2 0 00-2-2.3z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>'+
+          'Helpful ('+(r.help+(helped?1:0))+')</button>'+
+        '<span class="rv-date">'+r.ago+'</span>'+
+      '</div>'+
+    '</div>';
+  }
+
   function openMerchPDP(id, preSize){
     mCur = MERCH.filter(function(p){return p.id===id;})[0]; if(!mCur) return;
     mColor=0; mQty=1; mView=0;
@@ -4193,12 +4406,7 @@
     }).join('');
     document.getElementById('mpFitCopy').textContent = mCur.fit;
     document.getElementById('mpCareCopy').textContent = mCur.care;
-    document.getElementById('mpRatingBig').textContent = mCur.rating;
-    document.getElementById('mpRatingBigCount').textContent = mCur.ratings+' verified buyers';
-    var dist = [72,18,6,2,2];
-    document.getElementById('mpBars').innerHTML = dist.map(function(p,i){
-      return '<div class="mp-bar-row"><span class="k">'+(5-i)+' ★</span><span class="tr"><span class="fl" style="width:'+p+'%"></span></span><span class="pct">'+p+'%</span></div>';
-    }).join('');
+    renderReviews();
     var similar = MERCH.filter(function(p){return p.id!==mCur.id;})
       .sort(function(a,b){ return (b.cat===mCur.cat?1:0)-(a.cat===mCur.cat?1:0); }).slice(0,4);
     document.getElementById('mpSimilar').innerHTML = similar.map(merchCard).join('');
@@ -4240,6 +4448,36 @@
   /* collapsible info blocks */
   document.querySelectorAll('#merchpdp .mp-acc-h').forEach(function(h){
     h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+  });
+
+  /* reviews interactions */
+  document.getElementById('rvBars').addEventListener('click', function(e){
+    var b=e.target.closest('.rv-bar'); if(!b) return;
+    var st=parseInt(b.getAttribute('data-star'),10);
+    rvFilter = (rvFilter===st?0:st); rvShown=3;
+    document.querySelectorAll('#rvBars .rv-bar').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-star'),10)===rvFilter); });
+    document.querySelectorAll('#rvFilters .rv-fchip').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-f'),10)===rvFilter); });
+    applyReviewView();
+  });
+  document.getElementById('rvFilters').addEventListener('click', function(e){
+    var c=e.target.closest('.rv-fchip'); if(!c) return;
+    rvFilter=parseInt(c.getAttribute('data-f'),10); rvShown=3;
+    document.querySelectorAll('#rvFilters .rv-fchip').forEach(function(x){ x.classList.toggle('on', x===c); });
+    document.querySelectorAll('#rvBars .rv-bar').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-star'),10)===rvFilter); });
+    applyReviewView();
+  });
+  document.getElementById('rvSortSel').addEventListener('change', function(){ rvSort=this.value; rvShown=3; applyReviewView(); });
+  document.getElementById('rvMore').addEventListener('click', function(){ rvShown+=3; applyReviewView(); });
+  document.getElementById('rvList').addEventListener('click', function(e){
+    var h=e.target.closest('.rv-help'); if(!h) return;
+    var id=h.getAttribute('data-id'); rvHelpSet[id]=!rvHelpSet[id];
+    h.classList.toggle('on', rvHelpSet[id]);
+    var base=parseInt(h.textContent.replace(/[^0-9]/g,''),10);
+    h.querySelector('svg')&&(h.lastChild.textContent='Helpful ('+(base+(rvHelpSet[id]?1:-1))+')');
+    applyReviewView();
+  });
+  document.getElementById('rvWrite').addEventListener('click', function(){
+    toast('Thanks! Review form opens after your order is delivered.');
   });
 
   /* pincode check */
