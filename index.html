@@ -1511,6 +1511,21 @@
   .rv-more{width:100%; margin-top:14px; padding:13px; background:var(--surface2); border:1px solid var(--line); border-radius:8px; color:var(--ink-2); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s var(--ease-out);}
   .rv-more:hover{border-color:var(--line-2); color:#fff;}
   .rv-more[hidden]{display:none;}
+  /* ===== sticky PDP buy bar ===== */
+  .pdp-bar{position:fixed; left:0; right:0; bottom:0; z-index:100; display:flex; align-items:center; gap:14px; justify-content:space-between;
+    padding:12px 20px; background:rgba(14,15,18,.92); backdrop-filter:blur(14px); border-top:1px solid var(--line);
+    transform:translateY(120%); transition:transform .3s var(--ease-out); box-shadow:0 -12px 34px rgba(0,0,0,.45);}
+  .pdp-bar.show{transform:none;}
+  .pdp-bar-info{display:flex; align-items:center; gap:12px; min-width:0;}
+  .pdp-bar-thumb{width:42px; height:42px; border-radius:6px; overflow:hidden; flex:0 0 auto; background:var(--surface2);}
+  .pdp-bar-thumb img{width:100%; height:100%; object-fit:cover;}
+  .pdp-bar-name{font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:40vw;}
+  .pdp-bar-price{font-size:13px; color:var(--mut); font-variant-numeric:tabular-nums;}
+  .pdp-bar-price #pdpBarNow{color:#fff; font-weight:800; font-size:15px;}
+  .pdp-bar-size{font-size:12px;}
+  .pdp-bar-cta{display:flex; gap:8px; flex:0 0 auto;}
+  .pdp-bar-cta .btn{padding:11px 18px;}
+  @media(max-width:560px){ .pdp-bar-cta .btn.ghost{display:none;} .pdp-bar-name{max-width:34vw;} }
   /* ===== cart drawer ===== */
   .cart-scrim{position:fixed; inset:0; z-index:120; background:rgba(0,0,0,.6); opacity:0; visibility:hidden; transition:opacity .3s var(--ease-out), visibility .3s;}
   .cart-scrim.open{opacity:1; visibility:visible;}
@@ -2427,7 +2442,7 @@
           <div class="mp-lbl">Quantity</div>
           <div class="qstep" style="width:max-content;"><span class="q-btn" id="mpQtyMinus">&minus;</span><span class="q-val" id="mpQtyVal">1</span><span class="q-btn" id="mpQtyPlus">+</span></div>
 
-          <div class="mp-ctas">
+          <div class="mp-ctas" id="mpCtas">
             <div class="btn" id="mpAddBag">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
               Add to bag
@@ -2656,6 +2671,21 @@
     </div>
   </div>
 </section>
+<!-- ===== sticky PDP buy bar ===== -->
+<div class="pdp-bar" id="pdpBar">
+  <div class="pdp-bar-info">
+    <div class="pdp-bar-thumb" id="pdpBarThumb"></div>
+    <div style="min-width:0;">
+      <div class="pdp-bar-name" id="pdpBarName">Product</div>
+      <div class="pdp-bar-price"><span id="pdpBarNow">€29</span> <span class="pdp-bar-size" id="pdpBarSize"></span></div>
+    </div>
+  </div>
+  <div class="pdp-bar-cta">
+    <button class="btn ghost" id="pdpBarBuy">Buy now</button>
+    <button class="btn" id="pdpBarAdd">Add to bag</button>
+  </div>
+</div>
+
 <!-- ===== cart drawer ===== -->
 <div class="cart-scrim" id="cartScrim"></div>
 <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
@@ -3405,6 +3435,7 @@
     var timer = document.getElementById('offerTimer');
     if(timer) timer.style.display = (id === 'home') ? '' : 'none';
     if(siteNav) siteNav.style.display = (id === 'confirm') ? 'none' : '';
+    if(id !== 'merchpdp'){ var pb=document.getElementById('pdpBar'); if(pb) pb.classList.remove('show'); }
     window.scrollTo({top:0, behavior:'smooth'});
   }
   // navigation like a real site
@@ -4399,6 +4430,7 @@
       stockEl.textContent = 'Hurry — only '+low.n+' left in '+low.size;
       stockEl.classList.add('on');
     } else { stockEl.classList.remove('on'); }
+    document.getElementById('pdpBarSize').textContent = mSize ? '· '+mSize : '';
   }
   document.getElementById('mpSizes').addEventListener('click', function(e){
     var s = e.target.closest('.mp-sz'); if(!s || s.classList.contains('out')) return;
@@ -4551,6 +4583,10 @@
     document.getElementById('mpNow').textContent = '€'+mCur.price;
     document.getElementById('mpMrp').textContent = '€'+mCur.mrp;
     document.getElementById('mpOff').textContent = '('+offPct+'% OFF)';
+    document.getElementById('pdpBarName').textContent = mCur.name;
+    document.getElementById('pdpBarNow').textContent = '€'+mCur.price;
+    document.getElementById('pdpBarThumb').innerHTML = '<img src="'+bagThumb(mCur)+'" alt="">';
+    document.getElementById('pdpBar').classList.remove('show');
     document.getElementById('mpQtyVal').textContent = mQty;
     document.getElementById('mpSpecs').innerHTML = Object.keys(mCur.specs).map(function(k){
       return '<div class="mp-spec"><div class="k">'+k+'</div><div class="v">'+mCur.specs[k]+'</div></div>';
@@ -4660,6 +4696,19 @@
     bagAdd(mQty);
     openCart();
   });
+  /* sticky buy bar: mirror the main CTAs, reveal once the buy box scrolls away */
+  document.getElementById('pdpBarAdd').addEventListener('click', function(){ document.getElementById('mpAddBag').click(); });
+  document.getElementById('pdpBarBuy').addEventListener('click', function(){ document.getElementById('mpBuyNow').click(); });
+  if('IntersectionObserver' in window){
+    var pdpBarEl = document.getElementById('pdpBar');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var onPDP = document.getElementById('merchpdp').classList.contains('active');
+        pdpBarEl.classList.toggle('show', onPDP && !en.isIntersecting);
+      });
+    }, {threshold:0});
+    io.observe(document.getElementById('mpCtas'));
+  }
 
   var mcoModal = document.getElementById('mcoModal');
   document.getElementById('mpBuyNow').addEventListener('click', function(){
