@@ -1314,6 +1314,8 @@
               linear-gradient(180deg, transparent 55%, rgba(0,0,0,.45));}
   .mc-art svg{width:62%; height:62%; position:relative; z-index:1; filter:drop-shadow(0 14px 28px rgba(0,0,0,.5)); transition:transform .4s var(--ease-out);}
   @media(hover:hover){ .mcard:hover .mc-art svg{transform:scale(1.06);} }
+  .mc-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .4s var(--ease-out);}
+  @media(hover:hover){ .mcard:hover .mc-art img{transform:scale(1.05);} }
   .mc-tag{position:absolute; top:12px; left:12px; z-index:2; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:4px 9px; border-radius:3px; background:#f5c451; color:#241a02;}
   .mc-off{position:absolute; top:12px; right:12px; z-index:2; font-size:12px; font-weight:800; background:#fff; color:#0b0d12; padding:4px 9px; border-radius:4px;}
   .mc-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:6px; border-top:1px solid rgba(255,255,255,.05);}
@@ -1346,6 +1348,8 @@
     background:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px) 0 0/15px 15px,
               linear-gradient(180deg, transparent 55%, rgba(0,0,0,.4));}
   .mp-main svg{width:64%; height:64%; position:relative; z-index:1; filter:drop-shadow(0 18px 36px rgba(0,0,0,.55));}
+  .mp-main img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .mp-thumb img{width:100%; height:100%; object-fit:cover;}
   .mp-thumbs{display:flex; gap:8px; margin-top:10px;}
   .mp-thumb{width:64px; height:64px; border:1px solid var(--line); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; transition:border-color .15s var(--ease-out);}
   .mp-thumb svg{width:70%; height:70%;}
@@ -2245,7 +2249,7 @@
 
         <!-- RIGHT: buy box -->
         <div>
-          <div class="mp-brand">Horcus Merch</div>
+          <div class="mp-brand" id="mpBrand">Horcus Merch</div>
           <div class="mp-name" id="mpName">Product</div>
           <div class="mp-sub" id="mpSubtitle">Official creator merchandise</div>
           <div class="mp-rate-row" id="mpRateRow"><b id="mpRating">4.6</b><span class="st">&#9733;</span><span class="cnt" id="mpRatingCount">1.2k ratings</span></div>
@@ -3829,28 +3833,56 @@
   /* ================================================================
      MERCH STORE
      ================================================================ */
-  var MERCH = [
-    { id:'ace-tee', name:'Ace Logo Tee', cat:'Tees', type:'tee', price:29, mrp:39, rating:4.6, ratings:'1.2k', tag:'Bestseller',
-      sub:'Heavyweight oversized cotton tee',
-      colors:[{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'},{n:'Horcus Gold',hex:'#E6A93C',ink:'#221806'},{n:'Bone',hex:'#E8E2D4',ink:'#221806'}],
-      sizes:['S','M','L','XL','XXL'], out:['XXL'],
-      specs:{'Fabric':'240 GSM combed cotton','Fit':'Oversized','Neck':'Ribbed crew neck','Sleeve':'Drop shoulder','Print':'High-density chest crest','Country of origin':'India'},
-      fit:'Boxy, street-style cut with dropped shoulders. The model is 6′0″ with a 38″ chest and wears size M. If you prefer a regular fit, go one size down.',
-      care:'100% combed ring-spun cotton, pre-shrunk. Machine wash cold inside out, tumble dry low, do not iron directly on the print.' },
-    { id:'clutch-tee', name:'Clutch Washed Tee', cat:'Tees', type:'tee', price:32, mrp:45, rating:4.5, ratings:'640', tag:'',
-      sub:'Acid-washed vintage tee',
-      colors:[{n:'Washed Grey',hex:'#6d7178',ink:'#f2f2f2'},{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'}],
+  function tee(o){  // shared tee defaults; o overrides
+    var base = { cat:'Tees', type:'tee', brand:'Hydraflick', tag:'',
+      colors:[{n:'Jet Black',hex:'#1b1d22'},{n:'White',hex:'#EDEDED'}],
       sizes:['S','M','L','XL','XXL'], out:[],
-      specs:{'Fabric':'220 GSM cotton','Fit':'Relaxed','Neck':'Crew neck','Sleeve':'Half sleeve','Print':'Back spellout + chest hit','Country of origin':'India'},
-      fit:'Relaxed through the chest and waist with a slightly cropped length. True to size.',
-      care:'Garment-dyed cotton — each wash is unique and fades beautifully over time. Wash cold with like colours.' },
-    { id:'radiant-tee', name:'Radiant Tee', cat:'Tees', type:'tee', price:29, mrp:35, rating:4.7, ratings:'880', tag:'',
-      sub:'Classic fit everyday tee',
-      colors:[{n:'Maroon',hex:'#5c1f28',ink:'#F5CD79'},{n:'Jet Black',hex:'#1b1d22',ink:'#ffffff'}],
-      sizes:['S','M','L','XL'], out:[],
-      specs:{'Fabric':'200 GSM cotton','Fit':'Regular','Neck':'Crew neck','Sleeve':'Half sleeve','Print':'Minimal chest crest','Country of origin':'India'},
+      specs:{'Fabric':'220 GSM combed cotton','Fit':'Regular','Neck':'Ribbed crew neck','Sleeve':'Half sleeve','Print':'Screen print','Country of origin':'India'},
       fit:'Classic regular fit — not slim, not oversized. True to size.',
-      care:'Soft-washed cotton jersey. Machine wash cold, hang dry to keep the shape.' },
+      care:'100% combed ring-spun cotton, pre-shrunk. Machine wash cold inside out, tumble dry low, do not iron directly on the print.' };
+    for(var k in o) base[k]=o[k];
+    base.img = 'assets/merch/'+base.id+'-card.jpg';
+    return base;
+  }
+  var MERCH = [
+    tee({ id:'hydra-block', name:'Hydra Flick Tee', price:29, mrp:39, rating:4.6, ratings:'1.2k', tag:'Bestseller',
+      sub:'The mirrored logo that started it all',
+      photos:['assets/merch/hydra-block-flat.jpg','assets/merch/hydra-block-card.jpg','assets/merch/hydra-block-art.jpg'] }),
+    tee({ id:'signature', name:'Signature Script Tee', price:29, mrp:39, rating:4.7, ratings:'980',
+      sub:'Hydraflick’s autograph, across your chest',
+      photos:['assets/merch/signature-flat.jpg','assets/merch/signature-card.jpg','assets/merch/signature-art.jpg'] }),
+    tee({ id:'gg-easy', name:'GG… Easy. Tee', price:34, mrp:45, rating:4.8, ratings:'2.3k', tag:'Fan favourite',
+      sub:'“GG…” up front. “easy.” on the back.',
+      colors:[{n:'Jet Black',hex:'#1b1d22'}],
+      specs:{'Fabric':'240 GSM combed cotton','Fit':'Oversized','Neck':'Ribbed crew neck','Sleeve':'Drop shoulder','Print':'Front + back puff print','Country of origin':'India'},
+      fit:'Boxy, street-style cut with dropped shoulders. Go one size down for a regular fit.',
+      photos:['assets/merch/gg-easy-flat.jpg','assets/merch/gg-easy-pair.jpg','assets/merch/gg-easy-card.jpg'] }),
+    tee({ id:'ek-game-aur', name:'Ek Game Aur Tee', price:29, mrp:39, rating:4.7, ratings:'1.6k',
+      sub:'Bas ek aur. Promise.',
+      photos:['assets/merch/ek-game-aur-flat.jpg','assets/merch/ek-game-aur-card.jpg','assets/merch/ek-game-aur-art.jpg'] }),
+    tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870',
+      sub:'Indian server moment. You know the one.',
+      photos:['assets/merch/ping-999-flat.jpg','assets/merch/ping-999-card.jpg','assets/merch/ping-999-art.jpg'] }),
+    tee({ id:'ruk-ruk', name:'Ruk Ruk Ruk Tee', price:29, mrp:39, rating:4.5, ratings:'640',
+      sub:'The clip everyone spams in chat',
+      photos:['assets/merch/ruk-ruk-flat.jpg','assets/merch/ruk-ruk-card.jpg','assets/merch/ruk-ruk-art.jpg'] }),
+    tee({ id:'hydra-bhai', name:'Hydra Bhai Tee', price:29, mrp:39, rating:4.6, ratings:'720',
+      sub:'Barcode-certified bhai',
+      photos:['assets/merch/hydra-bhai-flat.jpg','assets/merch/hydra-bhai-card.jpg','assets/merch/hydra-bhai-art.jpg'] }),
+    tee({ id:'face-crest', name:'Face Crest Tee', price:29, mrp:39, rating:4.5, ratings:'530',
+      sub:'The face reveal, embroidered',
+      specs:{'Fabric':'220 GSM combed cotton','Fit':'Regular','Neck':'Ribbed crew neck','Sleeve':'Half sleeve','Print':'Embroidered face patch','Country of origin':'India'},
+      photos:['assets/merch/face-crest-flat.jpg','assets/merch/face-crest-card.jpg','assets/merch/face-crest-art.jpg'] }),
+    tee({ id:'doodle-buddy', name:'Doodle Buddy Tee', price:32, mrp:42, rating:4.8, ratings:'450',
+      sub:'Hand-drawn portrait with the good boy',
+      photos:['assets/merch/doodle-buddy-card.jpg','assets/merch/doodle-buddy-art.jpg'] }),
+    tee({ id:'skeleton', name:'Skeleton Peace Tee', price:31, mrp:42, rating:4.7, ratings:'810',
+      sub:'Ek game aur, till the very end',
+      photos:['assets/merch/skeleton-card.jpg','assets/merch/skeleton-art.jpg'] }),
+    tee({ id:'pastel-pup', name:'Pastel Pup Tee', price:32, mrp:42, rating:4.9, ratings:'390', tag:'Limited',
+      sub:'Gradient pup photo print — shown in the shadow colourway',
+      colors:[{n:'White',hex:'#EDEDED'},{n:'Shadow Wash',hex:'#3a3d46'}],
+      photos:['assets/merch/pastel-pup-flat.jpg','assets/merch/pastel-pup-card.jpg','assets/merch/pastel-pup-art.jpg'] }),
     { id:'crew-hoodie', name:'Horcus Crew Hoodie', cat:'Hoodies', type:'hoodie', price:59, mrp:79, rating:4.8, ratings:'2.1k', tag:'Fan favourite',
       sub:'400 GSM fleece pullover hoodie',
       colors:[{n:'Jet Black',hex:'#1b1d22',ink:'#E6A93C'},{n:'Horcus Gold',hex:'#E6A93C',ink:'#221806'}],
@@ -3947,15 +3979,16 @@
   var merchFiltersEl = document.getElementById('merchFilters');
   var merchMoreBtn = document.getElementById('merchMoreBtn');
   var merchExpanded = false, merchFilter = 'All';
-  var MERCH_PREVIEW_COUNT = 4;
+  var MERCH_PREVIEW_COUNT = 8;
 
   function merchCard(p){
     var offPct = Math.round((1 - p.price/p.mrp)*100);
+    var art = p.img ? '<img src="'+p.img+'" alt="'+p.name+'" loading="lazy">' : merchSVG(p,0,0);
     return '<div class="mcard" role="button" tabindex="0" data-mid="'+p.id+'" aria-label="'+p.name+'">'+
-      '<div class="mc-art" style="'+artBG(p,0)+'">'+
+      '<div class="mc-art" style="'+(p.img?'':artBG(p,0))+'">'+
         (p.tag ? '<span class="mc-tag">'+p.tag+'</span>' : '')+
         '<span class="mc-off">-'+offPct+'%</span>'+
-        merchSVG(p,0,0)+
+        art+
       '</div>'+
       '<div class="mc-body">'+
         '<div class="mc-cat">'+p.cat+'</div>'+
@@ -4021,6 +4054,15 @@
   var mpMain=document.getElementById('mpMain'), mpThumbs=document.getElementById('mpThumbs');
 
   function renderGallery(){
+    if(mCur.photos){
+      if(mView >= mCur.photos.length) mView = 0;
+      mpMain.setAttribute('style','');
+      mpMain.innerHTML = '<img src="'+mCur.photos[mView]+'" alt="'+mCur.name+'">';
+      mpThumbs.innerHTML = mCur.photos.map(function(src,v){
+        return '<div class="mp-thumb'+(v===mView?' on':'')+'" data-v="'+v+'"><img src="'+src+'" alt=""></div>';
+      }).join('');
+      return;
+    }
     mpMain.setAttribute('style', artBG(mCur, mColor));
     mpMain.innerHTML = merchSVG(mCur, mColor, mView);
     mpThumbs.innerHTML = [0,1,2,3].map(function(v){
@@ -4064,6 +4106,7 @@
     mColor=0; mQty=1; mView=0;
     mSize = mCur.sizes.length===1 ? mCur.sizes[0] : null;   // auto-pick "One size"
     var offPct = Math.round((1 - mCur.price/mCur.mrp)*100);
+    document.getElementById('mpBrand').textContent = mCur.brand || 'Horcus Merch';
     document.getElementById('mpCrumb').textContent = mCur.name;
     document.getElementById('mpName').textContent = mCur.name;
     document.getElementById('mpSubtitle').textContent = mCur.sub;
@@ -4143,8 +4186,8 @@
   document.getElementById('mpBuyNow').addEventListener('click', function(){
     if(!requireSize()) return;
     var sub = mCur.price*mQty, ship = sub>=50?0:4.99, total = sub+ship;
-    document.getElementById('mcoThumb').setAttribute('style', artBG(mCur,mColor)+'width:54px;height:54px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;');
-    document.getElementById('mcoThumb').innerHTML = merchSVG(mCur,mColor,0);
+    document.getElementById('mcoThumb').setAttribute('style', (mCur.img?'':artBG(mCur,mColor))+'width:54px;height:54px;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center;flex:0 0 auto;');
+    document.getElementById('mcoThumb').innerHTML = mCur.img ? '<img src="'+mCur.img+'" alt="" style="width:100%;height:100%;object-fit:cover;">' : merchSVG(mCur,mColor,0);
     document.getElementById('mcoTitle').textContent = mCur.name;
     document.getElementById('mcoVariant').textContent = (mSize?'Size '+mSize+' · ':'')+mCur.colors[mColor].n+' · Qty '+mQty;
     document.getElementById('mcoSub').textContent = '€'+sub.toFixed(2);
@@ -4179,7 +4222,8 @@
     document.getElementById('confirmOrderId').textContent = fakeOrderId().slice(0,26)+'...';
     document.getElementById('confirmItems').innerHTML =
       '<div class="cf-item">'+
-        '<div class="cf-item-ic" style="'+artBG(mCur,mColor)+'width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:4px;">'+merchSVG(mCur,mColor,0)+'</div>'+
+        '<div class="cf-item-ic" style="'+(mCur.img?'':artBG(mCur,mColor))+'width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:4px;overflow:hidden;">'+
+          (mCur.img ? '<img src="'+mCur.img+'" alt="" style="width:100%;height:100%;object-fit:cover;">' : merchSVG(mCur,mColor,0))+'</div>'+
         '<div><div class="cf-item-name">'+mCur.name+'</div>'+
         '<div class="cf-item-desc">'+(mSize?'Size '+mSize+' · ':'')+mCur.colors[mColor].n+' · Qty '+mQty+'</div></div>'+
       '</div>';
