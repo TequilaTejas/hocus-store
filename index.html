@@ -1362,20 +1362,28 @@
   /* ===== MERCH: SKU detail page (Myntra-style anatomy) ===== */
   .mp-wrap{display:grid; grid-template-columns:1.02fr 1fr; gap:36px; align-items:start;}
   @media(max-width:860px){ .mp-wrap{grid-template-columns:1fr;} }
-  .mp-gallery{position:sticky; top:76px;}
-  @media(max-width:860px){ .mp-gallery{position:static;} }
-  .mp-main{position:relative; aspect-ratio:1/1; border:1px solid var(--line); border-radius:5px; display:flex; align-items:center; justify-content:center; overflow:hidden;}
-  .mp-main::after{content:""; position:absolute; inset:0; pointer-events:none;
-    background:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px) 0 0/15px 15px,
-              linear-gradient(180deg, transparent 55%, rgba(0,0,0,.4));}
-  .mp-main svg{width:64%; height:64%; position:relative; z-index:1; filter:drop-shadow(0 18px 36px rgba(0,0,0,.55));}
-  .mp-main img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-  .mp-thumb img{width:100%; height:100%; object-fit:cover;}
-  .mp-thumbs{display:flex; gap:8px; margin-top:10px;}
-  .mp-thumb{width:64px; height:64px; border:1px solid var(--line); border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; transition:border-color .15s var(--ease-out);}
-  .mp-thumb svg{width:70%; height:70%;}
-  .mp-thumb:hover{border-color:var(--line-2);}
-  .mp-thumb.on{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand);}
+  .mp-gallery{align-self:start;}
+  /* Myntra-style 2-column image mosaic */
+  .mp-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
+  @media(max-width:520px){ .mp-grid{grid-template-columns:1fr;} }
+  .mp-cell{position:relative; aspect-ratio:3/4; border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:zoom-in; background:var(--surface2); display:flex; align-items:center; justify-content:center;}
+  .mp-cell img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease-out);}
+  .mp-cell svg{width:64%; height:64%; position:relative; z-index:1; filter:drop-shadow(0 18px 36px rgba(0,0,0,.55));}
+  @media(hover:hover){ .mp-cell:hover img{transform:scale(1.04);} }
+  .mp-cell:not(.clean)::after{content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px) 0 0/15px 15px, linear-gradient(180deg, transparent 62%, rgba(0,0,0,.34));}
+  .mp-cell .zic{position:absolute; bottom:8px; right:8px; z-index:2; width:26px; height:26px; border-radius:50%; background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.2); display:flex; align-items:center; justify-content:center; color:#fff; opacity:0; transition:opacity .2s var(--ease-out);}
+  @media(hover:hover){ .mp-cell:hover .zic{opacity:1;} }
+  /* lightbox */
+  .mp-lb{position:fixed; inset:0; z-index:130; background:rgba(6,7,9,.94); display:none; align-items:center; justify-content:center; padding:32px;}
+  .mp-lb.open{display:flex; animation:screenIn .22s var(--ease-out);}
+  .mp-lb img{max-width:92vw; max-height:86vh; object-fit:contain; border-radius:6px;}
+  .mp-lb-x{position:absolute; top:20px; right:24px; background:none; border:none; color:#fff; font-size:34px; line-height:1; cursor:pointer; opacity:.8;}
+  .mp-lb-x:hover{opacity:1;}
+  .mp-lb-nav{position:absolute; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:50%; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background-color .15s var(--ease-out);}
+  .mp-lb-nav:hover{background:rgba(255,255,255,.2);}
+  .mp-lb-prev{left:20px;} .mp-lb-next{right:20px;}
+  .mp-lb-count{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); font-size:12px; color:rgba(255,255,255,.7); font-variant-numeric:tabular-nums;}
   .mp-brand{font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--brand);}
   .mp-name{font-family:var(--font-display); font-size:clamp(22px,2.6vw,30px); font-weight:800; letter-spacing:-.02em; line-height:1.1; margin:6px 0 4px;}
   .mp-sub{font-size:13px; color:var(--mut);}
@@ -2404,8 +2412,7 @@
       <div class="mp-wrap" style="margin-top:18px;">
         <!-- LEFT: gallery -->
         <div class="mp-gallery">
-          <div class="mp-main" id="mpMain"></div>
-          <div class="mp-thumbs" id="mpThumbs"></div>
+          <div class="mp-grid" id="mpGrid"></div>
         </div>
 
         <!-- RIGHT: buy box -->
@@ -2671,6 +2678,15 @@
     </div>
   </div>
 </section>
+<!-- ===== gallery lightbox ===== -->
+<div class="mp-lb" id="mpLb">
+  <button class="mp-lb-x" id="mpLbX" aria-label="Close">&times;</button>
+  <button class="mp-lb-nav mp-lb-prev" id="mpLbPrev" aria-label="Previous">&#8249;</button>
+  <img id="mpLbImg" src="" alt="">
+  <button class="mp-lb-nav mp-lb-next" id="mpLbNext" aria-label="Next">&#8250;</button>
+  <div class="mp-lb-count" id="mpLbCount"></div>
+</div>
+
 <!-- ===== sticky PDP buy bar ===== -->
 <div class="pdp-bar" id="pdpBar">
   <div class="pdp-bar-info">
@@ -4370,28 +4386,50 @@
 
   /* ---- SKU detail page ---- */
   var mCur=null, mColor=0, mSize=null, mQty=1, mView=0;
-  var mpMain=document.getElementById('mpMain'), mpThumbs=document.getElementById('mpThumbs');
+  var mpGrid=document.getElementById('mpGrid');
 
-  function renderGallery(){
-    mpMain.classList.toggle('clean', !!mCur.clean);
-    if(mCur.photos){
-      if(mView >= mCur.photos.length) mView = 0;
-      mpMain.setAttribute('style','');
-      mpMain.innerHTML = '<img src="'+mCur.photos[mView]+'" alt="'+mCur.name+'">';
-      mpThumbs.innerHTML = mCur.photos.map(function(src,v){
-        return '<div class="mp-thumb'+(v===mView?' on':'')+'" data-v="'+v+'"><img src="'+src+'" alt=""></div>';
-      }).join('');
-      return;
-    }
-    mpMain.setAttribute('style', artBG(mCur, mColor));
-    mpMain.innerHTML = merchSVG(mCur, mColor, mView);
-    mpThumbs.innerHTML = [0,1,2,3].map(function(v){
-      return '<div class="mp-thumb'+(v===mView?' on':'')+'" data-v="'+v+'" style="'+artBG(mCur,mColor)+'">'+merchSVG(mCur,mColor,v)+'</div>';
-    }).join('');
+  function galleryImgs(){   // the list of photo URLs (photos, else null for SVG products)
+    return mCur.photos ? mCur.photos : null;
   }
-  mpThumbs.addEventListener('click', function(e){
-    var t = e.target.closest('.mp-thumb'); if(!t) return;
-    mView = parseInt(t.getAttribute('data-v'),10); renderGallery();
+  function renderGallery(){
+    var imgs = galleryImgs();
+    if(imgs){
+      mpGrid.innerHTML = imgs.map(function(src,v){
+        return '<div class="mp-cell'+(mCur.clean?' clean':'')+'" data-v="'+v+'">'+
+          '<img src="'+src+'" alt="'+mCur.name+' view '+(v+1)+'" loading="lazy">'+
+          '<span class="zic"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></span>'+
+        '</div>';
+      }).join('');
+    } else {
+      mpGrid.innerHTML = [0,1,2,3].map(function(v){
+        return '<div class="mp-cell" data-v="'+v+'" style="'+artBG(mCur,mColor)+'">'+merchSVG(mCur,mColor,v)+'</div>';
+      }).join('');
+    }
+  }
+  /* lightbox */
+  var lb=document.getElementById('mpLb'), lbImg=document.getElementById('mpLbImg'),
+      lbCount=document.getElementById('mpLbCount'), lbIdx=0;
+  function lbOpen(i){
+    var imgs=galleryImgs(); if(!imgs) return;   // SVG products don't zoom
+    lbIdx=(i+imgs.length)%imgs.length;
+    lbImg.src=imgs[lbIdx];
+    lbCount.textContent=(lbIdx+1)+' / '+imgs.length;
+    lb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function lbClose(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+  mpGrid.addEventListener('click', function(e){
+    var c=e.target.closest('.mp-cell'); if(!c) return;
+    lbOpen(parseInt(c.getAttribute('data-v'),10));
+  });
+  document.getElementById('mpLbX').addEventListener('click', lbClose);
+  document.getElementById('mpLbNext').addEventListener('click', function(e){ e.stopPropagation(); lbOpen(lbIdx+1); });
+  document.getElementById('mpLbPrev').addEventListener('click', function(e){ e.stopPropagation(); lbOpen(lbIdx-1); });
+  lb.addEventListener('click', function(e){ if(e.target===lb) lbClose(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape') lbClose();
+    else if(e.key==='ArrowRight') lbOpen(lbIdx+1);
+    else if(e.key==='ArrowLeft') lbOpen(lbIdx-1);
   });
 
   function renderSwatches(){
