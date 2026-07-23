@@ -1420,6 +1420,16 @@
   .mp-review .pill{background:var(--success); color:#fff; font-size:11px; font-weight:700; padding:1px 7px; border-radius:3px;}
   .mp-review .who{color:var(--mut);}
   .mp-review p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.55;}
+  /* PDP collapsible info blocks */
+  .mp-acc{border:1px solid var(--line); border-radius:5px; background:var(--surface); margin-top:12px; overflow:hidden;}
+  .mp-acc-h{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; cursor:pointer; user-select:none;
+    font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); transition:background-color .15s var(--ease-out);}
+  @media(hover:hover){ .mp-acc-h:hover{background:var(--surface2);} }
+  .mp-acc-h .mp-acc-hint{font-size:11px; color:var(--mut); font-weight:500; letter-spacing:0; text-transform:none; margin-left:auto;}
+  .mp-acc-h .car{color:var(--mut); font-size:12px; flex:0 0 auto; transition:transform .2s var(--ease-out);}
+  .mp-acc.open .mp-acc-h .car{transform:rotate(180deg);}
+  .mp-acc-b{display:none; padding:2px 16px 16px;}
+  .mp-acc.open .mp-acc-b{display:block; animation:screenIn .22s var(--ease-out);}
   /* size chart modal */
   .szc-table{width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums;}
   .szc-table th{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); font-weight:600; text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);}
@@ -2288,27 +2298,38 @@
             <div class="btn ghost" id="mpBuyNow">Buy now</div>
           </div>
 
-          <div class="mp-lbl" style="margin-top:22px;">Delivery options</div>
-          <div class="mp-pin-row">
-            <div class="field-like"><input id="mpPin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" autocomplete="off"></div>
-            <div class="btn ghost" id="mpPinCheck">Check</div>
+          <div style="margin-top:22px;">
+            <div class="mp-acc open" data-acc="delivery">
+              <div class="mp-acc-h">Delivery options <span class="mp-acc-hint">Pincode, COD, returns</span><span class="car">&#9662;</span></div>
+              <div class="mp-acc-b">
+                <div class="mp-pin-row">
+                  <div class="field-like"><input id="mpPin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" autocomplete="off"></div>
+                  <div class="btn ghost" id="mpPinCheck">Check</div>
+                </div>
+                <div class="mp-pin-result" id="mpPinResult"></div>
+                <div class="mp-trust">
+                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>100% original, printed on order</div>
+                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>7-day easy returns &amp; size exchange</div>
+                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cash on delivery available</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mp-acc open" data-acc="details">
+              <div class="mp-acc-h">Product details <span class="car">&#9662;</span></div>
+              <div class="mp-acc-b"><div class="mp-specs" id="mpSpecs"></div></div>
+            </div>
+
+            <div class="mp-acc" data-acc="fit">
+              <div class="mp-acc-h">Size &amp; fit <span class="car">&#9662;</span></div>
+              <div class="mp-acc-b"><p class="mp-body-copy" id="mpFitCopy"></p></div>
+            </div>
+
+            <div class="mp-acc" data-acc="care">
+              <div class="mp-acc-h">Material &amp; care <span class="car">&#9662;</span></div>
+              <div class="mp-acc-b"><p class="mp-body-copy" id="mpCareCopy"></p></div>
+            </div>
           </div>
-          <div class="mp-pin-result" id="mpPinResult"></div>
-
-          <div class="mp-trust">
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>100% original, printed on order</div>
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>7-day easy returns &amp; size exchange</div>
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cash on delivery available</div>
-          </div>
-
-          <div class="mp-lbl" style="margin-top:24px;">Product details</div>
-          <div class="mp-specs" id="mpSpecs"></div>
-
-          <div class="mp-lbl" style="margin-top:22px;">Size &amp; fit</div>
-          <p class="mp-body-copy" id="mpFitCopy"></p>
-
-          <div class="mp-lbl" style="margin-top:22px;">Material &amp; care</div>
-          <p class="mp-body-copy" id="mpCareCopy"></p>
         </div>
       </div>
 
@@ -4132,6 +4153,10 @@
     document.getElementById('mpSimilar').innerHTML = similar.map(merchCard).join('');
     document.getElementById('mpPinResult').classList.remove('on');
     document.getElementById('mpPin').value='';
+    document.querySelectorAll('#merchpdp .mp-acc').forEach(function(a){
+      var k = a.getAttribute('data-acc');
+      a.classList.toggle('open', k==='delivery' || k==='details');
+    });
     renderSwatches(); renderSizes(); renderGallery();
     goScreen('merchpdp');
   }
@@ -4158,6 +4183,11 @@
   });
   document.getElementById('sizeClose').addEventListener('click', function(){ sizeModal.classList.remove('open'); });
   sizeModal.addEventListener('click', function(e){ if(e.target===sizeModal) sizeModal.classList.remove('open'); });
+
+  /* collapsible info blocks */
+  document.querySelectorAll('#merchpdp .mp-acc-h').forEach(function(h){
+    h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+  });
 
   /* pincode check */
   document.getElementById('mpPinCheck').addEventListener('click', function(){
