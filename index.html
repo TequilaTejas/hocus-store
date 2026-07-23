@@ -1504,6 +1504,45 @@
   .rv-more{width:100%; margin-top:14px; padding:13px; background:var(--surface2); border:1px solid var(--line); border-radius:8px; color:var(--ink-2); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s var(--ease-out);}
   .rv-more:hover{border-color:var(--line-2); color:#fff;}
   .rv-more[hidden]{display:none;}
+  /* ===== cart drawer ===== */
+  .cart-scrim{position:fixed; inset:0; z-index:120; background:rgba(0,0,0,.6); opacity:0; visibility:hidden; transition:opacity .3s var(--ease-out), visibility .3s;}
+  .cart-scrim.open{opacity:1; visibility:visible;}
+  .cart-drawer{position:fixed; top:0; right:0; bottom:0; z-index:121; width:400px; max-width:92vw; background:var(--bg); border-left:1px solid var(--line); display:flex; flex-direction:column; transform:translateX(100%); transition:transform .34s var(--ease-out); box-shadow:-20px 0 60px rgba(0,0,0,.5);}
+  .cart-drawer.open{transform:none;}
+  .cart-hd{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:700; font-family:var(--font-display);}
+  .cart-hd-n{color:var(--mut); font-weight:600; font-size:13px; font-family:"Sora";}
+  .cart-x{background:none; border:none; color:var(--mut); font-size:26px; line-height:1; cursor:pointer; padding:0 4px; transition:color .15s var(--ease-out);}
+  .cart-x:hover{color:#fff;}
+  .cart-ship-bar{padding:12px 20px; border-bottom:1px solid var(--line); background:var(--surface);}
+  .cart-ship-txt{font-size:12px; color:var(--ink-2); margin-bottom:7px;}
+  .cart-ship-txt b{color:var(--success);}
+  .cart-ship-track{height:5px; background:var(--line); border-radius:99px; overflow:hidden;}
+  .cart-ship-track span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--brand),var(--brand-2)); border-radius:99px; transition:width .45s var(--ease-out);}
+  .cart-body{flex:1; overflow-y:auto; padding:6px 20px;}
+  .cart-empty{text-align:center; padding:60px 20px; color:var(--mut);}
+  .cart-empty svg{width:44px; height:44px; opacity:.4; margin-bottom:14px;}
+  .cart-empty .btn{margin-top:18px; display:inline-block;}
+  .cart-item{display:flex; gap:13px; padding:16px 0; border-bottom:1px solid var(--line);}
+  .cart-thumb{width:66px; height:80px; border-radius:6px; overflow:hidden; flex:0 0 auto; background:var(--surface2);}
+  .cart-thumb img{width:100%; height:100%; object-fit:cover;}
+  .cart-it-main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .cart-it-name{font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .cart-it-var{font-size:11.5px; color:var(--mut); margin-top:2px;}
+  .cart-it-row{display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:10px;}
+  .cart-qty{display:inline-flex; align-items:center; border:1px solid var(--line); border-radius:6px; overflow:hidden;}
+  .cart-qty button{width:28px; height:28px; background:var(--surface2); border:none; color:var(--ink-2); font-size:15px; cursor:pointer; transition:background-color .12s var(--ease-out);}
+  .cart-qty button:hover{background:var(--fill); color:#fff;}
+  .cart-qty span{min-width:30px; text-align:center; font-size:13px; font-weight:600;}
+  .cart-it-price{font-size:14px; font-weight:800; font-variant-numeric:tabular-nums;}
+  .cart-it-rm{align-self:flex-start; background:none; border:none; color:var(--mut); font-size:11px; cursor:pointer; text-decoration:underline; padding:0; margin-top:6px; transition:color .15s var(--ease-out);}
+  .cart-it-rm:hover{color:var(--danger);}
+  .cart-foot{border-top:1px solid var(--line); padding:16px 20px 20px; background:var(--surface);}
+  .cart-line{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-2); padding:3px 0;}
+  .cart-total{display:flex; justify-content:space-between; font-size:16px; font-weight:800; padding-top:9px; margin-top:5px; border-top:1px solid var(--line); font-variant-numeric:tabular-nums;}
+  .cart-continue{width:100%; margin-top:9px; background:none; border:none; color:var(--mut); font-family:inherit; font-size:12.5px; cursor:pointer; padding:8px; transition:color .15s var(--ease-out);}
+  .cart-continue:hover{color:#fff;}
+  .cart-foot.hide{display:none;}
+  @media(max-width:440px){ .cart-drawer{width:100vw;} }
   /* PDP collapsible info blocks */
   .mp-acc{border:1px solid var(--line); border-radius:5px; background:var(--surface); margin-top:12px; overflow:hidden;}
   .mp-acc-h{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 16px; cursor:pointer; user-select:none;
@@ -2609,6 +2648,27 @@
     </div>
   </div>
 </section>
+<!-- ===== cart drawer ===== -->
+<div class="cart-scrim" id="cartScrim"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
+  <div class="cart-hd">
+    <span>Your bag <span class="cart-hd-n" id="cartHdN">0</span></span>
+    <button class="cart-x" id="cartClose" aria-label="Close bag">&times;</button>
+  </div>
+  <div class="cart-ship-bar" id="cartShipBar">
+    <div class="cart-ship-txt" id="cartShipTxt">Add €50 for free shipping</div>
+    <div class="cart-ship-track"><span id="cartShipFill"></span></div>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-foot" id="cartFoot">
+    <div class="cart-line"><span>Subtotal</span><span id="cartSub">€0.00</span></div>
+    <div class="cart-line"><span>Shipping</span><span id="cartShip">—</span></div>
+    <div class="cart-total"><span>Total</span><span id="cartTotal">€0.00</span></div>
+    <button class="btn" id="cartCheckout" style="width:100%; margin-top:12px;">Checkout securely</button>
+    <button class="cart-continue" id="cartContinue">Continue shopping</button>
+  </div>
+</aside>
+
 <!-- size chart modal -->
 <div class="gmodal" id="sizeModal">
   <div class="co-box" style="max-width:420px;">
@@ -4191,14 +4251,77 @@
   renderMerchFilters(); renderMerchGrid();
 
   /* ---- bag ---- */
-  var bagCount = 0, bagBadge = document.getElementById('bagBadge');
+  /* ===== real bag + cart drawer ===== */
+  var bag = [], bagBadge = document.getElementById('bagBadge');
+  var FREE_SHIP = 50, SHIP_FEE = 4.99;
+  function bagThumb(p){ return p.img || (p.photos&&p.photos[0]) || 'assets/merch/'+p.id+'-card.jpg'; }
   function bagAdd(n){
-    bagCount += n;
-    bagBadge.textContent = bagCount;
-    bagBadge.classList.toggle('show', bagCount>0);
+    var color = (mCur.colors&&mCur.colors[mColor]) ? mCur.colors[mColor].n : '';
+    var key = mCur.id+'|'+(mSize||'')+'|'+color;
+    var found = bag.filter(function(b){return b.key===key;})[0];
+    if(found){ found.qty += n; }
+    else bag.push({key:key, id:mCur.id, name:mCur.name, price:mCur.price, size:mSize||'', color:color, qty:n, thumb:bagThumb(mCur)});
+    renderBag();
   }
-  document.getElementById('navBag').addEventListener('click', function(){
-    toast(bagCount===0 ? 'Your bag is empty' : bagCount+' item'+(bagCount>1?'s':'')+' in your bag');
+  function bagCount(){ return bag.reduce(function(s,b){return s+b.qty;},0); }
+  function bagSubtotal(){ return bag.reduce(function(s,b){return s+b.price*b.qty;},0); }
+  function renderBadge(){ var c=bagCount(); bagBadge.textContent=c; bagBadge.classList.toggle('show', c>0); }
+  function renderBag(){
+    renderBadge();
+    var n=bagCount(), sub=bagSubtotal();
+    document.getElementById('cartHdN').textContent = n+' item'+(n===1?'':'s');
+    var body=document.getElementById('cartBody'), foot=document.getElementById('cartFoot');
+    if(!bag.length){
+      body.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><div>Your bag is empty</div><button class="btn" id="cartShop">Shop merch</button></div>';
+      foot.classList.add('hide');
+      document.getElementById('cartShipBar').style.display='none';
+      return;
+    }
+    foot.classList.remove('hide');
+    document.getElementById('cartShipBar').style.display='';
+    body.innerHTML = bag.map(function(b,i){
+      return '<div class="cart-item">'+
+        '<div class="cart-thumb"><img src="'+b.thumb+'" alt=""></div>'+
+        '<div class="cart-it-main">'+
+          '<div class="cart-it-name">'+b.name+'</div>'+
+          '<div class="cart-it-var">'+[b.size?'Size '+b.size:'', b.color].filter(Boolean).join(' · ')+'</div>'+
+          '<button class="cart-it-rm" data-i="'+i+'">Remove</button>'+
+          '<div class="cart-it-row">'+
+            '<div class="cart-qty"><button data-dec="'+i+'">−</button><span>'+b.qty+'</span><button data-inc="'+i+'">+</button></div>'+
+            '<div class="cart-it-price">€'+(b.price*b.qty).toFixed(2)+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+    // free-ship progress
+    var rem = Math.max(0, FREE_SHIP-sub);
+    document.getElementById('cartShipTxt').innerHTML = rem>0 ? 'Add <b>€'+rem.toFixed(2)+'</b> for free shipping' : '<b>✓ You’ve unlocked free shipping</b>';
+    document.getElementById('cartShipFill').style.width = Math.min(100, sub/FREE_SHIP*100)+'%';
+    var ship = sub>=FREE_SHIP?0:SHIP_FEE;
+    document.getElementById('cartSub').textContent='€'+sub.toFixed(2);
+    document.getElementById('cartShip').textContent= ship===0?'FREE':'€'+ship.toFixed(2);
+    document.getElementById('cartTotal').textContent='€'+(sub+ship).toFixed(2);
+  }
+  var cartDrawer=document.getElementById('cartDrawer'), cartScrim=document.getElementById('cartScrim');
+  function openCart(){ renderBag(); cartDrawer.classList.add('open'); cartScrim.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeCart(){ cartDrawer.classList.remove('open'); cartScrim.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('navBag').addEventListener('click', openCart);
+  document.getElementById('cartClose').addEventListener('click', closeCart);
+  document.getElementById('cartContinue').addEventListener('click', closeCart);
+  cartScrim.addEventListener('click', closeCart);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && cartDrawer.classList.contains('open')) closeCart(); });
+  document.getElementById('cartBody').addEventListener('click', function(e){
+    var t=e.target;
+    if(t.id==='cartShop'){ closeCart(); goScreen('home'); setTimeout(function(){document.getElementById('merchSection').scrollIntoView({behavior:'smooth'});},350); return; }
+    var inc=t.getAttribute('data-inc'), dec=t.getAttribute('data-dec'), rm=t.getAttribute('data-i');
+    if(inc!=null){ bag[+inc].qty++; renderBag(); }
+    else if(dec!=null){ if(bag[+dec].qty>1) bag[+dec].qty--; else bag.splice(+dec,1); renderBag(); }
+    else if(rm!=null){ bag.splice(+rm,1); renderBag(); }
+  });
+  document.getElementById('cartCheckout').addEventListener('click', function(){
+    if(!bag.length) return;
+    closeCart();
+    checkoutBag();
   });
 
   /* ---- SKU detail page ---- */
@@ -4500,7 +4623,7 @@
   document.getElementById('mpAddBag').addEventListener('click', function(){
     if(!requireSize()) return;
     bagAdd(mQty);
-    toast('Added to bag — '+mCur.name+(mSize?' · '+mSize:''));
+    openCart();
   });
 
   var mcoModal = document.getElementById('mcoModal');
@@ -4559,6 +4682,37 @@
       '</div>';
     goScreen('confirm');
   });
+
+  /* whole-bag checkout → multi-item order confirmation */
+  function checkoutBag(){
+    if(!bag.length) return;
+    var sub = bagSubtotal(), ship = sub>=FREE_SHIP?0:SHIP_FEE, n = bagCount();
+    var sc = document.getElementById('successCheck');
+    if(sc){ sc.classList.remove('go'); void sc.offsetWidth; sc.classList.add('go'); }
+    document.getElementById('confirmTitle').textContent = 'Order placed!';
+    document.getElementById('confirmSub').textContent = n+' item'+(n===1?'':'s')+' go to print today. Tracking lands in your email once they ship.';
+    document.getElementById('confirmOrderNo').textContent = fakeOrderNo();
+    document.getElementById('confirmAmountPaid').textContent = '€'+(sub+ship).toFixed(2);
+    document.getElementById('confirmOrderId').textContent = fakeOrderId().slice(0,26)+'...';
+    document.getElementById('confirmItems').innerHTML = bag.map(function(b){
+      return '<div class="cf-item">'+
+        '<div class="cf-item-ic" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:4px;overflow:hidden;"><img src="'+b.thumb+'" alt="" style="width:100%;height:100%;object-fit:cover;"></div>'+
+        '<div><div class="cf-item-name">'+b.name+'</div>'+
+        '<div class="cf-item-desc">'+[b.size?'Size '+b.size:'',b.color,'Qty '+b.qty].filter(Boolean).join(' · ')+'</div></div>'+
+      '</div>';
+    }).join('');
+    document.getElementById('confirmBulk').style.display='none';
+    var eta = new Date(); eta.setDate(eta.getDate()+6);
+    var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][eta.getMonth()];
+    document.getElementById('confirmCodes').innerHTML =
+      '<div style="border:1px solid var(--line); border-radius:5px; padding:16px; font-size:13px; line-height:2; color:var(--ink-2);">'+
+        '<span style="color:var(--success); font-weight:700;">&#9679; Order confirmed</span> &mdash; today<br>'+
+        '<span style="color:var(--mut);">&#9675; Printed &amp; packed</span> &mdash; 1–2 days<br>'+
+        '<span style="color:var(--mut);">&#9675; Delivered</span> &mdash; by <b style="color:#fff;">'+eta.getDate()+' '+mon+'</b>'+
+      '</div>';
+    bag = []; renderBag();
+    goScreen('confirm');
+  }
 
 })();
 </script>
