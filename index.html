@@ -1402,6 +1402,13 @@
   .mp-sz.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff;}
   .mp-sz.out{opacity:.35; cursor:not-allowed; text-decoration:line-through;}
   .mp-sz:active{transform:scale(.95);}
+  .mp-stock{font-size:12px; margin-top:10px; min-height:0; color:var(--warn); font-weight:600; display:none; align-items:center; gap:7px;}
+  .mp-stock.on{display:flex;}
+  .mp-stock::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--warn); box-shadow:0 0 0 3px rgba(238,168,47,.18);}
+  #mpSizeBlock.err #mpSizeLbl{color:var(--danger);}
+  #mpSizeBlock.err .mp-sizes{animation:shakeX .4s var(--ease-out);}
+  #mpSizeBlock.err .mp-sz{border-color:var(--danger);}
+  @keyframes shakeX{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(2px);}}
   .mp-ctas{display:flex; gap:10px; margin-top:20px;}
   .mp-ctas .btn{flex:1.4; padding:15px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;}
   .mp-ctas .btn.ghost{flex:1;}
@@ -2412,8 +2419,9 @@
           </div>
 
           <div id="mpSizeBlock">
-            <div class="mp-lbl">Select size <span class="lnk" id="mpSizeChart">Size chart &#8250;</span></div>
+            <div class="mp-lbl"><span id="mpSizeLbl">Select size</span> <span class="lnk" id="mpSizeChart">Size chart &#8250;</span></div>
             <div class="mp-sizes" id="mpSizes"></div>
+            <div class="mp-stock" id="mpStock"></div>
           </div>
 
           <div class="mp-lbl">Quantity</div>
@@ -4362,15 +4370,30 @@
     renderSwatches(); renderGallery();
   });
 
+  // deterministic low-stock: the last in-stock size of any tee runs low
+  function lowStockFor(p){
+    if(!p.sizes || p.sizes.length<2) return null;
+    var inStock = p.sizes.filter(function(s){ return !(p.out&&p.out.indexOf(s)>=0); });
+    if(inStock.length<2) return null;
+    var s = inStock[inStock.length-1];               // e.g. XL runs low
+    return { size:s, n: 2 + (p.id.charCodeAt(0)%3) }; // 2–4 left, stable per product
+  }
   function renderSizes(){
     var block = document.getElementById('mpSizeBlock');
     if(!mCur.sizes.length){ block.style.display='none'; return; }
     block.style.display='';
+    block.classList.remove('err');
     document.getElementById('mpSizeChart').style.display = SIZE_CHARTS[mCur.type] ? '' : 'none';
+    var low = lowStockFor(mCur);
     document.getElementById('mpSizes').innerHTML = mCur.sizes.map(function(s){
       var out = mCur.out.indexOf(s)>=0;
       return '<span class="mp-sz'+(s===mSize?' on':'')+(out?' out':'')+'" data-s="'+s+'">'+s+'</span>';
     }).join('');
+    var stockEl = document.getElementById('mpStock');
+    if(low && mSize===low.size){
+      stockEl.textContent = 'Hurry — only '+low.n+' left in '+low.size;
+      stockEl.classList.add('on');
+    } else { stockEl.classList.remove('on'); }
   }
   document.getElementById('mpSizes').addEventListener('click', function(e){
     var s = e.target.closest('.mp-sz'); if(!s || s.classList.contains('out')) return;
@@ -4617,7 +4640,14 @@
 
   /* add to bag / buy now */
   function requireSize(){
-    if(mCur.sizes.length && !mSize){ toast('Select a size first'); return false; }
+    if(mCur.sizes.length && !mSize){
+      var block = document.getElementById('mpSizeBlock');
+      block.classList.remove('err'); void block.offsetWidth;   // restart shake
+      block.classList.add('err');
+      if(block.scrollIntoView) block.scrollIntoView({behavior:'smooth', block:'center'});
+      toast('Please select a size');
+      return false;
+    }
     return true;
   }
   document.getElementById('mpAddBag').addEventListener('click', function(){
