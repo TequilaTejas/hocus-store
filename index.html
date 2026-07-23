@@ -1430,6 +1430,12 @@
   .mp-acc.open .mp-acc-h .car{transform:rotate(180deg);}
   .mp-acc-b{display:none; padding:2px 16px 16px;}
   .mp-acc.open .mp-acc-b{display:block; animation:screenIn .22s var(--ease-out);}
+  /* flat (non-collapsible) variant of the same blocks — for A/B comparison */
+  .mp-flat .mp-acc{border:none; background:transparent; border-radius:0; margin-top:22px; overflow:visible;}
+  .mp-flat .mp-acc-h{padding:0; margin-bottom:10px; cursor:default; pointer-events:none;}
+  @media(hover:hover){ .mp-flat .mp-acc-h:hover{background:transparent;} }
+  .mp-flat .mp-acc-h .car, .mp-flat .mp-acc-h .mp-acc-hint{display:none;}
+  .mp-flat .mp-acc-b{display:block; padding:0; animation:none;}
   /* size chart modal */
   .szc-table{width:100%; border-collapse:collapse; font-size:12.5px; font-variant-numeric:tabular-nums;}
   .szc-table th{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); font-weight:600; text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);}
@@ -2298,7 +2304,7 @@
             <div class="btn ghost" id="mpBuyNow">Buy now</div>
           </div>
 
-          <div style="margin-top:22px;">
+          <div style="margin-top:22px;" id="mpInfoBlocks">
             <div class="mp-acc open" data-acc="delivery">
               <div class="mp-acc-h">Delivery options <span class="mp-acc-hint">Pincode, COD, returns</span><span class="car">&#9662;</span></div>
               <div class="mp-acc-b">
@@ -3869,6 +3875,9 @@
     tee({ id:'hydra-block', name:'Hydra Flick Tee', price:29, mrp:39, rating:4.6, ratings:'1.2k', tag:'Bestseller',
       sub:'The mirrored logo that started it all',
       photos:['assets/merch/hydra-block-flat.jpg','assets/merch/hydra-block-card.jpg','assets/merch/hydra-block-art.jpg'] }),
+    tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870', acc:true,
+      sub:'Indian server moment. You know the one.',
+      photos:['assets/merch/ping-999-flat.jpg','assets/merch/ping-999-card.jpg','assets/merch/ping-999-art.jpg'] }),
     tee({ id:'signature', name:'Signature Script Tee', price:29, mrp:39, rating:4.7, ratings:'980',
       sub:'Hydraflick’s autograph, across your chest',
       photos:['assets/merch/signature-flat.jpg','assets/merch/signature-card.jpg','assets/merch/signature-art.jpg'] }),
@@ -3881,9 +3890,6 @@
     tee({ id:'ek-game-aur', name:'Ek Game Aur Tee', price:29, mrp:39, rating:4.7, ratings:'1.6k',
       sub:'Bas ek aur. Promise.',
       photos:['assets/merch/ek-game-aur-flat.jpg','assets/merch/ek-game-aur-card.jpg','assets/merch/ek-game-aur-art.jpg'] }),
-    tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870',
-      sub:'Indian server moment. You know the one.',
-      photos:['assets/merch/ping-999-flat.jpg','assets/merch/ping-999-card.jpg','assets/merch/ping-999-art.jpg'] }),
     tee({ id:'ruk-ruk', name:'Ruk Ruk Ruk Tee', price:29, mrp:39, rating:4.5, ratings:'640',
       sub:'The clip everyone spams in chat',
       photos:['assets/merch/ruk-ruk-flat.jpg','assets/merch/ruk-ruk-card.jpg','assets/merch/ruk-ruk-art.jpg'] }),
@@ -4000,7 +4006,7 @@
   var merchFiltersEl = document.getElementById('merchFilters');
   var merchMoreBtn = document.getElementById('merchMoreBtn');
   var merchExpanded = false, merchFilter = 'All';
-  var MERCH_PREVIEW_COUNT = 8;
+  var MERCH_PREVIEW_COUNT = 4;
 
   function merchCard(p){
     var offPct = Math.round((1 - p.price/p.mrp)*100);
@@ -4025,9 +4031,7 @@
     var list = MERCH.filter(function(p){ return merchFilter==='All' || p.cat===merchFilter; });
     var visible = merchExpanded ? list : list.slice(0, MERCH_PREVIEW_COUNT);
     merchGridEl.innerHTML = visible.map(merchCard).join('');
-    var hidden = list.length - visible.length;
-    merchMoreBtn.textContent = merchExpanded ? 'Show less' : 'View all merch ('+MERCH.length+')';
-    merchMoreBtn.style.display = (!merchExpanded && hidden<=0) ? 'none' : '';
+    merchMoreBtn.textContent = 'See more';
   }
   function renderMerchFilters(){
     var cats = ['All','Tees','Hoodies','Accessories'];
@@ -4036,14 +4040,8 @@
       return '<span class="mf-chip'+(merchFilter===c?' on':'')+'" data-cat="'+c+'">'+c+' <span style="opacity:.6;">'+n+'</span></span>';
     }).join('');
   }
-  merchMoreBtn.addEventListener('click', function(){
-    merchExpanded = !merchExpanded;
-    // filters only surface in the expanded catalogue view — the compact home strip stays clean
-    merchFiltersEl.classList.toggle('on', merchExpanded);
-    if(!merchExpanded){ merchFilter='All'; renderMerchFilters(); }
-    renderMerchGrid();
-    if(!merchExpanded) document.getElementById('merchSection').scrollIntoView({behavior:'smooth', block:'start'});
-  });
+  // "See more" is intentionally inert while we test with a fixed 4-tee preview
+  merchMoreBtn.addEventListener('click', function(){});
   merchFiltersEl.addEventListener('click', function(e){
     var chip = e.target.closest('.mf-chip'); if(!chip) return;
     merchFilter = chip.getAttribute('data-cat');
@@ -4153,6 +4151,8 @@
     document.getElementById('mpSimilar').innerHTML = similar.map(merchCard).join('');
     document.getElementById('mpPinResult').classList.remove('on');
     document.getElementById('mpPin').value='';
+    // acc:true products get the collapsible variant; the rest keep the flat layout
+    document.getElementById('mpInfoBlocks').classList.toggle('mp-flat', !mCur.acc);
     document.querySelectorAll('#merchpdp .mp-acc').forEach(function(a){
       var k = a.getAttribute('data-acc');
       a.classList.toggle('open', k==='delivery' || k==='details');
