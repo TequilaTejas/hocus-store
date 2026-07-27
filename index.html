@@ -1500,9 +1500,7 @@
   .rv-rec b{color:var(--success); font-weight:700; font-size:13px;}
   /* distribution bars — clickable filter */
   .rv-bars{display:flex; flex-direction:column; gap:8px; width:100%;}
-  .rv-bar{display:grid; grid-template-columns:30px 1fr 42px; align-items:center; gap:12px; font-size:11px; color:var(--mut); font-variant-numeric:tabular-nums; background:none; border:none; padding:3px 4px; border-radius:5px; cursor:pointer; font-family:inherit; text-align:left; transition:background-color .14s var(--ease-out);}
-  .rv-bar:hover{background:var(--surface2);}
-  .rv-bar.on{background:rgba(var(--brand-rgb),.12);}
+  .rv-bar{display:grid; grid-template-columns:30px 1fr 42px; align-items:center; gap:12px; font-size:11px; color:var(--mut); font-variant-numeric:tabular-nums; padding:3px 4px;}
   .rv-bar .k{white-space:nowrap; display:flex; align-items:center; gap:2px;}
   .rv-bar .k b{color:var(--ink-2); font-weight:600;}
   .rv-bar .tr{height:7px; width:100%; background:var(--line); border-radius:99px; overflow:hidden;}
@@ -1523,11 +1521,7 @@
   .rv-chip{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--ink-2); border:1px solid var(--line); background:var(--surface); border-radius:99px; padding:7px 13px;}
   .rv-chip b{color:var(--brand-2); font-weight:600;}
   /* controls */
-  .rv-controls{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:22px; padding-bottom:6px;}
-  .rv-filters{display:flex; gap:6px; flex-wrap:wrap;}
-  .rv-fchip{font-size:12px; font-weight:600; color:var(--ink-2); border:1px solid var(--line); background:var(--surface); border-radius:99px; padding:6px 13px; cursor:pointer; transition:.14s var(--ease-out);}
-  .rv-fchip:hover{border-color:var(--line-2);}
-  .rv-fchip.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff;}
+  .rv-controls{display:flex; align-items:center; justify-content:flex-end; gap:12px; flex-wrap:wrap; margin-top:22px; padding-bottom:6px;}
   .rv-sort{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mut);}
   .rv-sort select{font-family:inherit; font-size:12.5px; color:var(--ink); background:var(--surface2); border:1px solid var(--line); border-radius:6px; padding:7px 10px; cursor:pointer;}
   /* review cards */
@@ -1549,11 +1543,6 @@
   .rv-photo{width:60px; height:60px; border-radius:6px; overflow:hidden; border:1px solid var(--line); cursor:pointer; flex:0 0 auto; transition:border-color .15s var(--ease-out), transform .15s var(--ease-out);}
   .rv-photo:hover{border-color:var(--brand); transform:scale(1.04);}
   .rv-photo img{width:100%; height:100%; object-fit:cover;}
-  .rv-c-foot{display:flex; align-items:center; gap:14px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);}
-  .rv-help{display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:11.5px; color:var(--mut); background:transparent; border:1px solid var(--line); border-radius:6px; padding:6px 11px; cursor:pointer; transition:.14s var(--ease-out);}
-  .rv-help:hover{border-color:var(--line-2); color:var(--ink);}
-  .rv-help.on{border-color:var(--brand); color:var(--brand-2); background:rgba(var(--brand-rgb),.1);}
-  .rv-help svg{width:13px; height:13px;}
   .rv-date{margin-left:auto; font-size:11px; color:var(--mut);}
   .rv-empty{text-align:center; color:var(--mut); font-size:13px; padding:28px; border:1px dashed var(--line); border-radius:8px;}
   .rv-more{width:100%; margin-top:14px; padding:13px; background:var(--surface2); border:1px solid var(--line); border-radius:8px; color:var(--ink-2); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s var(--ease-out);}
@@ -2567,11 +2556,9 @@
 
         <!-- controls: filter by star + sort -->
         <div class="rv-controls">
-          <div class="rv-filters" id="rvFilters"></div>
           <div class="rv-sort">
             <label for="rvSortSel">Sort</label>
             <select id="rvSortSel">
-              <option value="helpful">Most helpful</option>
               <option value="recent">Most recent</option>
               <option value="high">Highest rated</option>
               <option value="low">Lowest rated</option>
@@ -4587,7 +4574,7 @@
       title:'Sizing chart could be clearer', body:'Shirt quality is fine but the S was tighter than I expected around the chest. Check the measurements twice before ordering.'},
   ];
 
-  var rvFilter=0, rvSort='helpful', rvShown=3, rvHelpSet={};
+  var rvFilter=0, rvSort='recent', rvShown=3;
   function rvReviews(){
     // buyer photos reuse this product's shots
     var photos = (mCur.photos||[mCur.img]).slice(0,3);
@@ -4609,8 +4596,8 @@
     return [p5,p4,p3,p2,p1];
   }
   function renderReviews(){
-    rvFilter=0; rvSort='helpful'; rvShown=3; rvHelpSet={};
-    document.getElementById('rvSortSel').value='helpful';
+    rvFilter=0; rvSort='recent'; rvShown=3;
+    document.getElementById('rvSortSel').value='recent';
     document.getElementById('rvScoreN').textContent = mCur.rating.toFixed(1);
     document.getElementById('rvScoreStars').innerHTML = bigStars(mCur.rating);
     document.getElementById('rvScoreCount').textContent = mCur.ratings+' ratings';
@@ -4619,8 +4606,8 @@
     document.getElementById('rvRecPct').textContent = rec+'%';
     document.getElementById('rvBars').innerHTML = dist.map(function(p,i){
       var star=5-i;
-      return '<button class="rv-bar" data-star="'+star+'"><span class="k"><b>'+star+'</b>'+STAR.replace('viewBox','width="11" height="11" style="color:#f5c451" viewBox')+'</span>'+
-        '<span class="tr"><span class="fl" style="width:'+p+'%"></span></span><span class="pct">'+p+'%</span></button>';
+      return '<div class="rv-bar"><span class="k"><b>'+star+'</b>'+STAR.replace('viewBox','width="11" height="11" style="color:#f5c451" viewBox')+'</span>'+
+        '<span class="tr"><span class="fl" style="width:'+p+'%"></span></span><span class="pct">'+p+'%</span></div>';
     }).join('');
     // sub-scores
     var fitPos = mCur.type==='hoodie'||/oversiz/i.test(mCur.fit||'') ? 68 : (/regular|classic/i.test(mCur.fit||'')?50:54);
@@ -4635,12 +4622,6 @@
     document.getElementById('rvHighlights').innerHTML =
       ['<b>92%</b> praise print quality','<b>True to size</b> for most','<b>Thick fabric</b>','Fast delivery']
       .map(function(t){return '<span class="rv-chip">'+t+'</span>';}).join('');
-    // filters
-    var data=rvReviews();
-    var counts=[0,0,0,0,0]; data.forEach(function(r){counts[5-r.s]++;});
-    document.getElementById('rvFilters').innerHTML =
-      '<span class="rv-fchip on" data-f="0">All ('+data.length+')</span>'+
-      [5,4,3,2,1].map(function(st){var c=counts[5-st]; return c?'<span class="rv-fchip" data-f="'+st+'">'+st+' ★ ('+c+')</span>':'';}).join('');
     applyReviewView();
   }
   function applyReviewView(){
@@ -4662,24 +4643,17 @@
     document.getElementById('rvMore').textContent='Show more reviews ('+(data.length-rvShown)+')';
   }
   function reviewCard(r){
-    var helped=rvHelpSet[r.id];
     return '<div class="rv-card">'+
       '<div class="rv-c-top">'+
         '<div class="rv-av" style="background:'+r.color+'">'+r.initials+'</div>'+
         '<div class="rv-who"><div class="rv-name">'+r.name+
           '<span class="rv-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Verified</span></div>'+
-          '<div class="rv-sub-meta">Size bought: '+r.size+(r.rec?' · Recommends this':'')+'</div></div>'+
+          '<div class="rv-sub-meta">Size bought: '+r.size+(r.rec?' · Recommends this':'')+' · '+r.ago+'</div></div>'+
         '<div class="rv-c-stars">'+rowStars(r.s)+'</div>'+
       '</div>'+
       '<div class="rv-title">'+r.title+'</div>'+
       '<p class="rv-body">'+r.body+'</p>'+
       (r.photos.length? '<div class="rv-photos">'+r.photos.map(function(p){return '<div class="rv-photo"><img src="'+p+'" alt="buyer photo" loading="lazy"></div>';}).join('')+'</div>':'')+
-      '<div class="rv-c-foot">'+
-        '<button class="rv-help'+(helped?' on':'')+'" data-id="'+r.id+'">'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.3a2 2 0 002-1.7l1.4-9a2 2 0 00-2-2.3z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>'+
-          'Helpful ('+(r.help+(helped?1:0))+')</button>'+
-        '<span class="rv-date">'+r.ago+'</span>'+
-      '</div>'+
     '</div>';
   }
 
@@ -4756,31 +4730,8 @@
   });
 
   /* reviews interactions */
-  document.getElementById('rvBars').addEventListener('click', function(e){
-    var b=e.target.closest('.rv-bar'); if(!b) return;
-    var st=parseInt(b.getAttribute('data-star'),10);
-    rvFilter = (rvFilter===st?0:st); rvShown=3;
-    document.querySelectorAll('#rvBars .rv-bar').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-star'),10)===rvFilter); });
-    document.querySelectorAll('#rvFilters .rv-fchip').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-f'),10)===rvFilter); });
-    applyReviewView();
-  });
-  document.getElementById('rvFilters').addEventListener('click', function(e){
-    var c=e.target.closest('.rv-fchip'); if(!c) return;
-    rvFilter=parseInt(c.getAttribute('data-f'),10); rvShown=3;
-    document.querySelectorAll('#rvFilters .rv-fchip').forEach(function(x){ x.classList.toggle('on', x===c); });
-    document.querySelectorAll('#rvBars .rv-bar').forEach(function(x){ x.classList.toggle('on', parseInt(x.getAttribute('data-star'),10)===rvFilter); });
-    applyReviewView();
-  });
   document.getElementById('rvSortSel').addEventListener('change', function(){ rvSort=this.value; rvShown=3; applyReviewView(); });
   document.getElementById('rvMore').addEventListener('click', function(){ rvShown+=3; applyReviewView(); });
-  document.getElementById('rvList').addEventListener('click', function(e){
-    var h=e.target.closest('.rv-help'); if(!h) return;
-    var id=h.getAttribute('data-id'); rvHelpSet[id]=!rvHelpSet[id];
-    h.classList.toggle('on', rvHelpSet[id]);
-    var base=parseInt(h.textContent.replace(/[^0-9]/g,''),10);
-    h.querySelector('svg')&&(h.lastChild.textContent='Helpful ('+(base+(rvHelpSet[id]?1:-1))+')');
-    applyReviewView();
-  });
   document.getElementById('rvWrite').addEventListener('click', function(){
     toast('Thanks! Review form opens after your order is delivered.');
   });
