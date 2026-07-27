@@ -1452,10 +1452,17 @@
   .mp-ctas{display:flex; gap:10px; margin-top:20px;}
   .mp-ctas .btn{flex:1.4; padding:15px; font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;}
   .mp-ctas .btn.ghost{flex:1;}
-  .mp-offers{border:1px solid var(--line); border-radius:5px; background:var(--surface); padding:14px 16px; margin-top:16px;}
-  .mp-offer{display:flex; gap:10px; font-size:12.5px; color:var(--ink-2); line-height:1.5; padding:5px 0;}
-  .mp-offer .ic{color:var(--brand); flex:0 0 auto;}
-  .mp-offer b{color:#fff;}
+  .mp-offers{border:1px solid rgba(var(--brand-rgb),.28); border-radius:8px; background:var(--surface); margin-top:16px; overflow:hidden;}
+  .mp-offers-hd{display:flex; align-items:center; gap:9px; padding:11px 16px; border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(var(--brand-rgb),.14), rgba(var(--brand-rgb),.02) 60%, transparent);
+    font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink);}
+  .mp-offers-hd svg{color:var(--brand); flex:0 0 auto;}
+  .mp-offers-n{margin-left:auto; font-size:11px; font-weight:700; letter-spacing:0; color:var(--brand); background:rgba(var(--brand-rgb),.16); border:1px solid rgba(var(--brand-rgb),.3); border-radius:99px; min-width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; padding:0 6px;}
+  .mp-offer{display:flex; gap:12px; align-items:flex-start; padding:13px 16px; font-size:12.5px; color:var(--ink-2); line-height:1.55;}
+  .mp-offer + .mp-offer{border-top:1px dashed var(--line);}
+  .mp-offer-ic{width:30px; height:30px; border-radius:8px; background:rgba(var(--brand-rgb),.12); border:1px solid rgba(var(--brand-rgb),.3); color:var(--brand); display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .mp-offer-tx b{color:#fff; font-weight:700;}
+  .mp-offer-tx b.hl{color:var(--brand-2);}
   .mp-pin-row{display:flex; gap:8px; margin-top:4px;}
   .mp-pin-row .field-like{flex:1; display:flex; align-items:center; border:1px solid var(--line); background:var(--surface2); border-radius:4px; padding:0 12px; height:44px;}
   .mp-pin-row input{flex:1; background:transparent; border:none; color:#fff; font-size:13px; outline:none; font-family:inherit;}
@@ -2464,8 +2471,19 @@
           <div class="mp-tax">inclusive of all taxes</div>
 
           <div class="mp-offers">
-            <div class="mp-offer"><span class="ic">&#9679;</span><div><b>Bundle deal:</b> add any gift card to this order and get an extra <b>5% off</b> the merch.</div></div>
-            <div class="mp-offer"><span class="ic">&#9679;</span><div><b>Free shipping</b> on orders above €50. Standard shipping €4.99.</div></div>
+            <div class="mp-offers-hd">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg>
+              Available offers
+              <span class="mp-offers-n">2</span>
+            </div>
+            <div class="mp-offer">
+              <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
+              <div class="mp-offer-tx"><b>Bundle deal</b> — add any gift card to this order and get an extra <b class="hl">5% off</b> the merch.</div>
+            </div>
+            <div class="mp-offer">
+              <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
+              <div class="mp-offer-tx"><b>Free shipping</b> on orders above <b class="hl">€50</b>. Standard shipping €4.99.</div>
+            </div>
           </div>
 
           <div id="mpColorBlock">
