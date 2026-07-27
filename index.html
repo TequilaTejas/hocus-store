@@ -1486,7 +1486,7 @@
   .rv-write{background:transparent; border:1px solid var(--line-2); color:var(--ink); font-family:inherit; font-size:12.5px; font-weight:600; padding:9px 15px; border-radius:6px; cursor:pointer; transition:border-color .15s var(--ease-out), background-color .15s var(--ease-out);}
   .rv-write:hover{border-color:var(--brand); background:rgba(var(--brand-rgb),.1);}
   /* summary */
-  .rv-summary{display:grid; grid-template-columns:auto minmax(0,1.3fr) minmax(0,1fr); gap:26px 34px; align-items:start; border:1px solid var(--line); border-radius:8px; background:var(--surface); padding:20px 24px;}
+  .rv-summary{display:grid; grid-template-columns:auto minmax(0,1fr); gap:26px 34px; align-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); padding:20px 24px;}
   @media(max-width:720px){ .rv-summary{grid-template-columns:1fr; gap:20px;} }
   .rv-score{text-align:center; padding-right:22px; border-right:1px solid var(--line);}
   @media(max-width:720px){ .rv-score{border-right:none; border-bottom:1px solid var(--line); padding:0 0 18px;} }
@@ -2497,38 +2497,6 @@
             <div class="btn ghost" id="mpBuyNow">Buy now</div>
           </div>
 
-          <div style="margin-top:22px;" id="mpInfoBlocks">
-            <div class="mp-acc open" data-acc="delivery">
-              <div class="mp-acc-h">Delivery options <span class="mp-acc-hint">Pincode, COD, returns</span><span class="car">&#9662;</span></div>
-              <div class="mp-acc-b">
-                <div class="mp-pin-row">
-                  <div class="field-like"><input id="mpPin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" autocomplete="off"></div>
-                  <div class="btn ghost" id="mpPinCheck">Check</div>
-                </div>
-                <div class="mp-pin-result" id="mpPinResult"></div>
-                <div class="mp-trust">
-                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>100% original, printed on order</div>
-                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>7-day easy returns &amp; size exchange</div>
-                  <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cash on delivery available</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="mp-acc open" data-acc="details">
-              <div class="mp-acc-h">Product details <span class="car">&#9662;</span></div>
-              <div class="mp-acc-b"><div class="mp-specs" id="mpSpecs"></div></div>
-            </div>
-
-            <div class="mp-acc" data-acc="fit">
-              <div class="mp-acc-h">Size &amp; fit <span class="car">&#9662;</span></div>
-              <div class="mp-acc-b"><p class="mp-body-copy" id="mpFitCopy"></p></div>
-            </div>
-
-            <div class="mp-acc" data-acc="care">
-              <div class="mp-acc-h">Material &amp; care <span class="car">&#9662;</span></div>
-              <div class="mp-acc-b"><p class="mp-body-copy" id="mpCareCopy"></p></div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -2548,7 +2516,6 @@
             <div class="rv-rec"><b id="rvRecPct">94%</b> would recommend</div>
           </div>
           <div class="rv-bars" id="rvBars"></div>
-          <div class="rv-subs" id="rvSubs"></div>
         </div>
 
         <!-- AI-style highlight chips distilled from reviews -->
@@ -4134,9 +4101,9 @@
   }
   var MERCH = [
     tee({ id:'hydra-block', name:'Hydra Flick Tee', price:29, mrp:39, rating:4.6, ratings:'1.2k', tag:'Bestseller',
-      sub:'The mirrored logo that started it all', out:['XXL'], colorStyle:'pills',
+      sub:'The mirrored logo that started it all', out:['XXL'],
       photos:['assets/merch/hydra-block-flat.jpg','assets/merch/hydra-block-card.jpg','assets/merch/hydra-block-art.jpg'] }),
-    tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870', acc:true,
+    tee({ id:'ping-999', name:'Ping 999 Tee', price:31, mrp:42, rating:4.6, ratings:'870',
       sub:'Indian server moment. You know the one.',
       photos:['assets/merch/ping-999-flat.jpg','assets/merch/ping-999-card.jpg','assets/merch/ping-999-art.jpg'] }),
     // dark-store image variation (thedarkstore.in style): garment fills the frame, edges melt into the page
@@ -4145,7 +4112,7 @@
       sub:'Hydraflick’s autograph, across your chest',
       photos:['assets/merch/signature-hero-dark.jpg','assets/merch/signature-detail-dark.jpg','assets/merch/signature-model-dark.jpg','assets/merch/signature-art.jpg'] }),
     tee({ id:'gg-easy', name:'GG… Easy. Tee', price:34, mrp:45, rating:4.8, ratings:'2.3k', tag:'Fan favourite',
-      sub:'“GG…” up front. “easy.” on the back.', out:['S'], galleryStyle:'stage',
+      sub:'“GG…” up front. “easy.” on the back.', out:['S'],
       colors:[{n:'Jet Black',hex:'#1b1d22'}],
       specs:{'Fabric':'240 GSM combed cotton','Fit':'Oversized','Neck':'Ribbed crew neck','Sleeve':'Drop shoulder','Print':'Front + back puff print','Country of origin':'India'},
       fit:'Boxy, street-style cut with dropped shoulders. Go one size down for a regular fit.',
@@ -4435,8 +4402,8 @@
   var ZIC = '<span class="zic"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></span>';
   function renderGallery(){
     var imgs = galleryImgs();
-    // alt layout: one large stage + a thumbnail strip
-    if(mCur.galleryStyle==='stage' && imgs){
+    // one large stage image + a thumbnail strip (standard across all products)
+    if(imgs){
       if(mStageIdx>=imgs.length) mStageIdx=0;
       mpGrid.className='mp-stage-wrap';
       mpGrid.innerHTML =
@@ -4446,18 +4413,11 @@
         }).join('')+'</div>';
       return;
     }
+    // SVG-mockup products (no photos) keep a simple tile grid
     mpGrid.className='mp-grid';
-    if(imgs){
-      mpGrid.innerHTML = imgs.map(function(src,v){
-        return '<div class="mp-cell'+(mCur.clean?' clean':'')+'" data-v="'+v+'">'+
-          '<img src="'+src+'" alt="'+mCur.name+' view '+(v+1)+'" loading="lazy">'+ZIC+
-        '</div>';
-      }).join('');
-    } else {
-      mpGrid.innerHTML = [0,1,2,3].map(function(v){
-        return '<div class="mp-cell" data-v="'+v+'" style="'+artBG(mCur,mColor)+'">'+merchSVG(mCur,mColor,v)+'</div>';
-      }).join('');
-    }
+    mpGrid.innerHTML = [0,1,2,3].map(function(v){
+      return '<div class="mp-cell" data-v="'+v+'" style="'+artBG(mCur,mColor)+'">'+merchSVG(mCur,mColor,v)+'</div>';
+    }).join('');
   }
   /* lightbox */
   var lb=document.getElementById('mpLb'), lbImg=document.getElementById('mpLbImg'),
@@ -4491,19 +4451,11 @@
 
   function renderSwatches(){
     var host = document.getElementById('mpSwatches');
-    if(mCur.colorStyle==='pills'){
-      host.className = 'mp-cpills';
-      host.innerHTML = mCur.colors.map(function(c,i){
-        return '<button class="mp-cpill'+(i===mColor?' on':'')+'" data-i="'+i+'"><span class="dot" style="background:'+c.hex+';"></span>'+c.n+'</button>';
-      }).join('');
-      document.getElementById('mpSwName').textContent = '';
-    } else {
-      host.className = 'mp-swatches';
-      host.innerHTML = mCur.colors.map(function(c,i){
-        return '<div class="mp-sw'+(i===mColor?' on':'')+'" data-i="'+i+'" title="'+c.n+'"><span style="background:'+c.hex+';"></span></div>';
-      }).join('');
-      document.getElementById('mpSwName').textContent = '· '+mCur.colors[mColor].n;
-    }
+    host.className = 'mp-cpills';
+    host.innerHTML = mCur.colors.map(function(c,i){
+      return '<button class="mp-cpill'+(i===mColor?' on':'')+'" data-i="'+i+'"><span class="dot" style="background:'+c.hex+';"></span>'+c.n+'</button>';
+    }).join('');
+    document.getElementById('mpSwName').textContent = '';
   }
   document.getElementById('mpSwatches').addEventListener('click', function(e){
     var s = e.target.closest('.mp-sw,.mp-cpill'); if(!s) return;
@@ -4609,15 +4561,6 @@
       return '<div class="rv-bar"><span class="k"><b>'+star+'</b>'+STAR.replace('viewBox','width="11" height="11" style="color:#f5c451" viewBox')+'</span>'+
         '<span class="tr"><span class="fl" style="width:'+p+'%"></span></span><span class="pct">'+p+'%</span></div>';
     }).join('');
-    // sub-scores
-    var fitPos = mCur.type==='hoodie'||/oversiz/i.test(mCur.fit||'') ? 68 : (/regular|classic/i.test(mCur.fit||'')?50:54);
-    var q=Math.round(mCur.rating/5*100), val=Math.round((mCur.rating-0.2)/5*100);
-    document.getElementById('rvSubs').innerHTML =
-      '<div class="rv-sub fit"><div class="sl"><span>Fit</span><b>'+(fitPos>60?'Runs large':fitPos<45?'Runs small':'True to size')+'</b></div>'+
-        '<div class="meter"><span class="knob" style="left:'+fitPos+'%"></span></div>'+
-        '<div class="ends"><span>Runs small</span><span>Runs large</span></div></div>'+
-      '<div class="rv-sub"><div class="sl"><span>Print &amp; quality</span><b>'+(q/20).toFixed(1)+'/5</b></div><div class="meter"><i style="width:'+q+'%"></i></div></div>'+
-      '<div class="rv-sub"><div class="sl"><span>Value for money</span><b>'+(val/20).toFixed(1)+'/5</b></div><div class="meter"><i style="width:'+val+'%"></i></div></div>';
     // highlight chips
     document.getElementById('rvHighlights').innerHTML =
       ['<b>92%</b> praise print quality','<b>True to size</b> for most','<b>Thick fabric</b>','Fast delivery']
@@ -4680,23 +4623,10 @@
     document.getElementById('pdpBarThumb').innerHTML = '<img src="'+bagThumb(mCur)+'" alt="">';
     document.getElementById('pdpBar').classList.remove('show');
     document.getElementById('mpQtyVal').textContent = mQty;
-    document.getElementById('mpSpecs').innerHTML = Object.keys(mCur.specs).map(function(k){
-      return '<div class="mp-spec"><div class="k">'+k+'</div><div class="v">'+mCur.specs[k]+'</div></div>';
-    }).join('');
-    document.getElementById('mpFitCopy').textContent = mCur.fit;
-    document.getElementById('mpCareCopy').textContent = mCur.care;
     renderReviews();
     var similar = MERCH.filter(function(p){return p.id!==mCur.id;})
       .sort(function(a,b){ return (b.cat===mCur.cat?1:0)-(a.cat===mCur.cat?1:0); }).slice(0,4);
     document.getElementById('mpSimilar').innerHTML = similar.map(merchCard).join('');
-    document.getElementById('mpPinResult').classList.remove('on');
-    document.getElementById('mpPin').value='';
-    // acc:true products get the collapsible variant; the rest keep the flat layout
-    document.getElementById('mpInfoBlocks').classList.toggle('mp-flat', !mCur.acc);
-    document.querySelectorAll('#merchpdp .mp-acc').forEach(function(a){
-      var k = a.getAttribute('data-acc');
-      a.classList.toggle('open', k==='delivery' || k==='details');
-    });
     renderSwatches(); renderSizes(); renderGallery();
     goScreen('merchpdp');
   }
@@ -4724,28 +4654,11 @@
   document.getElementById('sizeClose').addEventListener('click', function(){ sizeModal.classList.remove('open'); });
   sizeModal.addEventListener('click', function(e){ if(e.target===sizeModal) sizeModal.classList.remove('open'); });
 
-  /* collapsible info blocks */
-  document.querySelectorAll('#merchpdp .mp-acc-h').forEach(function(h){
-    h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
-  });
-
   /* reviews interactions */
   document.getElementById('rvSortSel').addEventListener('change', function(){ rvSort=this.value; rvShown=3; applyReviewView(); });
   document.getElementById('rvMore').addEventListener('click', function(){ rvShown+=3; applyReviewView(); });
   document.getElementById('rvWrite').addEventListener('click', function(){
     toast('Thanks! Review form opens after your order is delivered.');
-  });
-
-  /* pincode check */
-  document.getElementById('mpPinCheck').addEventListener('click', function(){
-    var pin = document.getElementById('mpPin').value.trim();
-    var res = document.getElementById('mpPinResult');
-    if(!/^[0-9]{5,6}$/.test(pin)){ toast('Enter a valid pincode'); res.classList.remove('on'); return; }
-    var eta = new Date(); eta.setDate(eta.getDate()+5);
-    var day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][eta.getDay()];
-    var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][eta.getMonth()];
-    res.innerHTML = '<span class="ok">&#10003; Delivers to '+pin+'</span><br>Get it by <b>'+day+', '+eta.getDate()+' '+mon+'</b> &middot; Cash on delivery available<br>Easy 7-day returns &amp; free size exchange';
-    res.classList.add('on');
   });
 
   /* add to bag / buy now */
