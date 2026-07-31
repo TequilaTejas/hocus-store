@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Games Lab — Digital Games section concepts — Hocus Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0A0A; --surface:#17191C; --surface2:#1F2228; --fill:#1F2228;
+    --ink:#FFFFFF; --ink-2:#c5ccd6; --mut:#8F97A3; --line:#272A30; --line-2:#363b44;
+    --brand:#E6A93C; --brand-2:#F5CD79; --brand-50:#2A2210; --brand-rgb:230,169,60;
+    --success:#42B347; --warn:#EEA82F; --danger:#E5484D;
+    --radius:4px; --gap:16px; --maxw:1100px;
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+    --font-display:"Bricolage Grotesque","Sora",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  ::selection{background:rgba(var(--brand-rgb),.4); color:#fff;}
+  *{scrollbar-width:thin; scrollbar-color:#2c333d transparent;}
+  *::-webkit-scrollbar{width:10px; height:10px;}
+  *::-webkit-scrollbar-thumb{background:#2c333d; border-radius:4px; border:2px solid var(--bg);}
+  *::-webkit-scrollbar-track{background:transparent;}
+  :focus{outline:none;}
+  :focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:"Sora",-apple-system,Helvetica,Arial,sans-serif; font-size:14px; line-height:1.5;}
+  img{display:block; max-width:100%;}
+  .tabular{font-variant-numeric:tabular-nums;}
+
+  /* ===== lab chrome ===== */
+  .lab-top{padding:18px 24px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;}
+  .lab-wordmark{font-family:var(--font-display); font-weight:800; font-size:17px; letter-spacing:-.01em;}
+  .lab-wordmark .hocus{color:var(--brand-2);}
+  .lab-wordmark .sep{color:var(--mut); font-weight:500; margin:0 2px;}
+  .lab-wordmark .lab{color:var(--ink-2); font-weight:600;}
+  .lab-top-sub{color:var(--mut); font-size:12.5px;}
+
+  .lab-nav{position:sticky; top:0; z-index:60; background:rgba(10,10,10,.9); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line); padding:10px 24px; display:flex; gap:8px; overflow-x:auto;}
+  .lab-pill{flex:0 0 auto; padding:7px 15px; border-radius:50px; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2); font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:none; white-space:nowrap; transition:border-color .15s var(--ease-out), color .15s var(--ease-out), background-color .15s var(--ease-out);}
+  .lab-pill:hover{color:#fff; border-color:rgba(var(--brand-rgb),.6); background:var(--surface2);}
+  .lab-pill .n{color:var(--brand); font-weight:800; margin-right:6px;}
+
+  main{max-width:1280px; margin:0 auto; padding:0 24px;}
+  .lab-concept{padding:64px 0 48px; border-bottom:1px dashed var(--line); scroll-margin-top:64px;}
+  .lab-concept:last-of-type{border-bottom:none;}
+
+  .concept-eyebrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+  .concept-eyebrow .lbl{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut);}
+  .rec-tag{font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#0A0A0A; background:linear-gradient(135deg,var(--brand-2),var(--brand)); padding:3px 10px; border-radius:50px;}
+  .concept-name{font-family:var(--font-display); font-size:clamp(22px,2.6vw,28px); font-weight:700; letter-spacing:-.02em; margin:0 0 8px;}
+  .concept-desc{color:var(--ink-2); font-size:14px; max-width:680px; margin:0 0 16px;}
+  .concept-meta{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px;}
+  .meta-chip{font-size:11px; color:var(--mut); border:1px solid var(--line); padding:4px 11px; border-radius:50px; background:var(--surface); white-space:nowrap;}
+  .meta-chip b{color:var(--ink-2); font-weight:600;}
+
+  .store-mock{max-width:var(--maxw); margin:0 auto; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:clamp(20px,4vw,40px);}
+  .mock-wide{max-width:1180px;}
+
+  /* section-header pattern shared by all 4 concepts, matching the live store */
+  .mock-over{display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mut); margin-bottom:10px;}
+  .mock-over::before{content:""; width:20px; height:2px; background:var(--brand-2); flex:0 0 auto;}
+  .mock-title{font-family:var(--font-display); font-size:clamp(22px,2.6vw,26px); font-weight:700; letter-spacing:-.02em; margin:0 0 6px;}
+  .mock-sub{color:var(--mut); font-size:14px; margin:0 0 26px; max-width:520px;}
+
+  /* shared bits: lime discount chip, prices, amber cta, ghost btn, platform pill */
+  .lime-chip{display:inline-block; background:linear-gradient(135deg,#c4ff3d,#9bdb2a); color:#0a1a06; font-weight:800; font-size:11px; letter-spacing:.03em; text-transform:uppercase; padding:4px 9px; border-radius:6px; box-shadow:inset 0 1px 0 rgba(255,255,255,.4); white-space:nowrap;}
+  .lime-chip.sm{font-size:10px; padding:3px 7px; border-radius:5px;}
+  .px-strike{color:var(--mut); text-decoration:line-through; font-size:12px;}
+  .px-now{color:#fff; font-weight:700; font-size:15px;}
+  .btn-amber{background:var(--brand); color:#0A0A0A; font-weight:600; font-size:13.5px; padding:11px 20px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; font-family:inherit; transition:box-shadow .15s var(--ease-out), transform .1s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .btn-amber:hover{box-shadow:0 6px 18px rgba(var(--brand-rgb),.4);} }
+  .btn-amber:active{transform:scale(.97);}
+  .ghost-btn{padding:13px 32px; border-radius:8px; background:transparent; border:1px solid var(--line-2); color:var(--ink-2); font-size:13.5px; font-weight:600; cursor:pointer; font-family:inherit; letter-spacing:.01em; transition:border-color .15s var(--ease-out), color .15s var(--ease-out), background-color .15s var(--ease-out);}
+  .ghost-btn:hover{color:#fff; border-color:rgba(var(--brand-rgb),.55); background:rgba(var(--brand-rgb),.06);}
+  .ghost-btn:active{transform:scale(.98);}
+  .plat-pill{font-size:10px; font-weight:700; padding:4px 9px; border-radius:50px; background:rgba(0,0,0,.62); border:1px solid rgba(255,255,255,.2); color:#fff; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); white-space:nowrap;}
+
+  /* underline tabs, shared by concept B and concept D (== merch tabs on the live store) */
+  .tabs-row{display:flex; gap:2px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:24px;}
+  .u-tab{font-size:13px; font-weight:600; color:var(--mut); padding:10px 15px; cursor:pointer; border:none; background:none; font-family:inherit; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .15s var(--ease-out), border-color .15s var(--ease-out);}
+  .u-tab:hover{color:#fff;}
+  .u-tab.on{color:#fff; border-bottom-color:var(--brand);}
+
+  /* generic hover-lift used by every card type below */
+  .liftcard{transition:transform .13s var(--ease-out), border-color .13s var(--ease-out), box-shadow .13s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){
+    .liftcard:hover{transform:translateY(-5px); border-color:rgba(180,185,200,.3); box-shadow:0 18px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(180,185,200,.1);}
+  }
+  .liftcard:active{transform:scale(.97);}
+
+  /* ===================== CONCEPT A — Marquee + Shelf ===================== */
+  .marquee{position:relative; aspect-ratio:16/9; border-radius:5px; overflow:hidden; margin-bottom:24px; background:#050505;}
+  .marquee video, .marquee .mk-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .marquee video{transition:transform .4s var(--ease-out);}
+  .marquee .mk-poster{display:block; opacity:1; transition:opacity .9s var(--ease-in-out);}
+  .marquee.playing .mk-poster{opacity:0; pointer-events:none;}
+  body.reduced-motion .marquee video{display:none;}
+  body.reduced-motion .marquee .mk-poster{display:block; opacity:1;}
+  .marquee::after{content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 48%);}
+  /* progressive blur: stacked backdrop-filter bands, each masked to a lower slice */
+  .mk-fade{position:absolute; left:0; right:0; bottom:0; height:62%; z-index:1; pointer-events:none;}
+  .mk-fade>i{position:absolute; inset:0;}
+  .mk-fade>i:nth-child(1){backdrop-filter:blur(2px);  -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 64%,transparent 82%); mask-image:linear-gradient(0deg,#000 0%,#000 64%,transparent 82%);}
+  .mk-fade>i:nth-child(2){backdrop-filter:blur(5px);  -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 42%,transparent 62%); mask-image:linear-gradient(0deg,#000 0%,#000 42%,transparent 62%);}
+  .mk-fade>i:nth-child(3){backdrop-filter:blur(11px); -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 24%,transparent 42%); mask-image:linear-gradient(0deg,#000 0%,#000 24%,transparent 42%);}
+  .mk-fade>i:nth-child(4){backdrop-filter:blur(20px); -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);  mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);}
+  .mk-fade::after{content:""; position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 38%, transparent 100%);}
+  .mk-content{position:absolute; left:32px; right:32px; bottom:30px; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; gap:24px;}
+  .mk-logo{max-width:760px; max-height:280px; width:64%; object-fit:contain; object-position:left bottom; margin-bottom:0; filter:drop-shadow(0 6px 24px rgba(0,0,0,.7));}
+  .mk-right{display:flex; flex-direction:column; align-items:flex-end; gap:14px; flex-shrink:0;}
+  .mk-price-row{display:flex; align-items:baseline; gap:12px;}
+  .mk-price-row .px-strike{font-size:15px;}
+  .mk-price-row .px-now{font-size:27px; font-weight:700;}
+  .mk-corner{position:absolute; top:20px; right:20px; z-index:2;}
+  @media(max-width:700px){
+    .mk-content{flex-direction:column; align-items:flex-start;}
+    .mk-logo{width:78%;}
+    .mk-right{align-items:flex-start;}
+  }
+
+  .shelf-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px;}
+  @media(max-width:900px){.shelf-grid{grid-template-columns:repeat(2,1fr);}}
+  .g-card{background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer;}
+  .g-art{position:relative; aspect-ratio:16/9; overflow:hidden; background:#000;}
+  .g-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .g-art img.alt{opacity:0; transition:opacity .4s var(--ease-in-out);}
+  @media(hover:hover) and (pointer:fine){ .g-card:hover .g-art img.alt{opacity:1;} }
+  .g-plat{position:absolute; top:8px; left:8px; z-index:2;}
+  .g-chip{position:absolute; top:8px; right:8px; z-index:2;}
+  .g-body{padding:12px 14px 14px;}
+  .g-title{font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .g-price-row{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+
+  /* ===================== CONCEPT B — Poster Wall ===================== */
+  .poster-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:900px){.poster-grid{grid-template-columns:repeat(2,1fr);}}
+  .p-card{background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer; transition:opacity .2s var(--ease-out), transform .13s var(--ease-out), border-color .13s var(--ease-out), box-shadow .13s var(--ease-out);}
+  .p-card.hide{display:none;}
+  .p-art{position:relative; aspect-ratio:2/3; overflow:hidden;}
+  .p-art img{width:100%; height:100%; object-fit:cover; transition:filter .2s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .p-card:hover .p-art img{filter:brightness(.5);} }
+  .p-plats{position:absolute; left:10px; right:10px; bottom:-40px; display:flex; gap:6px; flex-wrap:wrap; opacity:0; transition:bottom .22s var(--ease-out), opacity .22s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .p-card:hover .p-plats{bottom:10px; opacity:1;} }
+  .p-body{padding:12px 14px 14px;}
+  .p-cat{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); margin-bottom:5px;}
+  .p-title{font-family:var(--font-display); font-weight:700; font-size:14.5px; margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .p-price-row{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+
+  /* ===================== CONCEPT C — Spotlight Rail ===================== */
+  .rail-outer{position:relative; border-radius:5px; overflow:hidden; padding:24px;}
+  .rail-backdrop{position:absolute; inset:0; z-index:0;}
+  .rail-backdrop img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:blur(40px) brightness(.35); opacity:0; transition:opacity .5s var(--ease-in-out);}
+  .rail-backdrop img.on{opacity:1;}
+  .rail-backdrop::after{content:""; position:absolute; inset:0; background:rgba(var(--brand-rgb),.06);}
+  .rail{position:relative; z-index:1; display:flex; gap:8px; height:320px;}
+  .rail-card{flex:0 0 150px; border-radius:5px; overflow:hidden; position:relative; cursor:pointer; background:var(--surface); border:1px solid var(--line); transition:flex .35s var(--ease-in-out), box-shadow .3s var(--ease-out);}
+  .rail-card.expanded{flex:0 0 330px; box-shadow:0 22px 54px rgba(0,0,0,.6);}
+  .rail-cover{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .25s var(--ease-out);}
+  .rail-card.expanded .rail-cover{opacity:0;}
+  .rail-tag{position:absolute; left:8px; bottom:8px; z-index:2; font-family:var(--font-display); font-weight:700; font-size:12px; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.8); max-width:calc(100% - 16px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .rail-card.expanded .rail-tag{display:none;}
+  .rail-inner{position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .25s var(--ease-out) .08s; display:flex; flex-direction:column;}
+  .rail-card.expanded .rail-inner{opacity:1; pointer-events:auto;}
+  .rail-inner-media{position:relative; width:100%; height:58%; overflow:hidden; background:#000;}
+  .rail-inner-media img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .6s var(--ease-in-out);}
+  .rail-inner-media img.on{opacity:1;}
+  .rail-inner-body{padding:12px 14px; flex:1; display:flex; flex-direction:column; justify-content:center; gap:9px;}
+  .rail-inner-title{font-family:var(--font-display); font-weight:700; font-size:15px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .rail-inner-price{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+  .rail-inner-cta{align-self:flex-start; padding:8px 16px; font-size:12.5px; margin-top:2px;}
+  @media(max-width:1180px){ .rail{overflow-x:auto; padding-bottom:6px;} }
+
+  /* ===================== CONCEPT D — Tabbed Shelf ===================== */
+  .shelf-list{display:flex; flex-direction:column;}
+  .shelf-row{display:flex; align-items:center; gap:16px; padding:12px 10px; border-bottom:1px solid var(--line); cursor:pointer; border-radius:4px; transition:background-color .15s var(--ease-out);}
+  .shelf-row:last-child{border-bottom:none;}
+  @media(hover:hover) and (pointer:fine){ .shelf-row:hover{background:var(--surface2);} }
+  .sr-thumb{flex:0 0 168px; aspect-ratio:460/215; border-radius:4px; overflow:hidden; background:#000;}
+  .sr-thumb img{width:100%; height:100%; object-fit:cover;}
+  .sr-main{flex:1 1 auto; min-width:0;}
+  .sr-title{font-family:var(--font-display); font-weight:700; font-size:15px; margin-bottom:5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .sr-stars{color:var(--brand); font-size:13px; letter-spacing:1px; margin-right:6px;}
+  .sr-meta{color:var(--mut); font-size:12px;}
+  .sr-price{flex:0 0 auto; text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:5px;}
+  .sr-price .row1{display:flex; align-items:center; gap:7px;}
+  .tab-panel{display:none;}
+  .tab-panel.on{display:block;}
+
+  /* ===================== SECTION 5 — fallback ladder ===================== */
+  .ladder-row{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
+  @media(max-width:980px){.ladder-row{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){.ladder-row{grid-template-columns:1fr;}}
+  .ladder-tile{border:1px solid var(--line); border-radius:5px; overflow:hidden; background:var(--surface);}
+  .ladder-media{position:relative; aspect-ratio:16/9; overflow:hidden; background:#0d0d0f;}
+  .ladder-media img, .ladder-media video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .rung-label{position:absolute; top:8px; left:8px; z-index:3; font-size:9.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; background:rgba(0,0,0,.68); color:var(--brand-2); padding:3px 8px; border-radius:50px; border:1px solid rgba(255,255,255,.15);}
+  .ladder-cap{padding:11px 12px; font-size:11px; color:var(--mut); line-height:1.5;}
+  .ladder-cap b{color:var(--ink-2); font-weight:600;}
+
+  /* rung 1: trailer shimmer fallback (shown only if a video element is absent — n/a here since we have a real trailer, kept for completeness) */
+  .rung-shimmer{position:absolute; inset:0; background:linear-gradient(100deg, var(--surface) 30%, var(--surface2) 50%, var(--surface) 70%); background-size:200% 100%; animation:shimmer 2.2s linear infinite;}
+  @keyframes shimmer{0%{background-position:200% 0;} 100%{background-position:-200% 0;}}
+  .rung-play{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+  .rung-play svg{width:40px; height:40px; opacity:.5;}
+
+  /* rung 2: screenshot crossfade */
+  .xfade-stack img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; animation:xfade3 9s ease-in-out infinite;}
+  .xfade-stack img:nth-child(1){animation-delay:0s;}
+  .xfade-stack img:nth-child(2){animation-delay:3s;}
+  .xfade-stack img:nth-child(3){animation-delay:6s;}
+  @keyframes xfade3{0%{opacity:0;} 6%{opacity:1;} 33%{opacity:1;} 39%{opacity:0;} 100%{opacity:0;}}
+
+  /* rung 3: ken burns */
+  .kenburns{animation:kenburns 18s var(--ease-in-out) infinite alternate;}
+  @keyframes kenburns{0%{transform:scale(1) translate(0,0);} 100%{transform:scale(1.08) translate(-1.5%,-1%);}}
+
+  /* rung 4: portrait on blur */
+  .blur-fill{position:absolute; inset:-20px; width:calc(100% + 40px); height:calc(100% + 40px); object-fit:cover; filter:blur(30px) brightness(.55); transform:scale(1.15);}
+  .blur-portrait{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:150%; width:auto; max-width:none; object-fit:contain; box-shadow:0 12px 40px rgba(0,0,0,.6);}
+
+  /* rung 5: title-only placeholder */
+  .title-only{position:absolute; inset:0; background:linear-gradient(135deg, var(--brand-50), #17191C 72%);}
+  .title-only::before{content:""; position:absolute; inset:0; opacity:.35;
+    background-image:radial-gradient(rgba(230,169,60,.35) 1px, transparent 1px);
+    background-size:14px 14px;}
+  .title-only-txt{position:absolute; left:14px; right:14px; bottom:34px; font-family:var(--font-display); font-weight:800; font-size:18px; color:#fff; line-height:1.15; z-index:2;}
+  .title-only-wm{position:absolute; right:12px; bottom:10px; font-size:9.5px; font-weight:800; letter-spacing:.12em; color:rgba(230,169,60,.55); z-index:2;}
+
+  @media (prefers-reduced-motion: reduce){
+    .rung-shimmer, .xfade-stack img, .kenburns{animation:none !important;}
+    .kenburns{transform:none !important;}
+    .xfade-stack img{opacity:1 !important;}
+    .xfade-stack img:not(:first-child){display:none;}
+  }
+
+  /* ===== footer ===== */
+  .lab-footer{padding:32px 24px 60px; text-align:center; color:var(--mut); font-size:12.5px; border-top:1px solid var(--line); margin-top:8px;}
+
+  @media(max-width:640px){
+    .mk-content{max-width:78%;}
+    .sr-thumb{flex-basis:120px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="lab-top">
+  <div class="lab-wordmark"><span class="hocus">HOCUS</span><span class="sep">·</span><span class="lab">games lab</span></div>
+  <div class="lab-top-sub">4 concepts for the new Digital Games section, rendered with real Steam art &amp; prices — pick one.</div>
+</header>
+
+<nav class="lab-nav" aria-label="Jump to concept">
+  <a class="lab-pill" href="#conceptA"><span class="n">A</span>Marquee + Shelf</a>
+  <a class="lab-pill" href="#conceptB"><span class="n">B</span>Poster Wall</a>
+  <a class="lab-pill" href="#conceptC"><span class="n">C</span>Spotlight Rail</a>
+  <a class="lab-pill" href="#conceptD"><span class="n">D</span>Tabbed Shelf</a>
+  <a class="lab-pill" href="#ladder"><span class="n">•</span>Fallback ladder</a>
+</nav>
+
+<main>
+
+  <!-- ============================================================ CONCEPT A ============================================================ -->
+  <section class="lab-concept" id="conceptA">
+    <div class="concept-eyebrow"><span class="lbl">Concept A</span><span class="rec-tag">Recommended</span></div>
+    <h2 class="concept-name">Marquee + Shelf</h2>
+    <p class="concept-desc">One big featured game up top with real trailer motion, a 4-across shelf of the rest below — the same rhythm as the Valorant hero-SKU + catalogue grid already on the home page.</p>
+    <div class="concept-meta">
+      <span class="meta-chip">Effort: <b>L</b></span>
+      <span class="meta-chip">Video dependency: <b>optional</b></span>
+      <span class="meta-chip">Echoes: <b>featured SKU + catalogue grid</b></span>
+    </div>
+
+    <div class="store-mock">
+      <div class="mock-over">Digital games</div>
+      <div class="mock-title">Level up your library</div>
+      <p class="mock-sub">Steam keys, delivered to your inbox in seconds. Always below store price.</p>
+
+      <!-- marquee -->
+      <div class="marquee">
+        <video muted loop playsinline preload="metadata" data-content-ratio="2.4" poster="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg">
+          <source src="https://cdn.akamai.steamstatic.com/steam/apps/257081132/movie480.mp4" type="video/mp4">
+        </video>
+        <img class="mk-poster" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg" alt="Cyberpunk 2077 key art">
+        <div class="mk-fade" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <span class="lime-chip mk-corner">-65% OFF</span>
+        <div class="mk-content">
+          <div class="mk-left">
+            <img class="mk-logo" src="assets/lab/cp2077-logo.png" alt="Cyberpunk 2077">
+          </div>
+          <div class="mk-right">
+            <div class="mk-price-row">
+              <span class="px-strike tabular">€69.99</span>
+              <span class="px-now tabular">€24.49</span>
+            </div>
+            <button class="btn-amber">Get key <span aria-hidden="true">&#8594;</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- shelf -->
+      <div class="shelf-grid">
+        <div class="g-card liftcard" tabindex="0">
+          <div class="g-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg" alt="">
+            <img class="alt" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/capsule_616x353.jpg" alt="">
+            <span class="plat-pill g-plat">Steam</span>
+            <span class="lime-chip sm g-chip">-42%</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">Elden Ring</div>
+            <div class="g-price-row"><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€34.99</span></div>
+          </div>
+        </div>
+        <div class="g-card liftcard" tabindex="0">
+          <div class="g-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg" alt="">
+            <img class="alt" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/capsule_616x353.jpg" alt="">
+            <span class="plat-pill g-plat">Steam</span>
+            <span class="lime-chip sm g-chip">-20%</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">Baldur's Gate 3</div>
+            <div class="g-price-row"><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€47.99</span></div>
+          </div>
+        </div>
+        <div class="g-card liftcard" tabindex="0">
+          <div class="g-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg" alt="">
+            <img class="alt" src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/capsule_616x353.jpg" alt="">
+            <span class="plat-pill g-plat">Steam</span>
+            <span class="lime-chip sm g-chip">-30%</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">Stardew Valley</div>
+            <div class="g-price-row"><span class="px-strike tabular">€13.99</span><span class="px-now tabular">€9.75</span></div>
+          </div>
+        </div>
+        <div class="g-card liftcard" tabindex="0">
+          <div class="g-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg" alt="">
+            <img class="alt" src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/capsule_616x353.jpg" alt="">
+            <span class="plat-pill g-plat">Steam</span>
+            <span class="lime-chip sm g-chip">-45%</span>
+          </div>
+          <div class="g-body">
+            <div class="g-title">Sekiro: Shadows Die Twice</div>
+            <div class="g-price-row"><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€32.99</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center;">
+        <button class="ghost-btn">View all games</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONCEPT B ============================================================ -->
+  <section class="lab-concept" id="conceptB">
+    <div class="concept-eyebrow"><span class="lbl">Concept B</span></div>
+    <h2 class="concept-name">Poster Wall</h2>
+    <p class="concept-desc">Portrait key-art grid with underline category tabs, same filter pattern as Merch. Platform pills slide up on hover, mirroring the merch size-peek.</p>
+    <div class="concept-meta">
+      <span class="meta-chip">Effort: <b>M</b></span>
+      <span class="meta-chip">Video dependency: <b>none</b></span>
+      <span class="meta-chip">Echoes: <b>merch grid + size-peek</b></span>
+    </div>
+
+    <div class="store-mock">
+      <div class="mock-over">Digital games</div>
+      <div class="mock-title">Level up your library</div>
+      <p class="mock-sub">Steam keys, delivered to your inbox in seconds. Always below store price.</p>
+
+      <div class="tabs-row" id="bTabs">
+        <button class="u-tab on" data-filter="All">All</button>
+        <button class="u-tab" data-filter="Action">Action</button>
+        <button class="u-tab" data-filter="Indie">Indie</button>
+        <button class="u-tab" data-filter="Under20">Under €20</button>
+      </div>
+
+      <div class="poster-grid" id="bGrid">
+        <div class="p-card liftcard" data-cat="Action" data-price="34.99" tabindex="0">
+          <div class="p-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg" alt="Elden Ring">
+            <div class="p-plats"><span class="plat-pill">Steam</span></div>
+          </div>
+          <div class="p-body">
+            <div class="p-cat">Action</div>
+            <div class="p-title">Elden Ring</div>
+            <div class="p-price-row"><span class="lime-chip sm">-42%</span><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€34.99</span></div>
+          </div>
+        </div>
+        <div class="p-card liftcard" data-cat="Action" data-price="32.99" tabindex="0">
+          <div class="p-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/library_600x900.jpg" alt="Sekiro: Shadows Die Twice">
+            <div class="p-plats"><span class="plat-pill">Steam</span><span class="plat-pill">PSN</span></div>
+          </div>
+          <div class="p-body">
+            <div class="p-cat">Action</div>
+            <div class="p-title">Sekiro: Shadows Die Twice</div>
+            <div class="p-price-row"><span class="lime-chip sm">-45%</span><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€32.99</span></div>
+          </div>
+        </div>
+        <div class="p-card liftcard" data-cat="Indie" data-price="4.99" tabindex="0">
+          <div class="p-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/504230/library_600x900.jpg" alt="Celeste">
+            <div class="p-plats"><span class="plat-pill">Steam</span></div>
+          </div>
+          <div class="p-body">
+            <div class="p-cat">Indie</div>
+            <div class="p-title">Celeste</div>
+            <div class="p-price-row"><span class="lime-chip sm">-75%</span><span class="px-strike tabular">€19.99</span><span class="px-now tabular">€4.99</span></div>
+          </div>
+        </div>
+        <div class="p-card liftcard" data-cat="Indie" data-price="9.75" tabindex="0">
+          <div class="p-art">
+            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/library_600x900.jpg" alt="Stardew Valley">
+            <div class="p-plats"><span class="plat-pill">Steam</span><span class="plat-pill">Xbox</span></div>
+          </div>
+          <div class="p-body">
+            <div class="p-cat">Indie</div>
+            <div class="p-title">Stardew Valley</div>
+            <div class="p-price-row"><span class="lime-chip sm">-30%</span><span class="px-strike tabular">€13.99</span><span class="px-now tabular">€9.75</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:center; margin-top:28px;">
+        <button class="ghost-btn">View all games</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONCEPT C ============================================================ -->
+  <section class="lab-concept" id="conceptC">
+    <div class="concept-eyebrow"><span class="lbl">Concept C</span></div>
+    <h2 class="concept-name">Spotlight Rail</h2>
+    <p class="concept-desc">A horizontal rail of covers; the focused card expands to reveal a live inline preview over a blurred, colour-matched backdrop. The most novel option — no existing pattern to lean on.</p>
+    <div class="concept-meta">
+      <span class="meta-chip">Effort: <b>L</b></span>
+      <span class="meta-chip">Video dependency: <b>optional</b></span>
+      <span class="meta-chip">Echoes: <b>none — most novel</b></span>
+    </div>
+
+    <div class="store-mock mock-wide">
+      <div class="mock-over">Digital games</div>
+      <div class="mock-title">Level up your library</div>
+      <p class="mock-sub">Hover or tab through a cover to preview it.</p>
+
+      <div class="rail-outer" id="railOuter">
+        <div class="rail-backdrop" id="railBackdrop">
+          <img class="on" data-idx="0" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_hero.jpg" alt="">
+          <img data-idx="1" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg" alt="">
+          <img data-idx="2" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_hero.jpg" alt="">
+          <img data-idx="3" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1145350/library_hero.jpg" alt="">
+          <img data-idx="4" src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/library_hero.jpg" alt="">
+          <img data-idx="5" src="https://cdn.cloudflare.steamstatic.com/steam/apps/504230/library_hero.jpg" alt="">
+        </div>
+
+        <div class="rail" id="rail">
+          <div class="rail-card expanded" data-idx="0" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg" alt="">
+            <div class="rail-tag">Elden Ring</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_943bf6fe62352757d9070c1d33e50b92fe8539f1.1920x1080.jpg?t=1784684281" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_dcdac9e4b26ac0ee5248bfd2967d764fd00cdb42.1920x1080.jpg?t=1784684281" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Elden Ring</div>
+                <div class="rail-inner-price"><span class="lime-chip sm">-42%</span><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€34.99</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail-card" data-idx="1" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_600x900.jpg" alt="">
+            <div class="rail-tag">Cyberpunk 2077</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_2f649b68d579bf87011487d29bc4ccbfdd97d34f.1920x1080.jpg?t=1784714077" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_0e64170751e1ae20ff8fdb7001a8892fd48260e7.1920x1080.jpg?t=1784714077" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Cyberpunk 2077</div>
+                <div class="rail-inner-price"><span class="lime-chip sm">-65%</span><span class="px-strike tabular">€69.99</span><span class="px-now tabular">€24.49</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail-card" data-idx="2" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg" alt="">
+            <div class="rail-tag">Baldur's Gate 3</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_c73bc54415178c07fef85f54ee26621728c77504.1920x1080.jpg?t=1777363040" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_73d93bea842b93914d966622104dcb8c0f42972b.1920x1080.jpg?t=1777363040" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Baldur's Gate 3</div>
+                <div class="rail-inner-price"><span class="lime-chip sm">-20%</span><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€47.99</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail-card" data-idx="3" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1145350/library_600x900.jpg" alt="">
+            <div class="rail-tag">Hades II</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_ef0f63061d0a0a9a7e46f3b84f125d25330e8f19.1920x1080.jpg?t=1779901265" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_f28befd916e59b8bf0a8a801b8a498b8adaa01eb.1920x1080.jpg?t=1779901265" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Hades II</div>
+                <div class="rail-inner-price"><span class="px-now tabular">€28.99</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail-card" data-idx="4" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/library_600x900.jpg" alt="">
+            <div class="rail-tag">Sekiro</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_0f7b0f8ed9ffc49aba26f9328caa9a1d59ad60f0.1920x1080.jpg?t=1762888662" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_2685dd844a2a523b6c7ec207d46a538db6a908cd.1920x1080.jpg?t=1762888662" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Sekiro: Shadows Die Twice</div>
+                <div class="rail-inner-price"><span class="lime-chip sm">-45%</span><span class="px-strike tabular">€59.99</span><span class="px-now tabular">€32.99</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+          <div class="rail-card" data-idx="5" tabindex="0">
+            <img class="rail-cover" src="https://cdn.cloudflare.steamstatic.com/steam/apps/504230/library_600x900.jpg" alt="">
+            <div class="rail-tag">Celeste</div>
+            <div class="rail-inner">
+              <div class="rail-inner-media">
+                <img class="on" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_1ad297c2044cdcf450ee83e56350cafb590da755.1920x1080.jpg?t=1714089525" alt="">
+                <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_03bfe6bd5ddac7f747c8d2aa1a4f82cfd53c6dcb.1920x1080.jpg?t=1714089525" alt="">
+              </div>
+              <div class="rail-inner-body">
+                <div class="rail-inner-title">Celeste</div>
+                <div class="rail-inner-price"><span class="lime-chip sm">-75%</span><span class="px-strike tabular">€19.99</span><span class="px-now tabular">€4.99</span></div>
+                <button class="btn-amber rail-inner-cta">Get key &#8594;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONCEPT D ============================================================ -->
+  <section class="lab-concept" id="conceptD">
+    <div class="concept-eyebrow"><span class="lbl">Concept D</span></div>
+    <h2 class="concept-name">Tabbed Shelf</h2>
+    <p class="concept-desc">Steam-style [Trending] [Top sellers] [Specials] tabs above dense list rows — thumb, title, rating, delivery line, price. Cheapest to build, scans fastest for return shoppers.</p>
+    <div class="concept-meta">
+      <span class="meta-chip">Effort: <b>S</b></span>
+      <span class="meta-chip">Video dependency: <b>none</b></span>
+      <span class="meta-chip">Echoes: <b>merch tabs + catalogue rows</b></span>
+    </div>
+
+    <div class="store-mock">
+      <div class="mock-over">Digital games</div>
+      <div class="mock-title">Level up your library</div>
+      <p class="mock-sub">Steam keys, delivered to your inbox in seconds.</p>
+
+      <div class="tabs-row" id="dTabs">
+        <button class="u-tab on" data-tab="trending">Trending</button>
+        <button class="u-tab" data-tab="top">Top sellers</button>
+        <button class="u-tab" data-tab="specials">Specials</button>
+      </div>
+
+      <div class="shelf-list tab-panel on" id="panel-trending">
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1030300/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Hollow Knight: Silksong</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="px-now tabular">€19.50</span></div></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1145350/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Hades II</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="px-now tabular">€28.99</span></div></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Baldur's Gate 3</div><span class="sr-stars">★★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-20%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€47.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Cyberpunk 2077</div><span class="sr-stars">★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-65%</span><span class="px-strike tabular">€69.99</span></div><span class="px-now tabular">€24.49</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Elden Ring</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-42%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€34.99</span></div>
+        </div>
+      </div>
+
+      <div class="shelf-list tab-panel" id="panel-top">
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Elden Ring</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-42%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€34.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Baldur's Gate 3</div><span class="sr-stars">★★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-20%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€47.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Sekiro: Shadows Die Twice</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-45%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€32.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Stardew Valley</div><span class="sr-stars">★★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-30%</span><span class="px-strike tabular">€13.99</span></div><span class="px-now tabular">€9.75</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Cyberpunk 2077</div><span class="sr-stars">★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-65%</span><span class="px-strike tabular">€69.99</span></div><span class="px-now tabular">€24.49</span></div>
+        </div>
+      </div>
+
+      <div class="shelf-list tab-panel" id="panel-specials">
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/504230/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Celeste</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-75%</span><span class="px-strike tabular">€19.99</span></div><span class="px-now tabular">€4.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Cyberpunk 2077</div><span class="sr-stars">★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-65%</span><span class="px-strike tabular">€69.99</span></div><span class="px-now tabular">€24.49</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Sekiro: Shadows Die Twice</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-45%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€32.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Elden Ring</div><span class="sr-stars">★★★★½</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-42%</span><span class="px-strike tabular">€59.99</span></div><span class="px-now tabular">€34.99</span></div>
+        </div>
+        <div class="shelf-row" tabindex="0">
+          <div class="sr-thumb"><img src="https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg" alt=""></div>
+          <div class="sr-main"><div class="sr-title">Stardew Valley</div><span class="sr-stars">★★★★★</span><span class="sr-meta">Global · Instant delivery</span></div>
+          <div class="sr-price"><div class="row1"><span class="lime-chip sm">-30%</span><span class="px-strike tabular">€13.99</span></div><span class="px-now tabular">€9.75</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ SECTION 5 — FALLBACK LADDER ============================================================ -->
+  <section class="lab-concept" id="ladder">
+    <div class="concept-eyebrow"><span class="lbl">Section 5</span></div>
+    <h2 class="concept-name">The fallback ladder</h2>
+    <p class="concept-desc">Not every publisher sends a trailer. This is what each concept renders depending on what asset actually comes in — from full motion down to a placeholder with just a title.</p>
+
+    <div class="store-mock mock-wide">
+      <div class="ladder-row">
+        <div class="ladder-tile">
+          <div class="ladder-media">
+            <span class="rung-label">1 · Trailer</span>
+            <video id="ladderVideo" autoplay muted loop playsinline preload="metadata" poster="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg">
+              <source src="https://cdn.akamai.steamstatic.com/steam/apps/257081132/movie480.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="ladder-cap"><b>Cyberpunk 2077.</b> publisher sent: trailer mp4 → we render: autoplay muted loop (static frame if motion reduced)</div>
+        </div>
+
+        <div class="ladder-tile">
+          <div class="ladder-media xfade-stack">
+            <span class="rung-label">2 · Screenshots</span>
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_b887651a93b0525739049eb4194f633de2df75be.1920x1080.jpg?t=1754692865" alt="">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_9ac899fe2cda15d48b0549bba77ef8c4a090a71c.1920x1080.jpg?t=1754692865" alt="">
+            <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_4fa0866709ede3753fdf2745349b528d5e8c4054.1920x1080.jpg?t=1754692865" alt="">
+          </div>
+          <div class="ladder-cap"><b>Stardew Valley.</b> publisher sent: 3 store screenshots, no trailer → we render: slow crossfade loop</div>
+        </div>
+
+        <div class="ladder-tile">
+          <div class="ladder-media">
+            <span class="rung-label">3 · Key art</span>
+            <img class="kenburns" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_hero.jpg" alt="">
+          </div>
+          <div class="ladder-cap"><b>Elden Ring.</b> publisher sent: key art only → we render: Ken Burns pan/zoom, 18s alternate</div>
+        </div>
+
+        <div class="ladder-tile">
+          <div class="ladder-media">
+            <span class="rung-label">4 · Portrait</span>
+            <img class="blur-fill" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg" alt="">
+            <img class="blur-portrait" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg" alt="">
+          </div>
+          <div class="ladder-cap"><b>Baldur's Gate 3.</b> publisher sent: portrait cover only, wrong aspect → we render: cover centred over a blurred fill of itself</div>
+        </div>
+
+        <div class="ladder-tile">
+          <div class="ladder-media">
+            <span class="rung-label">5 · Title only</span>
+            <div class="title-only"></div>
+            <div class="title-only-txt">Wraithbound</div>
+            <div class="title-only-wm">HOCUS</div>
+          </div>
+          <div class="ladder-cap"><b>Wraithbound</b> (pre-launch). publisher sent: nothing yet → we render: amber gradient + title, no art needed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="lab-footer">Lab page — not linked from the store.</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---- reduced motion gate ----
+  var reduced = false;
+  try{ reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  if(reduced){
+    document.body.classList.add('reduced-motion');
+    var vids = document.querySelectorAll('video');
+    for(var i=0;i<vids.length;i++){
+      vids[i].pause();
+      vids[i].removeAttribute('autoplay');
+    }
+  }
+
+  // ---- marquee: zoom video so its picture fills the frame ----
+  // Trailers often ship letterboxed inside a 16:9 encode (this one: 2.4:1 picture,
+  // baked black bars). data-content-ratio declares the true picture ratio; without
+  // it we fall back to the encoded ratio. Scale crops the bars, capped at 1.6.
+  (function(){
+    var mk = document.querySelector('.marquee');
+    var v = mk && mk.querySelector('video');
+    if(!v) return;
+    function fit(){
+      var cw = mk.clientWidth, ch = mk.clientHeight;
+      if(!cw || !ch) return;
+      var boxR = cw/ch;
+      var encR = (v.videoWidth && v.videoHeight) ? v.videoWidth/v.videoHeight : 16/9;
+      var picR = parseFloat(v.dataset.contentRatio) || encR;
+      var s = Math.max(1, picR/boxR, boxR/picR);
+      v.style.transform = 'scale(' + Math.min(s, 1.6).toFixed(3) + ')';
+    }
+    v.addEventListener('loadedmetadata', fit);
+    window.addEventListener('resize', fit);
+    fit();
+    // poster holds for 6s, then trailer fades in underneath it
+    if(!reduced){
+      setTimeout(function(){
+        v.preload = 'auto';
+        var p = v.play();
+        function go(){ mk.classList.add('playing'); }
+        if(p && p.then){ p.then(go).catch(function(){}); } else { go(); }
+      }, 6000);
+    }
+  })();
+
+  // ---- Concept B: category / price tabs ----
+  var bTabs = document.getElementById('bTabs');
+  var bGrid = document.getElementById('bGrid');
+  if(bTabs && bGrid){
+    bTabs.addEventListener('click', function(e){
+      var btn = e.target.closest ? e.target.closest('.u-tab') : null;
+      if(!btn) return;
+      var tabs = bTabs.querySelectorAll('.u-tab');
+      for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('on'); }
+      btn.classList.add('on');
+      var filter = btn.getAttribute('data-filter');
+      var cards = bGrid.querySelectorAll('.p-card');
+      for(var j=0;j<cards.length;j++){
+        var c = cards[j];
+        var show = true;
+        if(filter === 'Under20'){ show = parseFloat(c.getAttribute('data-price')) < 20; }
+        else if(filter !== 'All'){ show = c.getAttribute('data-cat') === filter; }
+        c.classList.toggle('hide', !show);
+      }
+    });
+  }
+
+  // ---- Concept C: spotlight rail ----
+  var rail = document.getElementById('rail');
+  var backdrop = document.getElementById('railBackdrop');
+  if(rail && backdrop){
+    var railCards = rail.querySelectorAll('.rail-card');
+    var backdropImgs = backdrop.querySelectorAll('img');
+    function focusCard(card){
+      var idx = card.getAttribute('data-idx');
+      for(var i=0;i<railCards.length;i++){ railCards[i].classList.remove('expanded'); }
+      card.classList.add('expanded');
+      for(var j=0;j<backdropImgs.length;j++){
+        backdropImgs[j].classList.toggle('on', backdropImgs[j].getAttribute('data-idx') === idx);
+      }
+    }
+    for(var k=0;k<railCards.length;k++){
+      (function(card){
+        card.addEventListener('mouseenter', function(){ focusCard(card); });
+        card.addEventListener('focus', function(){ focusCard(card); });
+      })(railCards[k]);
+    }
+    // gentle auto-crossfade of the two inner preview images per expanded card
+    if(!reduced){
+      setInterval(function(){
+        var expanded = rail.querySelector('.rail-card.expanded');
+        if(!expanded) return;
+        var imgs = expanded.querySelectorAll('.rail-inner-media img');
+        if(imgs.length < 2) return;
+        var onImg = expanded.querySelector('.rail-inner-media img.on') || imgs[0];
+        onImg.classList.remove('on');
+        var next = onImg === imgs[0] ? imgs[1] : imgs[0];
+        next.classList.add('on');
+      }, 3200);
+    }
+  }
+
+  // ---- Concept D: trending / top sellers / specials tabs ----
+  var dTabs = document.getElementById('dTabs');
+  if(dTabs){
+    dTabs.addEventListener('click', function(e){
+      var btn = e.target.closest ? e.target.closest('.u-tab') : null;
+      if(!btn) return;
+      var tabs = dTabs.querySelectorAll('.u-tab');
+      for(var i=0;i<tabs.length;i++){ tabs[i].classList.remove('on'); }
+      btn.classList.add('on');
+      var name = btn.getAttribute('data-tab');
+      var panels = document.querySelectorAll('.tab-panel');
+      for(var j=0;j<panels.length;j++){ panels[j].classList.remove('on'); }
+      var panel = document.getElementById('panel-' + name);
+      if(panel) panel.classList.add('on');
+    });
+  }
+})();
+</script>
+</body>
+</html>

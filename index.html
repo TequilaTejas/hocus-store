@@ -962,6 +962,14 @@
   .search .ph{color:var(--mut); font-size:13px;}
   .search{position:relative;} .search:focus-within{border-color:var(--mut); box-shadow:0 0 0 3px rgba(143,151,163,.14);}
   #searchWrap{display:none;}   /* search hidden for now */
+  /* games browse: inline search + non-wrapping filter rail */
+  .gb-search{flex:0 1 300px; margin:0; height:40px; border-radius:8px;}
+  #gbFilters{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none;}
+  #gbFilters::-webkit-scrollbar{display:none;}
+  #gbFilters .mf-tab{white-space:nowrap; flex:0 0 auto;}
+  #gbGrid .p-price-row{flex-wrap:nowrap;}
+  .gb-empty{grid-column:1/-1; text-align:center; color:var(--mut); padding:48px 0; font-size:13.5px;}
+  @media(max-width:700px){ .gb-search{flex-basis:100%; order:3;} }
   /* in-house custom select (settings modal) */
   #settingsModal .co-box{overflow:visible;}
   .cs{position:relative;}
@@ -1422,7 +1430,7 @@
   .mp-rate-row{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:4px; padding:6px 10px; margin-top:12px; font-size:13px; cursor:pointer;}
   .mp-rate-row b{color:#fff;} .mp-rate-row .st{color:#f5c451;} .mp-rate-row .cnt{color:var(--mut); font-size:12px; border-left:1px solid var(--line); padding-left:8px;}
   .mp-hr{border:none; border-top:1px solid var(--line); margin:16px 0;}
-  .mp-price-row{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; font-variant-numeric:tabular-nums;}
+  .mp-price-row{display:flex; align-items:baseline; gap:10px; flex-wrap:nowrap; font-variant-numeric:tabular-nums;}
   .mp-now{font-size:28px; font-weight:800; color:#fff; letter-spacing:-.02em;}
   .mp-mrp{font-size:15px; color:var(--mut);} .mp-mrp s{text-decoration:line-through;}
   .mp-offpct{font-size:15px; font-weight:700; color:#7fe0a6;}
@@ -1624,6 +1632,152 @@
   .szc-table td{padding:9px 10px; border-bottom:1px solid var(--line); color:var(--ink-2);}
   .szc-table tr td:first-child{color:#fff; font-weight:700;}
   .szc-note{font-size:11.5px; color:var(--mut); margin-top:10px; line-height:1.5;}
+
+  /* ============================================================
+     DIGITAL GAMES — ported from games-lab.html Concept A (marquee+shelf)
+     + Concept B (poster wall) + the fallback-ladder tiers. New classes only
+     where index.html has no equivalent; everything else reuses existing
+     tokens (sec-head/sec-h/sec-sub, view-more-btn, merch-filters/mf-tab,
+     mp-wrap/mp-stage-wrap family, mp-offers/mp-offer, mp-specs/mp-spec,
+     mp-trust, .btn, .crumb, .steps/.step).
+     ============================================================ */
+  .lime-chip{display:inline-block; background:linear-gradient(135deg,#c4ff3d,#9bdb2a); color:#0a1a06; font-weight:800; font-size:11px; letter-spacing:.03em; text-transform:uppercase; padding:4px 9px; border-radius:6px; box-shadow:inset 0 1px 0 rgba(255,255,255,.4); white-space:nowrap;}
+  .lime-chip.sm{font-size:10px; padding:3px 7px; border-radius:5px;}
+  .px-strike{color:var(--mut); text-decoration:line-through; font-size:12px;}
+  .px-now{color:#fff; font-weight:700; font-size:15px;}
+  .plat-pill{font-size:10px; font-weight:700; padding:4px 9px; border-radius:50px; background:rgba(0,0,0,.62); border:1px solid rgba(255,255,255,.2); color:#fff; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); white-space:nowrap;}
+  .liftcard{transition:transform .13s var(--ease-out), border-color .13s var(--ease-out), box-shadow .13s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .liftcard:hover{transform:translateY(-5px); border-color:rgba(180,185,200,.3); box-shadow:0 18px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(180,185,200,.1);} }
+  .liftcard:active{transform:scale(.97);}
+
+  /* ---- marquee (home hero game) ---- */
+  .marquee{position:relative; aspect-ratio:16/9; border-radius:5px; overflow:hidden; margin-bottom:20px; background:#050505; cursor:pointer;}
+  .marquee video, .marquee .mk-poster{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .marquee video{transition:transform .4s var(--ease-out);}
+  .marquee .mk-poster{display:block; opacity:1; transition:opacity .9s var(--ease-in-out);}
+  .marquee.playing .mk-poster{opacity:0; pointer-events:none;}
+  .marquee::after{content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 48%);}
+  .mk-fade{position:absolute; left:0; right:0; bottom:0; height:62%; z-index:1; pointer-events:none;}
+  .mk-fade>i{position:absolute; inset:0;}
+  .mk-fade>i:nth-child(1){backdrop-filter:blur(2px);  -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 64%,transparent 82%); mask-image:linear-gradient(0deg,#000 0%,#000 64%,transparent 82%);}
+  .mk-fade>i:nth-child(2){backdrop-filter:blur(5px);  -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 42%,transparent 62%); mask-image:linear-gradient(0deg,#000 0%,#000 42%,transparent 62%);}
+  .mk-fade>i:nth-child(3){backdrop-filter:blur(11px); -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 24%,transparent 42%); mask-image:linear-gradient(0deg,#000 0%,#000 24%,transparent 42%);}
+  .mk-fade>i:nth-child(4){backdrop-filter:blur(20px); -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);  mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);}
+  .mk-fade::after{content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 38%, transparent 100%);}
+  .mk-content{position:absolute; left:32px; right:32px; bottom:30px; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; gap:24px;}
+  .mk-logo{max-width:760px; max-height:280px; width:64%; object-fit:contain; object-position:left bottom; margin-bottom:0; filter:drop-shadow(0 6px 24px rgba(0,0,0,.7));}
+  .mk-right{display:flex; flex-direction:column; align-items:flex-end; gap:14px; flex-shrink:0;}
+  .mk-price-row{display:flex; align-items:baseline; gap:12px;}
+  .mk-price-row .px-strike{font-size:15px;}
+  .mk-price-row .px-now{font-size:27px; font-weight:700;}
+  .mk-corner{position:absolute; top:20px; right:20px; z-index:2;}
+  @media(max-width:700px){
+    .mk-content{flex-direction:column; align-items:flex-start;}
+    .mk-logo{width:78%;}
+    .mk-right{align-items:flex-start;}
+  }
+
+  /* ---- shelf (home, 4-across) ---- */
+  .shelf-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:0;}
+  @media(max-width:900px){.shelf-grid{grid-template-columns:repeat(2,1fr);}}
+  .g-card{background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer;}
+  .g-art{position:relative; aspect-ratio:16/9; overflow:hidden; background:#000;}
+  .g-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .g-art img.alt{opacity:0; transition:opacity .4s var(--ease-in-out);}
+  @media(hover:hover) and (pointer:fine){ .g-card:hover .g-art img.alt{opacity:1;} }
+  .g-plat{position:absolute; top:8px; left:8px; z-index:2;}
+  .g-chip{position:absolute; top:8px; right:8px; z-index:2;}
+  .g-body{padding:12px 14px 14px;}
+  .g-title{font-family:var(--font-display); font-size:14px; font-weight:700; margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .g-price-row{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+
+  /* ---- poster wall (browse-all screen) ---- */
+  .poster-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:16px;}
+  @media(max-width:900px){.poster-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.poster-grid{grid-template-columns:1fr;}}
+  .p-card{background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer; transition:opacity .2s var(--ease-out), transform .13s var(--ease-out), border-color .13s var(--ease-out), box-shadow .13s var(--ease-out);}
+  .p-card.hide{display:none;}
+  .p-art{position:relative; aspect-ratio:2/3; overflow:hidden;}
+  .p-art img{width:100%; height:100%; object-fit:cover; transition:filter .2s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .p-card:hover .p-art img{filter:brightness(.5);} }
+  .p-plats{position:absolute; left:10px; right:10px; bottom:-40px; display:flex; gap:6px; flex-wrap:wrap; opacity:0; transition:bottom .22s var(--ease-out), opacity .22s var(--ease-out);}
+  @media(hover:hover) and (pointer:fine){ .p-card:hover .p-plats{bottom:10px; opacity:1;} }
+  .p-chip{position:absolute; top:10px; right:10px; z-index:2;}
+  .p-body{padding:12px 14px 14px;}
+  .p-cat{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); margin-bottom:5px;}
+  .p-title{font-family:var(--font-display); font-weight:700; font-size:14.5px; margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .p-price-row{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+
+  /* ---- game PDP: two-column ~58/42 buy box ---- */
+  .gp-wrap{display:grid; grid-template-columns:1.38fr 1fr; gap:36px; align-items:start;}
+  @media(max-width:900px){.gp-wrap{grid-template-columns:1fr;}}
+  .gp-stage{position:relative; aspect-ratio:16/9; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#000;}
+  .gp-stage:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
+  .gp-stage img, .gp-stage video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .gp-stage img{cursor:zoom-in;}
+  /* stage chrome: prev/next, counter chip, mute toggle */
+  .gp-stage-nav{position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:50%; z-index:3;
+    background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:17px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); transition:background-color .15s var(--ease-out);}
+  .gp-stage-nav:hover{background:rgba(0,0,0,.78);}
+  .gp-stage-prev{left:10px;} .gp-stage-next{right:10px;}
+  .gp-stage-count{position:absolute; right:10px; bottom:10px; z-index:3; background:rgba(0,0,0,.6); color:#fff; font-size:11px;
+    font-variant-numeric:tabular-nums; padding:4px 9px; border-radius:50px; border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(4px); pointer-events:none;}
+  .gp-mute-btn{position:absolute; top:10px; right:10px; z-index:3; width:30px; height:30px; border-radius:50%;
+    background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.18); color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background-color .15s var(--ease-out);}
+  .gp-mute-btn:hover{background:rgba(0,0,0,.78);}
+  .gp-mute-btn svg{width:15px; height:15px;}
+  .gp-strip{display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; margin-top:10px; padding-bottom:2px;}
+  .gp-strip-t{position:relative; flex:0 0 auto; width:96px; height:54px; border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer; background:var(--surface2); padding:0; transition:border-color .15s var(--ease-out);}
+  .gp-strip-t img{width:100%; height:100%; object-fit:cover; display:block;}
+  .gp-strip-t:hover{border-color:var(--line-2);}
+  .gp-strip-t.on{border-color:var(--brand); box-shadow:0 0 0 1px var(--brand);}
+  .gp-strip-play{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.35); color:#fff; pointer-events:none;}
+  .gp-strip-play svg{width:16px; height:16px;}
+  .gp-strip-tag{position:absolute; left:4px; bottom:4px; z-index:2; font-size:8px; font-weight:800; letter-spacing:.06em; color:#fff; background:rgba(0,0,0,.65); padding:2px 4px; border-radius:3px; pointer-events:none;}
+  .gp-pills{display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 14px;}
+  .gp-chip{display:inline-block; white-space:nowrap; border:1px solid var(--line); background:var(--surface2); color:var(--ink-2); font-size:11.5px; padding:6px 14px; border-radius:50px;}
+  .gp-chip.clickable{cursor:pointer; transition:border-color .15s var(--ease-out), color .15s var(--ease-out);}
+  .gp-chip.clickable:hover{border-color:var(--brand); color:#fff;}
+  #gamepdp .mp-price-row{align-items:center;}
+  #gamepdp .mp-price-row .mp-now{margin-left:auto;}
+  .gp-under{margin-top:8px;}
+  .gp-under .l1{display:flex; align-items:center; gap:8px; font-size:12px;}
+  .gp-under .sv{color:var(--success); font-weight:600;}
+  .gp-under .dot{color:var(--line-2);}
+  .gp-under .tx{color:var(--mut);}
+  .gp-ends{font-size:12px; color:var(--mut); margin-top:4px;}
+  /* system requirements */
+  .gp-sysreq{display:grid; grid-template-columns:1fr 1fr; gap:0 24px;}
+  .gp-sysreq-h{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); font-weight:700; margin:0 0 8px;}
+  .gp-sysreq-row{display:flex; justify-content:space-between; gap:10px; font-size:12px; color:var(--ink-2); padding:6px 0; border-bottom:1px solid var(--line); line-height:1.4;}
+  .gp-sysreq-row:last-child{border-bottom:none;}
+  .gp-sysreq-row .k{color:var(--mut); flex:0 0 auto;}
+  .gp-sysreq-row .v{text-align:right;}
+  @media(max-width:560px){.gp-sysreq{grid-template-columns:1fr; gap:18px 0;}}
+  .gp-sys-col{padding:14px 16px; border-radius:5px;}
+  .gp-sys-col.rec{background:linear-gradient(180deg, var(--brand-50), rgba(var(--brand-rgb),0.02)); box-shadow:inset 0 0 0 1px rgba(var(--brand-rgb),.28);}
+  .gp-sys-col.rec .gp-sysreq-h{color:var(--brand-2);}
+  #gamepdp .steps{grid-template-columns:repeat(4,1fr); gap:16px;}
+  #gamepdp .step{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:24px;}
+  #gamepdp .step .n{width:36px; height:36px; border-radius:10px; background:rgba(var(--brand-rgb),.12); border:1px solid rgba(var(--brand-rgb),.38); color:var(--brand-2); font-family:var(--font-display); font-size:17px; font-weight:800; letter-spacing:-.02em; display:grid; place-items:center; margin-bottom:20px; line-height:1;}
+  #gamepdp .step .st-h{font-size:16px; font-weight:700; margin-bottom:7px; letter-spacing:-.01em; color:#fff;}
+  #gamepdp .step .st-p{color:var(--mut); font-size:13px; line-height:1.55;}
+  @media(max-width:900px){#gamepdp .steps{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){#gamepdp .steps{grid-template-columns:1fr;}}
+
+  /* ---- fallback ladder tiers (used inside .gp-stage when no thumb rail applies) ---- */
+  .kenburns{animation:kenburns 18s var(--ease-in-out) infinite alternate;}
+  @keyframes kenburns{0%{transform:scale(1) translate(0,0);} 100%{transform:scale(1.08) translate(-1.5%,-1%);}}
+  .blur-fill{position:absolute; inset:-20px; width:calc(100% + 40px); height:calc(100% + 40px); object-fit:cover; filter:blur(30px) brightness(.35); transform:scale(1.15);}
+  .blur-portrait{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:60%; width:auto; max-width:none; object-fit:contain; border-radius:4px; box-shadow:0 12px 40px rgba(0,0,0,.6);}
+  .blur-vignette{position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.6) 100%);}
+  .title-only{position:absolute; inset:0; background:linear-gradient(135deg, var(--brand-50), #17191C 72%);}
+  .title-only::before{content:""; position:absolute; inset:0; opacity:.35; background-image:radial-gradient(rgba(230,169,60,.35) 1px, transparent 1px); background-size:14px 14px;}
+  .title-only-txt{position:absolute; left:16px; right:16px; bottom:16px; font-family:var(--font-display); font-weight:800; font-size:18px; color:#fff; line-height:1.15; z-index:2;}
+  .title-only-wm{position:absolute; right:12px; top:12px; font-size:9.5px; font-weight:800; letter-spacing:.12em; color:rgba(230,169,60,.55); z-index:2;}
+  @media (prefers-reduced-motion: reduce){ .kenburns{animation:none !important; transform:none !important;} }
 </style>
 </head>
 <body>
@@ -2105,6 +2259,44 @@
       <div class="merch-grid" id="merchGrid"><!-- filled by JS --></div>
       <div style="display:flex; justify-content:center; margin-top:32px;">
         <button class="view-more-btn" id="merchMoreBtn">View all merch</button>
+      </div>
+
+      <!-- ===== DIGITAL GAMES (Steam keys) ===== -->
+      <div class="sec-head" style="margin-top:56px;" id="gamesSection">
+        <div>
+          <div class="sec-over">Digital games</div>
+          <div class="sec-h">Games, keys in your inbox</div>
+          <p class="sec-sub" style="margin:6px 0 0;">Official Steam keys, delivered in seconds. Always below store price.</p>
+        </div>
+      </div>
+
+      <!-- marquee: featured game (Cyberpunk 2077) -->
+      <div class="marquee kbtn" id="gameMarquee" tabindex="0" role="button" aria-label="Cyberpunk 2077 — view details">
+        <video muted loop playsinline preload="metadata" data-content-ratio="2.4" poster="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg">
+          <source src="https://cdn.akamai.steamstatic.com/steam/apps/257081132/movie480.mp4" type="video/mp4">
+        </video>
+        <img class="mk-poster" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg" alt="Cyberpunk 2077 key art">
+        <div class="mk-fade" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <span class="lime-chip mk-corner">-65% OFF</span>
+        <div class="mk-content">
+          <div class="mk-left">
+            <img class="mk-logo" src="assets/lab/cp2077-logo.png" alt="Cyberpunk 2077">
+          </div>
+          <div class="mk-right">
+            <div class="mk-price-row">
+              <span class="px-strike tabular">€69.99</span>
+              <span class="px-now tabular">€24.49</span>
+            </div>
+            <button class="btn" id="marqueeGetKey">Buy now <span aria-hidden="true">&#8594;</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- shelf: 4-across -->
+      <div class="shelf-grid" id="gamesShelf"><!-- filled by JS --></div>
+
+      <div style="display:flex; justify-content:center; margin-top:32px;">
+        <button class="view-more-btn" id="gamesMoreBtn">View all games</button>
       </div>
 
       <!-- section title -->
@@ -2595,6 +2787,113 @@
   </div>
 </section>
 
+<!-- ============ 2c. GAME PDP ============ -->
+<section class="screen" id="gamepdp">
+  <div class="frame">
+    <div class="pad">
+      <div class="crumb"><span class="crumb-link" id="gpBackHome">Home</span> <span class="crumb-sep">/</span> <span class="crumb-link" id="gpBackGames">Digital games</span> <span class="crumb-sep">/</span> <span class="crumb-cur" id="gpCrumb">Game</span></div>
+
+      <div class="gp-wrap" style="margin-top:18px;">
+        <!-- LEFT: media gallery -->
+        <div>
+          <div class="gp-stage" id="gpStage" tabindex="0" role="group" aria-label="Media gallery — use arrow keys to browse"><!-- filled by JS --></div>
+          <div class="gp-strip" id="gpStrip"><!-- filled by JS --></div>
+        </div>
+
+        <!-- RIGHT: buy box -->
+        <div>
+          <div class="mp-name" id="gpTitle">Game title</div>
+          <div class="gp-pills" id="gpPills"><!-- filled by JS --></div>
+          <div class="mp-rate-row"><b id="gpRating">4.6</b><span class="st">&#9733;</span><span class="cnt" id="gpRatingCount">1.2k ratings</span></div>
+
+          <hr class="mp-hr">
+          <div class="mp-price-row" id="gpPriceRow"><!-- filled by JS --></div>
+          <div class="gp-under" id="gpUnder"><!-- filled by JS --></div>
+
+          <div id="gpCtas"><button class="btn" id="gpBuy" style="width:100%; margin-top:16px;">Buy now <span aria-hidden="true">&#8594;</span></button></div>
+
+          <div class="mp-trust" style="grid-template-columns:1fr; margin-top:16px;">
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--success);"><polyline points="20 6 9 17 4 12"/></svg>Activates worldwide &mdash; <span id="gpRegionTxt">Global</span></div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>Code on this screen and in your email within seconds</div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>Official key, sourced from authorized distribution</div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>Full refund until the code is revealed</div>
+          </div>
+
+          <div class="mp-offers" style="margin-top:16px;">
+            <div class="mp-offers-hd">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg>
+              Available offers
+              <span class="mp-offers-n">1</span>
+            </div>
+            <div class="mp-offer">
+              <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
+              <div class="mp-offer-tx"><b>Bundle deal</b> — pair with a <span class="lnk" id="gpGiftCardLink" style="color:var(--brand); cursor:pointer;">Steam Gift Card</span> and get an extra <b class="hl">5% off</b> the card.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== HOW TO REDEEM ===== -->
+      <div class="sec">
+        <div class="sec-h" style="font-size:22px;">How to redeem on Steam</div>
+        <div class="steps">
+          <div class="step"><div class="n">1</div><div class="st-h">Open Steam</div><div class="st-p">Launch Steam and sign in.</div></div>
+          <div class="step"><div class="n">2</div><div class="st-h">Activate a product</div><div class="st-p">Games &rarr; Activate a Product on Steam.</div></div>
+          <div class="step"><div class="n">3</div><div class="st-h">Enter your code</div><div class="st-p">Paste the code from your email.</div></div>
+          <div class="step"><div class="n">4</div><div class="st-h">Download and play</div><div class="st-p">Steam installs the game automatically.</div></div>
+        </div>
+      </div>
+
+      <!-- ===== ABOUT ===== -->
+      <div class="sec">
+        <div class="sec-h" style="font-size:22px;">About</div>
+        <p class="mp-body-copy" id="gpAbout" style="max-width:640px;"></p>
+        <div class="mp-specs" id="gpMeta" style="margin-top:18px;"><!-- filled by JS --></div>
+      </div>
+
+      <!-- ===== SYSTEM REQUIREMENTS ===== -->
+      <div class="sec">
+        <div class="sec-h" style="font-size:22px;">System requirements</div>
+        <div class="mp-acc" data-acc="sysreq">
+          <div class="mp-acc-h">Minimum &amp; recommended <span class="mp-acc-hint">OS, CPU, RAM, GPU, storage</span><span class="car">&#9662;</span></div>
+          <div class="mp-acc-b">
+            <div class="gp-sysreq">
+              <div class="gp-sys-col"><div class="gp-sysreq-h">Minimum</div><div id="gpSysreqMin"><!-- filled by JS --></div></div>
+              <div class="gp-sys-col rec"><div class="gp-sysreq-h">Recommended</div><div id="gpSysreqRec"><!-- filled by JS --></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MORE LIKE THIS ===== -->
+      <div class="sec">
+        <div class="sec-h" style="font-size:22px;">More like this</div>
+        <div class="shelf-grid" id="gpSimilar"><!-- filled by JS --></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2d. GAMES BROWSE (all digital games) ============ -->
+<section class="screen" id="gamesbrowse">
+  <div class="frame">
+    <div class="pad">
+      <div class="crumb"><span class="crumb-link" id="gbBackHome">Home</span> <span class="crumb-sep">/</span> <span class="crumb-cur">Digital games</span></div>
+
+      <div class="sec-head" style="margin-top:18px;">
+        <div>
+          <div class="sec-h">All digital games</div>
+          <p class="sec-sub" id="gbCount" style="margin:6px 0 0;">8 games</p>
+        </div>
+        <div class="search gb-search"><span class="mag" aria-hidden="true"></span><input id="gbSearch" type="text" placeholder="Search games" autocomplete="off" aria-label="Search games"><span class="clr" id="gbSearchClr" role="button" tabindex="0" aria-label="Clear search">&times;</span></div>
+      </div>
+
+      <div class="merch-filters" id="gbFilters"><!-- filled by JS --></div>
+      <div class="poster-grid" id="gbGrid"><!-- filled by JS --></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ 3. CHECKOUT ============ -->
 <section class="screen" id="checkout">
   <div class="frame">
@@ -2752,6 +3051,29 @@
   <div class="pdp-bar-cta">
     <button class="btn ghost" id="pdpBarBuy">Buy now</button>
     <button class="btn" id="pdpBarAdd">Add to bag</button>
+  </div>
+</div>
+
+<!-- ===== games gallery lightbox (images only) ===== -->
+<div class="mp-lb" id="gpLb">
+  <button class="mp-lb-x" id="gpLbX" aria-label="Close">&times;</button>
+  <button class="mp-lb-nav mp-lb-prev" id="gpLbPrev" aria-label="Previous">&#8249;</button>
+  <img id="gpLbImg" src="" alt="">
+  <button class="mp-lb-nav mp-lb-next" id="gpLbNext" aria-label="Next">&#8250;</button>
+  <div class="mp-lb-count" id="gpLbCount"></div>
+</div>
+
+<!-- ===== sticky game PDP buy bar ===== -->
+<div class="pdp-bar" id="gpBar">
+  <div class="pdp-bar-info">
+    <div class="pdp-bar-thumb" id="gpBarThumb"></div>
+    <div style="min-width:0;">
+      <div class="pdp-bar-name" id="gpBarName">Game</div>
+      <div class="pdp-bar-price"><span id="gpBarNow">€29</span></div>
+    </div>
+  </div>
+  <div class="pdp-bar-cta">
+    <button class="btn" id="gpBarBuy">Buy now <span aria-hidden="true">&#8594;</span></button>
   </div>
 </div>
 
@@ -3197,6 +3519,7 @@
   ];
   var pdpSkuIdx = 0, pdpDenomIdx = 1, pdpQty = 1;
   var isLoggedIn = false, pendingBuy = false;   // purchase requires sign in
+  var pendingGameBuy = null;   // set when a "Get key" buy is what triggered the sign-in gate
 
   var skuLabel = document.getElementById('pdpSkuLabel');
   var skuMenu  = document.getElementById('pdpSkuMenu');
@@ -3505,6 +3828,7 @@
     if(timer) timer.style.display = (id === 'home') ? '' : 'none';
     if(siteNav) siteNav.style.display = (id === 'confirm') ? 'none' : '';
     if(id !== 'merchpdp'){ var pb=document.getElementById('pdpBar'); if(pb) pb.classList.remove('show'); }
+    if(id !== 'gamepdp'){ var gb=document.getElementById('gpBar'); if(gb) gb.classList.remove('show'); }
     window.scrollTo({top:0, behavior:'smooth'});
   }
   // navigation like a real site
@@ -3552,6 +3876,15 @@
   coModal.addEventListener('click', function(e){ if(e.target===coModal) coModal.classList.remove('open'); });
   document.getElementById('coPay').addEventListener('click', function(){
     coModal.classList.remove('open');
+    // digital games checkout popup (coModal was otherwise unused — repurposed for "Get key")
+    if(typeof gcoCurrent !== 'undefined' && gcoCurrent){
+      var g = gcoCurrent; gcoCurrent = null;
+      renderConfirmation({ title: g.title, sku: g.platform+' · '+g.region, vp:'Digital key', qty:1, price: g.price });
+      document.getElementById('confirmTitle').textContent = 'Key delivered!';
+      document.getElementById('confirmSub').textContent = 'Your Steam key for '+g.title+' has been sent to your email — check the code below.';
+      goScreen('confirm');
+      return;
+    }
     var d = DENOMS[pdpDenomIdx];
     renderConfirmation({
       title: document.getElementById('pdpTitle').textContent,
@@ -3733,7 +4066,11 @@
     if(uav) uav.textContent = (name||'U').trim().charAt(0).toUpperCase();
     var cav = document.querySelector('.co-signed .av');
     if(cav) cav.textContent = (name||'U').trim().charAt(0).toUpperCase();
-    if(pendingBuy){ pendingBuy = false; openRzp(); }    // resume purchase
+    if(pendingBuy){
+      pendingBuy = false;
+      if(pendingGameBuy){ var pg = pendingGameBuy; pendingGameBuy = null; openGameCheckoutPopup(pg); }
+      else { openRzp(); }
+    }    // resume purchase
   }
   document.getElementById('signinBtn').addEventListener('click', function(){
     pendingBuy = false;               // plain sign-in, not a buy
@@ -4856,6 +5193,567 @@
     bag = []; renderBag();
     goScreen('confirm');
   }
+
+  /* ============================================================
+     DIGITAL GAMES — Steam keys (marquee/shelf on home, dedicated PDP,
+     browse-all screen). Mirrors the MERCH data + render + PDP pattern.
+     ============================================================ */
+  function steamCdn(appid, file){ return 'https://cdn.cloudflare.steamstatic.com/steam/apps/'+appid+'/'+file; }
+
+  var DIGITAL_GAMES = [
+    { id:'cyberpunk', appid:1091500, title:'Cyberpunk 2077', platform:'Steam', region:'Global',
+      genre:'RPG', tags:['Open World','Story Rich','Singleplayer'],
+      price:24.49, mrp:69.99, rating:4.4, ratings:'186,412', release:'9 Dec, 2020',
+      dev:'CD PROJEKT RED', pub:'CD PROJEKT RED',
+      about:'Open-world RPG set in Night City. You play V, a mercenary chasing an implant that promises immortality, navigating gangs, corporations and body modification along the way.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'Core i7-6700 / Ryzen 5 1600', ram:'12 GB', gpu:'GTX 1060 6GB / RX 580 8GB', storage:'70 GB SSD'},
+        rec:{os:'Windows 10/11 64-bit', cpu:'Core i7-12700 / Ryzen 7 7800X3D', ram:'16 GB', gpu:'RTX 2060 Super / RX 5700 XT', storage:'70 GB SSD'}
+      },
+      media:{
+        trailer:'https://cdn.akamai.steamstatic.com/steam/apps/257081132/movie480.mp4',
+        trailerPoster: steamCdn(1091500,'library_hero.jpg'),
+        contentRatio:2.4,
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_2f649b68d579bf87011487d29bc4ccbfdd97d34f.1920x1080.jpg?t=1784714077',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_0e64170751e1ae20ff8fdb7001a8892fd48260e7.1920x1080.jpg?t=1784714077',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_af2804aa4bf35d4251043744412ce3b359a125ef.1920x1080.jpg?t=1784714077',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_7924f64b6e5d586a80418c9896a1c92881a7905b.1920x1080.jpg?t=1784714077',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1091500/ss_4eb068b1cf52c91b57157b84bed18a186ed7714b.1920x1080.jpg?t=1784714077'
+        ],
+        hero: steamCdn(1091500,'library_hero.jpg'),
+        poster: steamCdn(1091500,'library_600x900.jpg'),
+        logo:'assets/lab/cp2077-logo.png'
+      }
+    },
+    { id:'elden-ring', appid:1245620, title:'Elden Ring', platform:'Steam', region:'Global',
+      genre:'Action RPG', tags:['Souls-like','Open World','Difficult'],
+      price:34.99, mrp:59.99, rating:4.8, ratings:'671,204', release:'24 Feb, 2022',
+      dev:'FromSoftware, Inc.', pub:'Bandai Namco Entertainment',
+      about:'Fantasy action RPG from FromSoftware. Explore the Lands Between on foot or horseback, alone or with friends, and rise to become an Elden Lord.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10', cpu:'Core i5-8400 / Ryzen 3 3300X', ram:'12 GB', gpu:'GTX 1060 3GB / RX 580 4GB', storage:'60 GB'},
+        rec:{os:'Windows 10/11', cpu:'Core i7-8700K / Ryzen 5 3600X', ram:'16 GB', gpu:'GTX 1070 8GB / RX Vega 56', storage:'60 GB SSD'}
+      },
+      media:{
+        trailer:'https://cdn.akamai.steamstatic.com/steam/apps/256889456/movie480.mp4',
+        trailerPoster: steamCdn(1245620,'library_hero.jpg'),
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_943bf6fe62352757d9070c1d33e50b92fe8539f1.1920x1080.jpg?t=1784684281',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_dcdac9e4b26ac0ee5248bfd2967d764fd00cdb42.1920x1080.jpg?t=1784684281',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_3c41384a24d86dddd58a8f61db77f9dc0bfda8b5.1920x1080.jpg?t=1784684281',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_e0316c76f8197405c1312d072b84331dd735d60b.1920x1080.jpg?t=1784684281',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1245620/ss_ef61b771ee6b269b1f0cb484233e07a0bfb5f81b.1920x1080.jpg?t=1784684281'
+        ],
+        hero: steamCdn(1245620,'library_hero.jpg'),
+        poster: steamCdn(1245620,'library_600x900.jpg')
+      }
+    },
+    { id:'bg3', appid:1086940, title:"Baldur's Gate 3", platform:'Steam', region:'Global',
+      genre:'RPG', tags:['Turn-Based','Story Rich','Co-op'],
+      price:47.99, mrp:59.99, rating:4.9, ratings:'712,558', release:'3 Aug, 2023',
+      dev:'Larian Studios', pub:'Larian Studios',
+      about:'Party-based RPG set in the Forgotten Realms. Build a group of companions and make choices that shape both their arcs and the ending — solo or in co-op.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'Core i5-4460 / FX-8350', ram:'8 GB', gpu:'GTX 970 / RX 480', storage:'150 GB'},
+        rec:{os:'Windows 10/11 64-bit', cpu:'Core i7-8700K / Ryzen 5 3600', ram:'16 GB', gpu:'RTX 2060 Super / RX 5700 XT', storage:'150 GB SSD'}
+      },
+      media:{
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_c73bc54415178c07fef85f54ee26621728c77504.1920x1080.jpg?t=1777363040',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_73d93bea842b93914d966622104dcb8c0f42972b.1920x1080.jpg?t=1777363040',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_cf936d31061b58e98e0c646aee00e6030c410cda.1920x1080.jpg?t=1777363040',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_b6a6ee6e046426d08ceea7a4506a1b5f44181543.1920x1080.jpg?t=1777363040',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1086940/ss_6b8faba0f6831a406ce015648958da9612d14dbb.1920x1080.jpg?t=1777363040'
+        ],
+        hero: steamCdn(1086940,'library_hero.jpg'),
+        poster: steamCdn(1086940,'library_600x900.jpg')
+      }
+    },
+    { id:'stardew', appid:413150, title:'Stardew Valley', platform:'Steam', region:'Global',
+      genre:'Simulation', tags:['Farming','Indie','Relaxing'],
+      price:9.75, mrp:13.99, rating:4.9, ratings:'227,331', release:'26 Feb, 2016',
+      dev:'ConcernedApe', pub:'ConcernedApe',
+      about:"You inherit your grandfather's old farm. Grow crops, fish, mine and build relationships with the town, over as many seasons as you like.",
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 7+', cpu:'2 GHz dual-core', ram:'2 GB', gpu:'256 MB, Shader 3.0+', storage:'500 MB'},
+        rec:{os:'Windows 10', cpu:'2.5 GHz dual-core', ram:'4 GB', gpu:'Integrated graphics OK', storage:'500 MB'}
+      },
+      media:{
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_b887651a93b0525739049eb4194f633de2df75be.1920x1080.jpg?t=1754692865',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_9ac899fe2cda15d48b0549bba77ef8c4a090a71c.1920x1080.jpg?t=1754692865',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_4fa0866709ede3753fdf2745349b528d5e8c4054.1920x1080.jpg?t=1754692865',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_d836f0a5b0447fb6a2bdb0a6ac5f954949d3c41e.1920x1080.jpg?t=1754692865',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/413150/ss_10628b4a811c0a925a1433d4323f78c7017dbbe4.1920x1080.jpg?t=1754692865'
+        ],
+        hero: steamCdn(413150,'library_hero.jpg'),
+        poster: steamCdn(413150,'library_600x900.jpg')
+      }
+    },
+    { id:'sekiro', appid:814380, title:'Sekiro: Shadows Die Twice', platform:'Steam', region:'Global',
+      genre:'Action', tags:['Souls-like','Ninja','Difficult'],
+      price:32.99, mrp:59.99, rating:4.8, ratings:'148,902', release:'21 Mar, 2019',
+      dev:'FromSoftware, Inc.', pub:'Activision',
+      about:'Third-person action game from FromSoftware. Play a one-armed shinobi bound to a young lord, mastering stealth, vertical traversal and precise sword combat.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 7 64-bit', cpu:'Core i3-2100 / FX-6300', ram:'4 GB', gpu:'GTX 760 / R7 260X', storage:'25 GB'},
+        rec:{os:'Windows 10 64-bit', cpu:'Core i7-4790K / Ryzen 5 1500X', ram:'8 GB', gpu:'GTX 970 / R9 290', storage:'25 GB SSD'}
+      },
+      media:{
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_0f7b0f8ed9ffc49aba26f9328caa9a1d59ad60f0.1920x1080.jpg?t=1762888662',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_2685dd844a2a523b6c7ec207d46a538db6a908cd.1920x1080.jpg?t=1762888662',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_15f0e9982621aed44900215ad283811af0779b1d.1920x1080.jpg?t=1762888662',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_1e6f5540866a5564d65df915c22fe1e57e336a6f.1920x1080.jpg?t=1762888662',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/814380/ss_3d6b38c382c0eafb02dc90d22f33fd292e4e5cf3.1920x1080.jpg?t=1762888662'
+        ],
+        hero: steamCdn(814380,'library_hero.jpg'),
+        poster: steamCdn(814380,'library_600x900.jpg')
+      }
+    },
+    { id:'hades2', appid:1145350, title:'Hades II', platform:'Steam', region:'Global',
+      genre:'Roguelike', tags:['Action','Indie','Roguelike'],
+      price:28.99, mrp:null, rating:4.7, ratings:'42,118', release:'25 Sep, 2025',
+      dev:'Supergiant Games', pub:'Supergiant Games',
+      about:'Roguelike dungeon crawler and sequel to Hades. Battle through the Underworld and beyond using dark sorcery to take on the Titan of Time.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'Core i3 or equivalent', ram:'4 GB', gpu:'GTX 650 Ti or equivalent', storage:'10 GB SSD'},
+        rec:{os:'Windows 10/11 64-bit', cpu:'Core i5 or equivalent', ram:'8 GB', gpu:'GTX 970 or equivalent', storage:'10 GB SSD'}
+      },
+      media:{
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_ef0f63061d0a0a9a7e46f3b84f125d25330e8f19.1920x1080.jpg?t=1779901265',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_f28befd916e59b8bf0a8a801b8a498b8adaa01eb.1920x1080.jpg?t=1779901265',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_b88cb7b48a86f07a7288bf37141f6558279f9bfc.1920x1080.jpg?t=1779901265',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_c8d2b18451a2cc4d5b4fdd78ed84a5e64e051eac.1920x1080.jpg?t=1779901265',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1145350/ss_f366f20f4fb699f6735581e04c7c45a1ef7bd1b8.1920x1080.jpg?t=1779901265'
+        ],
+        hero: steamCdn(1145350,'library_hero.jpg'),
+        poster: steamCdn(1145350,'library_600x900.jpg')
+      }
+    },
+    { id:'celeste', appid:504230, title:'Celeste', platform:'Steam', region:'Global',
+      genre:'Platformer', tags:['Indie','Difficult','Story Rich'],
+      price:4.99, mrp:19.99, rating:4.9, ratings:'38,760', release:'25 Jan, 2018',
+      dev:'Maddy Makes Games Inc.', pub:'Maddy Makes Games Inc.',
+      about:"Tight, hand-crafted platformer. Help Madeline climb Celeste Mountain across hundreds of challenges, with a soundtrack of over 20 original songs.",
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 7+', cpu:'Dual-core 2 GHz', ram:'4 GB', gpu:'DirectX 10 compatible', storage:'1 GB'},
+        rec:{os:'Windows 10', cpu:'Quad-core 2.5 GHz', ram:'4 GB', gpu:'DirectX 11 compatible', storage:'1 GB'}
+      },
+      media:{
+        // deliberate ladder demo: screenshots only, no trailer — exercises the "screens only" tier
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_1ad297c2044cdcf450ee83e56350cafb590da755.1920x1080.jpg?t=1714089525',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_03bfe6bd5ddac7f747c8d2aa1a4f82cfd53c6dcb.1920x1080.jpg?t=1714089525',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_4b0f0222341b64a37114033aca9994551f27c161.1920x1080.jpg?t=1714089525',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_1012b11ad364ad6c138a25a654108de28de56c5f.1920x1080.jpg?t=1714089525',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/504230/ss_832ef0f27c3d6efdaa4b5d1cc896dce0999bc9e8.1920x1080.jpg?t=1714089525'
+        ],
+        hero: steamCdn(504230,'library_hero.jpg'),
+        poster: steamCdn(504230,'library_600x900.jpg')
+      }
+    },
+    { id:'silksong', appid:1030300, title:'Hollow Knight: Silksong', platform:'Steam', region:'Global',
+      genre:'Metroidvania', tags:['Indie','Difficult','Atmospheric'],
+      price:19.50, mrp:null, rating:4.8, ratings:'29,540', release:'4 Sep, 2025',
+      dev:'Team Cherry', pub:'Team Cherry',
+      about:'Metroidvania sequel to Hollow Knight. Play Hornet, exploring a haunted, silk-bound kingdom across a large, connected map full of new enemies.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 7+', cpu:'Dual-core 2 GHz', ram:'4 GB', gpu:'GTX 650 or equivalent', storage:'9 GB'},
+        rec:{os:'Windows 10/11', cpu:'Quad-core 2.5 GHz', ram:'8 GB', gpu:'GTX 960 or equivalent', storage:'9 GB SSD'}
+      },
+      media:{
+        // deliberate ladder demo: poster only — no trailer, no screens, no hero.
+        // exercises the "portrait on blurred self" fallback tier on the PDP.
+        poster: steamCdn(1030300,'library_600x900.jpg')
+      }
+    }
+  ];
+
+  function gamesById(id){ return DIGITAL_GAMES.filter(function(g){ return g.id===id; })[0]; }
+  function gamePct(g){ return g.mrp ? Math.round((1 - g.price/g.mrp)*100) : null; }
+  function gamePriceRow(g){
+    var pct = gamePct(g);
+    return (pct ? '<span class="lime-chip">-'+pct+'%</span>' : '')+
+      (g.mrp ? '<span class="mp-mrp"><s>€'+g.mrp.toFixed(2)+'</s></span>' : '')+
+      '<span class="mp-now">€'+g.price.toFixed(2)+'</span>';
+  }
+
+  /* ---- home shelf (4 cards) ---- */
+  var GAMES_SHELF_IDS = ['elden-ring','bg3','stardew','sekiro'];
+  function gameShelfCard(g){
+    var pct = gamePct(g);
+    return '<div class="g-card liftcard" data-gid="'+g.id+'" role="button" tabindex="0" aria-label="'+g.title+'">'+
+      '<div class="g-art">'+
+        '<img src="'+steamCdn(g.appid,'header.jpg')+'" alt="" loading="lazy">'+
+        '<img class="alt" src="'+steamCdn(g.appid,'capsule_616x353.jpg')+'" alt="" loading="lazy">'+
+        '<span class="plat-pill g-plat">'+g.platform+'</span>'+
+        (pct ? '<span class="lime-chip sm g-chip">-'+pct+'%</span>' : '')+
+      '</div>'+
+      '<div class="g-body">'+
+        '<div class="g-title">'+g.title+'</div>'+
+        '<div class="g-price-row">'+(g.mrp?'<span class="px-strike tabular">€'+g.mrp.toFixed(2)+'</span>':'')+'<span class="px-now tabular">€'+g.price.toFixed(2)+'</span></div>'+
+      '</div>'+
+    '</div>';
+  }
+  function handleGameCardActivate(e){
+    var card = e.target.closest('[data-gid]'); if(!card) return;
+    if(e.type==='keydown' && e.key!=='Enter' && e.key!==' ') return;
+    if(e.type==='keydown') e.preventDefault();
+    openGamePDP(card.getAttribute('data-gid'));
+  }
+  var gamesShelfEl = document.getElementById('gamesShelf');
+  if(gamesShelfEl){
+    gamesShelfEl.innerHTML = GAMES_SHELF_IDS.map(function(id){ return gameShelfCard(gamesById(id)); }).join('');
+    gamesShelfEl.addEventListener('click', handleGameCardActivate);
+    gamesShelfEl.addEventListener('keydown', handleGameCardActivate);
+  }
+
+  /* ---- home marquee (Cyberpunk 2077) ---- */
+  var gameMarqueeEl = document.getElementById('gameMarquee');
+  if(gameMarqueeEl){ gameMarqueeEl.addEventListener('click', function(){ openGamePDP('cyberpunk'); }); }
+
+  /* ---- reduced-motion gate for game video elements ---- */
+  var gamesReducedMotion = false;
+  try{ gamesReducedMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  if(gamesReducedMotion) document.body.classList.add('reduced-motion');
+
+  /* ---- marquee: hold on the poster/key-art for 6s, then fade into the trailer ---- */
+  (function(){
+    var mk = gameMarqueeEl;
+    var v = mk && mk.querySelector('video');
+    if(!v) return;
+    if(gamesReducedMotion) return;   // poster stays up forever, trailer never plays
+    setTimeout(function(){
+      v.preload = 'auto';
+      var p = v.play();
+      if(p && p.then){
+        p.then(function(){ mk.classList.add('playing'); }).catch(function(){});
+      } else {
+        mk.classList.add('playing');
+      }
+    }, 6000);
+  })();
+
+  /* ---- marquee video: zoom so the letterboxed picture fills the 16:9 frame ---- */
+  (function(){
+    var mk = gameMarqueeEl;
+    var v = mk && mk.querySelector('video');
+    if(!v) return;
+    function fit(){
+      var cw = mk.clientWidth, ch = mk.clientHeight;
+      if(!cw || !ch) return;
+      var boxR = cw/ch;
+      var encR = (v.videoWidth && v.videoHeight) ? v.videoWidth/v.videoHeight : 16/9;
+      var picR = parseFloat(v.dataset.contentRatio) || encR;
+      var s = Math.max(1, picR/boxR, boxR/picR);
+      v.style.transform = 'scale('+Math.min(s,1.6).toFixed(3)+')';
+    }
+    v.addEventListener('loadedmetadata', fit);
+    window.addEventListener('resize', fit);
+    fit();
+  })();
+
+  /* ---- "View all games" (home) -> browse screen ---- */
+  var gamesMoreBtn = document.getElementById('gamesMoreBtn');
+  if(gamesMoreBtn) gamesMoreBtn.addEventListener('click', function(){ renderGamesBrowse(); goScreen('gamesbrowse'); });
+
+  /* ================= GAME PDP ================= */
+  var gpCur = null, gpItems = [], gpStageIdx = 0, gpMuted = true;
+
+  function gpGalleryItems(g){
+    var items = [];
+    if(g.media.trailer) items.push({type:'video', src:g.media.trailer, poster:g.media.trailerPoster||g.media.hero||g.media.poster});
+    (g.media.screens||[]).forEach(function(s){ items.push({type:'image', src:s}); });
+    return items;
+  }
+  function gpImages(){ return gpItems.filter(function(it){ return it.type==='image'; }).map(function(it){ return it.src; }); }
+  var GP_PLAY_GLYPH = '<span class="gp-strip-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+  var GP_MUTE_ON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>';
+  var GP_MUTE_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.5 8.5a5 5 0 010 7"/><path d="M18.5 5.5a9 9 0 010 13"/></svg>';
+
+  function gpRenderStrip(){
+    var strip = document.getElementById('gpStrip');
+    if(gpItems.length < 2){ strip.innerHTML=''; strip.style.display='none'; return; }
+    strip.style.display='';
+    strip.innerHTML = gpItems.map(function(it,i){
+      var thumb = it.type==='video' ? it.poster : it.src;
+      return '<button class="gp-strip-t'+(i===gpStageIdx?' on':'')+'" data-i="'+i+'">'+
+        '<img src="'+thumb+'" alt="view '+(i+1)+'" loading="lazy">'+
+        (it.type==='video' ? GP_PLAY_GLYPH+'<span class="gp-strip-tag">TRAILER</span>' : '')+
+      '</button>';
+    }).join('');
+  }
+  function gpStageChrome(){
+    if(gpItems.length < 2) return '';
+    return '<button class="gp-stage-nav gp-stage-prev" id="gpStagePrev" aria-label="Previous">&#8249;</button>'+
+      '<button class="gp-stage-nav gp-stage-next" id="gpStageNext" aria-label="Next">&#8250;</button>'+
+      '<div class="gp-stage-count">'+(gpStageIdx+1)+' / '+gpItems.length+'</div>';
+  }
+  // fallback ladder: trailer+screens -> screens only -> hero Ken Burns -> poster-on-blur -> branded placeholder
+  function gpRenderStage(){
+    var stage = document.getElementById('gpStage');
+    if(gpItems.length){
+      var it = gpItems[gpStageIdx];
+      if(it.type==='video'){
+        stage.innerHTML = '<video '+(gamesReducedMotion?'':'autoplay ')+(gpMuted?'muted ':'')+'loop playsinline preload="metadata" poster="'+it.poster+'"><source src="'+it.src+'" type="video/mp4"></video>'+
+          '<button class="gp-mute-btn" id="gpMuteBtn" aria-label="'+(gpMuted?'Unmute trailer':'Mute trailer')+'">'+(gpMuted?GP_MUTE_OFF:GP_MUTE_ON)+'</button>'+
+          gpStageChrome();
+      } else {
+        stage.innerHTML = '<img src="'+it.src+'" alt="'+gpCur.title+' screenshot">'+gpStageChrome();
+      }
+      return;
+    }
+    if(gpCur.media.hero){
+      stage.innerHTML = '<img class="kenburns" src="'+gpCur.media.hero+'" alt="'+gpCur.title+' key art">';
+    } else if(gpCur.media.poster){
+      stage.innerHTML = '<img class="blur-fill" src="'+gpCur.media.poster+'" alt="">'+
+        '<div class="blur-vignette"></div>'+
+        '<img class="blur-portrait" src="'+gpCur.media.poster+'" alt="'+gpCur.title+' cover art">';
+    } else {
+      stage.innerHTML = '<div class="title-only"></div>'+
+        '<div class="title-only-txt">'+gpCur.title+'</div>'+
+        '<div class="title-only-wm">HOCUS</div>';
+    }
+  }
+  function gpSwitch(i){
+    if(!gpItems.length) return;
+    gpStageIdx = ((i%gpItems.length)+gpItems.length)%gpItems.length;
+    gpRenderStage(); gpRenderStrip();
+  }
+  document.getElementById('gpStrip').addEventListener('click', function(e){
+    var t = e.target.closest('.gp-strip-t'); if(!t) return;
+    gpSwitch(parseInt(t.getAttribute('data-i'),10));
+  });
+
+  /* ---- games gallery lightbox (images only — trailer never opens it) ---- */
+  var gpLb=document.getElementById('gpLb'), gpLbImg=document.getElementById('gpLbImg'),
+      gpLbCount=document.getElementById('gpLbCount'), gpLbIdx=0;
+  function gpLbOpen(i){
+    var imgs=gpImages(); if(!imgs.length) return;
+    gpLbIdx=(i+imgs.length)%imgs.length;
+    gpLbImg.src=imgs[gpLbIdx];
+    gpLbImg.alt=gpCur.title+' screenshot';
+    gpLbCount.textContent=(gpLbIdx+1)+' / '+imgs.length;
+    gpLb.classList.add('open'); document.body.style.overflow='hidden';
+  }
+  function gpLbClose(){ gpLb.classList.remove('open'); document.body.style.overflow=''; }
+  document.getElementById('gpLbX').addEventListener('click', gpLbClose);
+  document.getElementById('gpLbNext').addEventListener('click', function(e){ e.stopPropagation(); gpLbOpen(gpLbIdx+1); });
+  document.getElementById('gpLbPrev').addEventListener('click', function(e){ e.stopPropagation(); gpLbOpen(gpLbIdx-1); });
+  gpLb.addEventListener('click', function(e){ if(e.target===gpLb) gpLbClose(); });
+
+  /* ---- stage interactions: prev/next, mute toggle, click-to-zoom (images only) ---- */
+  document.getElementById('gpStage').addEventListener('click', function(e){
+    if(e.target.closest('#gpStagePrev')){ gpSwitch(gpStageIdx-1); return; }
+    if(e.target.closest('#gpStageNext')){ gpSwitch(gpStageIdx+1); return; }
+    var muteBtn = e.target.closest('#gpMuteBtn');
+    if(muteBtn){
+      gpMuted = !gpMuted;
+      var v = document.querySelector('#gpStage video');
+      if(v) v.muted = gpMuted;
+      muteBtn.innerHTML = gpMuted?GP_MUTE_OFF:GP_MUTE_ON;
+      muteBtn.setAttribute('aria-label', gpMuted?'Unmute trailer':'Mute trailer');
+      return;
+    }
+    var it = gpItems[gpStageIdx];
+    if(it && it.type==='image') gpLbOpen(gpImages().indexOf(it.src));
+  });
+
+  /* ---- keyboard: gallery focus moves the stage; lightbox open steals arrows/Esc ---- */
+  document.addEventListener('keydown', function(e){
+    if(gpLb.classList.contains('open')){
+      if(e.key==='Escape') gpLbClose();
+      else if(e.key==='ArrowRight') gpLbOpen(gpLbIdx+1);
+      else if(e.key==='ArrowLeft') gpLbOpen(gpLbIdx-1);
+      return;
+    }
+    if(!document.getElementById('gamepdp').classList.contains('active')) return;
+    var active = document.activeElement;
+    var galleryFocused = active && active.closest && (active.closest('#gpStage') || active.closest('#gpStrip'));
+    if(!galleryFocused) return;
+    if(e.key==='ArrowRight'){ gpSwitch(gpStageIdx+1); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'){ gpSwitch(gpStageIdx-1); e.preventDefault(); }
+  });
+
+  function gpSysreqRows(s){
+    return [['os','OS'],['cpu','CPU'],['ram','RAM'],['gpu','GPU'],['storage','Storage']].map(function(r){
+      return '<div class="gp-sysreq-row"><span class="k">'+r[1]+'</span><span class="v">'+s[r[0]]+'</span></div>';
+    }).join('');
+  }
+
+  function openGamePDP(id){
+    var g = gamesById(id); if(!g) return;
+    gpCur = g;
+    gpItems = gpGalleryItems(g);
+    gpStageIdx = 0;
+    gpMuted = true;
+    gpRenderStage(); gpRenderStrip();
+
+    document.getElementById('gpCrumb').textContent = g.title;
+    document.getElementById('gpTitle').textContent = g.title;
+    document.getElementById('gpPills').innerHTML =
+      '<span class="plat-pill">'+g.platform+'</span>'+
+      '<span class="plat-pill">'+g.region+'</span>'+
+      '<span class="plat-pill">&#9889; Instant delivery</span>';
+    document.getElementById('gpRating').textContent = g.rating.toFixed(1);
+    document.getElementById('gpRatingCount').textContent = g.ratings+' ratings';
+    document.getElementById('gpPriceRow').innerHTML = gamePriceRow(g);
+    document.getElementById('gpUnder').innerHTML = g.mrp
+      ? '<div class="l1"><span class="sv">You save €'+(g.mrp-g.price).toFixed(2)+'</span><span class="dot">&middot;</span><span class="tx">Inclusive of all taxes</span></div>'+
+        '<div class="gp-ends">Sale ends 8 Aug</div>'
+      : '<div class="l1"><span class="tx">Inclusive of all taxes</span></div>';
+    document.getElementById('gpRegionTxt').textContent = g.region;
+    document.getElementById('gpAbout').textContent = g.about;
+    var metaRows = [['Release',g.release],['Developer',g.dev],['Publisher',g.pub],['Platform',g.platform],['Region',g.region]];
+    document.getElementById('gpMeta').innerHTML = metaRows.map(function(r){
+      return '<div class="mp-spec"><div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div></div>';
+    }).join('');
+    if(g.sysreq){
+      document.getElementById('gpSysreqMin').innerHTML = gpSysreqRows(g.sysreq.min);
+      document.getElementById('gpSysreqRec').innerHTML = gpSysreqRows(g.sysreq.rec);
+    }
+    document.querySelectorAll('#gamepdp .mp-acc').forEach(function(a){ a.classList.remove('open'); });
+    var similarGames = DIGITAL_GAMES.filter(function(x){ return x.id!==g.id; })
+      .sort(function(a,b){ return (b.genre===g.genre?1:0)-(a.genre===g.genre?1:0); }).slice(0,4);
+    document.getElementById('gpSimilar').innerHTML = similarGames.map(gameShelfCard).join('');
+
+    // sticky buy bar
+    document.getElementById('gpBarName').textContent = g.title;
+    document.getElementById('gpBarNow').textContent = '€'+g.price.toFixed(2);
+    document.getElementById('gpBarThumb').innerHTML = '<img src="'+steamCdn(g.appid,'header.jpg')+'" alt="">';
+    document.getElementById('gpBar').classList.remove('show');
+
+    goScreen('gamepdp');
+  }
+  document.getElementById('gpSimilar').addEventListener('click', handleGameCardActivate);
+  document.getElementById('gpSimilar').addEventListener('keydown', handleGameCardActivate);
+  document.getElementById('gpBackHome').addEventListener('click', function(){ goScreen('home'); });
+  document.getElementById('gpBackGames').addEventListener('click', function(){
+    goScreen('home');
+    setTimeout(function(){ var s=document.getElementById('gamesSection'); if(s) s.scrollIntoView({behavior:'smooth'}); }, 350);
+  });
+  document.getElementById('gpGiftCardLink').addEventListener('click', function(){
+    goScreen('home');
+    setTimeout(function(){ var s=document.getElementById('catalogueSection'); if(s) s.scrollIntoView({behavior:'smooth'}); }, 350);
+  });
+
+  /* collapsible info blocks (system requirements) */
+  document.querySelectorAll('#gamepdp .mp-acc-h').forEach(function(h){
+    h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+  });
+
+  /* sticky buy bar: reveal once the buy box CTA scrolls away */
+  document.getElementById('gpBarBuy').addEventListener('click', function(){ document.getElementById('gpBuy').click(); });
+  if('IntersectionObserver' in window){
+    var gpBarEl = document.getElementById('gpBar');
+    var gpIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var onGamePDP = document.getElementById('gamepdp').classList.contains('active');
+        gpBarEl.classList.toggle('show', onGamePDP && !en.isIntersecting);
+      });
+    }, {threshold:0});
+    gpIo.observe(document.getElementById('gpCtas'));
+  }
+
+  /* ---- "Get key" checkout: reuse the sign-in gate, then the (previously unused) coModal ---- */
+  var gcoCurrent = null;
+  function openGameCheckoutPopup(g){
+    gcoCurrent = g;
+    document.getElementById('coUser').textContent = document.getElementById('userName').textContent;
+    document.getElementById('coTitle').textContent = g.title;
+    document.getElementById('coSku').textContent = g.platform+' · '+g.region+' key';
+    document.getElementById('coQtyLine').textContent = 'Digital key × 1';
+    document.getElementById('coSub').textContent = '€'+g.price.toFixed(2);
+    document.getElementById('coTotal').textContent = '€'+g.price.toFixed(2);
+    document.getElementById('coPay').textContent = 'Pay €'+g.price.toFixed(2);
+    document.getElementById('coWarn').style.display = 'none';
+    coModal.classList.add('open');
+  }
+  document.getElementById('gpBuy').addEventListener('click', function(){
+    if(!gpCur) return;
+    if(!isLoggedIn){
+      pendingBuy = true;
+      pendingGameBuy = gpCur;
+      openAuth();
+      return;
+    }
+    openGameCheckoutPopup(gpCur);
+  });
+  document.getElementById('marqueeGetKey').addEventListener('click', function(e){ e.stopPropagation(); openGamePDP('cyberpunk'); });
+
+  /* ================= GAMES BROWSE (poster wall) ================= */
+  var gamesFilter = 'All';
+  var gamesSearch = '';
+  function gamePosterCard(g){
+    var pct = gamePct(g);
+    return '<div class="p-card liftcard" data-gid="'+g.id+'" role="button" tabindex="0" aria-label="'+g.title+'">'+
+      '<div class="p-art">'+
+        '<img src="'+g.media.poster+'" alt="'+g.title+'" loading="lazy">'+
+        (pct ? '<span class="lime-chip sm p-chip">-'+pct+'%</span>' : '')+
+        '<div class="p-plats"><span class="plat-pill">'+g.platform+'</span></div>'+
+      '</div>'+
+      '<div class="p-body">'+
+        '<div class="p-cat">'+g.genre+'</div>'+
+        '<div class="p-title">'+g.title+'</div>'+
+        '<div class="p-price-row">'+(g.mrp?'<span class="px-strike tabular">€'+g.mrp.toFixed(2)+'</span>':'')+'<span class="px-now tabular">€'+g.price.toFixed(2)+'</span></div>'+
+      '</div>'+
+    '</div>';
+  }
+  function gamesGenres(){
+    var seen = {}, out = [];
+    DIGITAL_GAMES.forEach(function(g){ if(!seen[g.genre]){ seen[g.genre]=true; out.push(g.genre); } });
+    return out;
+  }
+  function renderGamesFilters(){
+    var cats = ['All'].concat(gamesGenres());
+    document.getElementById('gbFilters').innerHTML = cats.map(function(c){
+      var n = c==='All' ? DIGITAL_GAMES.length : DIGITAL_GAMES.filter(function(g){return g.genre===c;}).length;
+      return '<button class="mf-tab'+(gamesFilter===c?' on':'')+'" data-cat="'+c+'">'+c+'<span class="n">'+n+'</span></button>';
+    }).join('');
+  }
+  function renderGamesBrowse(){
+    renderGamesFilters();
+    var q = gamesSearch.trim().toLowerCase();
+    var list = DIGITAL_GAMES.filter(function(g){
+      if(gamesFilter!=='All' && g.genre!==gamesFilter) return false;
+      if(!q) return true;
+      return (g.title+' '+g.genre+' '+(g.tags||[]).join(' ')).toLowerCase().indexOf(q) > -1;
+    });
+    document.getElementById('gbGrid').innerHTML = list.length
+      ? list.map(gamePosterCard).join('')
+      : '<div class="gb-empty">No games match your search.</div>';
+    document.getElementById('gbCount').textContent = list.length + (list.length===1?' game':' games');
+    document.getElementById('gbSearchClr').style.display = q ? 'block' : 'none';
+  }
+  document.getElementById('gbFilters').addEventListener('click', function(e){
+    var tab = e.target.closest('.mf-tab'); if(!tab) return;
+    gamesFilter = tab.getAttribute('data-cat');
+    renderGamesBrowse();
+  });
+  document.getElementById('gbGrid').addEventListener('click', handleGameCardActivate);
+  document.getElementById('gbGrid').addEventListener('keydown', handleGameCardActivate);
+  document.getElementById('gbBackHome').addEventListener('click', function(){ goScreen('home'); });
+  document.getElementById('gbSearch').addEventListener('input', function(){
+    gamesSearch = this.value;
+    renderGamesBrowse();
+  });
+  document.getElementById('gbSearchClr').addEventListener('click', function(){
+    gamesSearch = '';
+    document.getElementById('gbSearch').value = '';
+    renderGamesBrowse();
+    document.getElementById('gbSearch').focus();
+  });
 
 })();
 </script>
