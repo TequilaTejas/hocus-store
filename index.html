@@ -173,6 +173,9 @@
   .btn:hover{filter:brightness(1.1);}
   .btn:active{transform:translateY(1px);}
   .btn.ghost{background:var(--surface2); color:var(--ink); border:1px solid var(--line); border-radius:var(--radius);}
+  .btn.outline{background:transparent; color:var(--brand); border:1px solid var(--brand);}
+  @media(hover:hover){ .btn.outline:hover{background:rgba(var(--brand-rgb),.08); filter:none;} }
+  .btn.outline.confirmed{border-color:var(--success); color:var(--success); pointer-events:none; cursor:default;}
   .chip{border:1px solid var(--line); background:var(--surface2); padding:8px 14px; font-size:12px; text-align:center;}
   .chip.on{border-color:var(--brand); background:rgba(var(--brand-rgb),.16); color:#fff; font-weight:600;}
   .chips{display:flex; gap:8px; flex-wrap:wrap;}
@@ -1620,6 +1623,8 @@
   .mp-acc.open .mp-acc-h .car{transform:rotate(180deg);}
   .mp-acc-b{display:none; padding:2px 16px 16px;}
   .mp-acc.open .mp-acc-b{display:block; animation:screenIn .22s var(--ease-out);}
+  /* fixed variant: same bordered box, permanently open, no toggle affordance */
+  .mp-acc--fixed .mp-acc-h{cursor:default; pointer-events:none;}
   /* flat (non-collapsible) variant of the same blocks — for A/B comparison */
   .mp-flat .mp-acc{border:none; background:transparent; border-radius:0; margin-top:22px; overflow:visible;}
   .mp-flat .mp-acc-h{padding:0; margin-bottom:10px; cursor:default; pointer-events:none;}
@@ -1646,6 +1651,8 @@
   .px-strike{color:var(--mut); text-decoration:line-through; font-size:12px;}
   .px-now{color:#fff; font-weight:700; font-size:15px;}
   .plat-pill{font-size:10px; font-weight:700; padding:4px 9px; border-radius:50px; background:rgba(0,0,0,.62); border:1px solid rgba(255,255,255,.2); color:#fff; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); white-space:nowrap;}
+  /* exclusive Steam·PC platform tag: Steam's brand blue gradient, one-of-a-kind in the pill row */
+  .plat-pill.steam-x{background:linear-gradient(135deg,#06bfff 0%,#2d73ff 100%); border-color:rgba(255,255,255,.35); box-shadow:0 0 14px rgba(45,115,255,.35); text-shadow:0 1px 2px rgba(0,0,0,.35);}
   .liftcard{transition:transform .13s var(--ease-out), border-color .13s var(--ease-out), box-shadow .13s var(--ease-out);}
   @media(hover:hover) and (pointer:fine){ .liftcard:hover{transform:translateY(-5px); border-color:rgba(180,185,200,.3); box-shadow:0 18px 40px rgba(0,0,0,.5), 0 0 0 1px rgba(180,185,200,.1);} }
   .liftcard:active{transform:scale(.97);}
@@ -1666,6 +1673,7 @@
   .mk-fade::after{content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 38%, transparent 100%);}
   .mk-content{position:absolute; left:32px; right:32px; bottom:30px; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; gap:24px;}
   .mk-logo{max-width:760px; max-height:280px; width:64%; object-fit:contain; object-position:left bottom; margin-bottom:0; filter:drop-shadow(0 6px 24px rgba(0,0,0,.7));}
+  .mk-title{font-family:var(--font-display); font-size:clamp(40px,6vw,84px); font-weight:800; letter-spacing:-.03em; line-height:1; color:#fff; text-shadow:0 6px 30px rgba(0,0,0,.8);}
   .mk-right{display:flex; flex-direction:column; align-items:flex-end; gap:14px; flex-shrink:0;}
   .mk-price-row{display:flex; align-items:baseline; gap:12px;}
   .mk-price-row .px-strike{font-size:15px;}
@@ -1683,8 +1691,6 @@
   .g-card{background:var(--surface); border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer;}
   .g-art{position:relative; aspect-ratio:16/9; overflow:hidden; background:#000;}
   .g-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
-  .g-art img.alt{opacity:0; transition:opacity .4s var(--ease-in-out);}
-  @media(hover:hover) and (pointer:fine){ .g-card:hover .g-art img.alt{opacity:1;} }
   .g-plat{position:absolute; top:8px; left:8px; z-index:2;}
   .g-chip{position:absolute; top:8px; right:8px; z-index:2;}
   .g-body{padding:12px 14px 14px;}
@@ -1707,10 +1713,26 @@
   .p-cat{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--mut); margin-bottom:5px;}
   .p-title{font-family:var(--font-display); font-weight:700; font-size:14.5px; margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .p-price-row{display:flex; align-items:baseline; gap:7px; flex-wrap:wrap;}
+  .p-soon{font-size:11px; color:var(--mut); font-weight:600;}
 
-  /* ---- game PDP: two-column ~58/42 buy box ---- */
-  .gp-wrap{display:grid; grid-template-columns:1.38fr 1fr; gap:36px; align-items:start;}
-  @media(max-width:900px){.gp-wrap{grid-template-columns:1fr;}}
+  /* ---- explicit PC/Steam platform strip (bottom of card art) + DIRECT/COMING SOON corner tags ---- */
+  .gp-platstrip{position:absolute; left:0; right:0; bottom:0; height:26px; z-index:2; display:flex; align-items:center; gap:6px; padding:0 8px;
+    background:rgba(0,0,0,.72); backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);}
+  .gp-platstrip svg{flex:0 0 auto; color:#fff;}
+  .gp-platstrip .pw{font-size:10px; font-weight:800; letter-spacing:.05em; color:#fff; white-space:nowrap;}
+  .gp-platstrip .pc-lbl{margin-left:auto; font-size:9px; font-weight:700; letter-spacing:.06em; color:rgba(255,255,255,.65); white-space:nowrap;}
+  .soon-tag{display:inline-block; background:rgba(0,0,0,.72); border:1px solid rgba(255,255,255,.28); color:#fff;
+    font-size:9px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:3px 7px; border-radius:5px; white-space:nowrap;}
+
+  /* ---- game PDP: two-column ~58/42 buy box; redeem fills the left column under the gallery ---- */
+  .gp-wrap{display:grid; grid-template-columns:1.38fr 1fr; gap:0 36px; align-items:start;
+    grid-template-areas:"gallery buybox" "redeem offers";}
+  /* min-width:0 so the non-wrapping thumb strip scrolls instead of blowing the column out */
+  .gp-gallery{grid-area:gallery; min-width:0;}
+  .gp-buybox{grid-area:buybox; min-width:0;}
+  .gp-redeem{grid-area:redeem; min-width:0;}
+  .gp-offercol{grid-area:offers; min-width:0; align-self:end;}
+  @media(max-width:900px){.gp-wrap{grid-template-columns:1fr; grid-template-areas:"gallery" "buybox" "offers" "redeem";}}
   .gp-stage{position:relative; aspect-ratio:16/9; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#000;}
   .gp-stage:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
   .gp-stage img, .gp-stage video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
@@ -1728,7 +1750,8 @@
     display:flex; align-items:center; justify-content:center; transition:background-color .15s var(--ease-out);}
   .gp-mute-btn:hover{background:rgba(0,0,0,.78);}
   .gp-mute-btn svg{width:15px; height:15px;}
-  .gp-strip{display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; margin-top:10px; padding-bottom:2px;}
+  .gp-strip{display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin-top:10px;}
+  .gp-strip::-webkit-scrollbar{display:none;}
   .gp-strip-t{position:relative; flex:0 0 auto; width:96px; height:54px; border:1px solid var(--line); border-radius:5px; overflow:hidden; cursor:pointer; background:var(--surface2); padding:0; transition:border-color .15s var(--ease-out);}
   .gp-strip-t img{width:100%; height:100%; object-fit:cover; display:block;}
   .gp-strip-t:hover{border-color:var(--line-2);}
@@ -1740,8 +1763,31 @@
   .gp-chip{display:inline-block; white-space:nowrap; border:1px solid var(--line); background:var(--surface2); color:var(--ink-2); font-size:11.5px; padding:6px 14px; border-radius:50px;}
   .gp-chip.clickable{cursor:pointer; transition:border-color .15s var(--ease-out), color .15s var(--ease-out);}
   .gp-chip.clickable:hover{border-color:var(--brand); color:#fff;}
-  #gamepdp .mp-price-row{align-items:center;}
-  #gamepdp .mp-price-row .mp-now{margin-left:auto;}
+  /* price anatomy borrowed from the gift-card tiles (and CDKeys/Eneba et al.),
+     stacked: big final price on top, struck list price + green −% chip beneath */
+  #gamepdp .mp-price-row{flex-direction:column; align-items:flex-start; gap:7px; margin-top:22px;}
+  #gamepdp .mp-now{font-size:32px;}
+  .gp-was{display:flex; align-items:center; gap:10px;}
+  .gp-was .mp-mrp{font-size:14px;}
+  .gp-save{font-size:12px; font-weight:700; color:#7fe0a6; background:rgba(66,179,71,.14); border:1px solid rgba(66,179,71,.4); padding:3px 9px; border-radius:5px; white-space:nowrap;}
+
+  /* wishlist CTA: square icon button beside Buy now; full-width labelled button on wishlist-only games */
+  .gp-wish-ic{flex:0 0 auto; width:48px; padding:0; display:inline-flex; align-items:center; justify-content:center;}
+  .gp-wish-ic svg, .gp-wish-full svg{display:block;}
+  .gp-wish-full{flex:1; display:inline-flex; align-items:center; justify-content:center; gap:9px;}
+
+  /* roomier buy-box rhythm: title → pills → price → CTA breathe more */
+  #gamepdp .gp-pills{margin:14px 0 0; gap:8px;}
+  /* PDP metadata chips: borderless small-radius tints, color only where it means something
+     (base .plat-pill stays a dark overlay chip for card art) */
+  #gamepdp .plat-pill{font-size:11px; font-weight:600; letter-spacing:.02em; height:26px; padding:0 11px; line-height:1;
+    background:rgba(255,255,255,.06); border:none; border-radius:6px; color:var(--ink-2);
+    backdrop-filter:none; -webkit-backdrop-filter:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;}
+  #gamepdp .plat-pill.steam-x{background:rgba(45,115,255,.16); color:#7fb1ff; box-shadow:none; text-shadow:none;}
+  #gamepdp .plat-pill.pp-fast{background:rgba(66,179,71,.13); color:#7fe0a6;}
+  #gamepdp .plat-pill.pp-soon{background:rgba(167,139,250,.15); color:#c4b5fd;}
+  #gamepdp .gp-under{margin-top:10px;}
+  #gamepdp #gpCtas{margin-top:auto; padding-top:26px;}
   .gp-under{margin-top:8px;}
   .gp-under .l1{display:flex; align-items:center; gap:8px; font-size:12px;}
   .gp-under .sv{color:var(--success); font-weight:600;}
@@ -1756,22 +1802,44 @@
   .gp-sysreq-row .k{color:var(--mut); flex:0 0 auto;}
   .gp-sysreq-row .v{text-align:right;}
   @media(max-width:560px){.gp-sysreq{grid-template-columns:1fr; gap:18px 0;}}
+  /* buy-box trust list: plain icon+text rows, no boxes */
+  #gamepdp .mp-trust{gap:14px; margin-top:22px;}
+  #gamepdp .mp-trust-i{border:none; background:transparent; padding:0 2px; font-size:12.5px;}
+  /* buy box fills its grid track (which bottoms out at the redeem steps) and the
+     offers card pins to that bottom edge, so both columns end on the same line */
+  .gp-buybox{align-self:stretch; display:flex; flex-direction:column;}
+
+
+  /* yellow diet: on the game PDP, brand color is reserved for the primary Buy CTA.
+     Everything else (icons, chips, step numbers, offer card) goes neutral. */
+  #gamepdp .mp-trust-i svg{color:var(--ink-2);}
+  #gamepdp .btn.outline{border-color:var(--line-2); color:var(--ink-2);}
+  @media(hover:hover){ #gamepdp .btn.outline:hover{background:rgba(255,255,255,.05);} }
+  #gamepdp .mp-offers{border-color:var(--line);}
+  #gamepdp .mp-offers-hd svg{color:var(--ink-2);}
+  #gamepdp .mp-offer-ic{background:var(--surface2); border-color:var(--line); color:var(--ink-2);}
+  #gamepdp .mp-offers-n{color:var(--ink-2); background:var(--surface2); border-color:var(--line);}
+  #gamepdp .mp-offer-tx b.hl{color:#fff;}
+  #gamepdp .gp-strip-t.on{border-color:rgba(255,255,255,.7); box-shadow:0 0 0 1px rgba(255,255,255,.7);}
+
   .gp-sys-col{padding:14px 16px; border-radius:5px;}
   .gp-sys-col.rec{background:linear-gradient(180deg, var(--brand-50), rgba(var(--brand-rgb),0.02)); box-shadow:inset 0 0 0 1px rgba(var(--brand-rgb),.28);}
   .gp-sys-col.rec .gp-sysreq-h{color:var(--brand-2);}
-  #gamepdp .steps{grid-template-columns:repeat(4,1fr); gap:16px;}
-  #gamepdp .step{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:24px;}
-  #gamepdp .step .n{width:36px; height:36px; border-radius:10px; background:rgba(var(--brand-rgb),.12); border:1px solid rgba(var(--brand-rgb),.38); color:var(--brand-2); font-family:var(--font-display); font-size:17px; font-weight:800; letter-spacing:-.02em; display:grid; place-items:center; margin-bottom:20px; line-height:1;}
-  #gamepdp .step .st-h{font-size:16px; font-weight:700; margin-bottom:7px; letter-spacing:-.01em; color:#fff;}
-  #gamepdp .step .st-p{color:var(--mut); font-size:13px; line-height:1.55;}
-  @media(max-width:900px){#gamepdp .steps{grid-template-columns:repeat(2,1fr);}}
+  /* open redeem steps: no card chrome, whitespace does the separating */
+  #gamepdp .steps{grid-template-columns:repeat(2,1fr); gap:26px 32px;}
   @media(max-width:560px){#gamepdp .steps{grid-template-columns:1fr;}}
+  #gamepdp .step{display:grid; grid-template-columns:auto 1fr; column-gap:14px; align-items:start; background:transparent; border:none; border-radius:0; padding:0;}
+  #gamepdp .step .n{grid-row:span 2;}
+  #gamepdp .step .n{flex:0 0 auto; width:26px; height:26px; border-radius:7px; background:var(--surface2); border:1px solid var(--line); color:var(--ink-2); font-family:var(--font-display); font-size:13px; font-weight:800; letter-spacing:-.02em; display:grid; place-items:center; margin-bottom:0; line-height:1;}
+  #gamepdp .step .st-h{font-size:14px; font-weight:700; margin-bottom:2px; letter-spacing:-.01em; color:#fff;}
+  #gamepdp .step .st-p{color:var(--mut); font-size:12.5px; line-height:1.5; max-width:none;}
 
   /* ---- fallback ladder tiers (used inside .gp-stage when no thumb rail applies) ---- */
   .kenburns{animation:kenburns 18s var(--ease-in-out) infinite alternate;}
   @keyframes kenburns{0%{transform:scale(1) translate(0,0);} 100%{transform:scale(1.08) translate(-1.5%,-1%);}}
   .blur-fill{position:absolute; inset:-20px; width:calc(100% + 40px); height:calc(100% + 40px); object-fit:cover; filter:blur(30px) brightness(.35); transform:scale(1.15);}
   .blur-portrait{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); height:60%; width:auto; max-width:none; object-fit:contain; border-radius:4px; box-shadow:0 12px 40px rgba(0,0,0,.6);}
+  .p-art-contain{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:88%; height:auto; border-radius:4px; box-shadow:0 10px 32px rgba(0,0,0,.55);}
   .blur-vignette{position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.6) 100%);}
   .title-only{position:absolute; inset:0; background:linear-gradient(135deg, var(--brand-50), #17191C 72%);}
   .title-only::before{content:""; position:absolute; inset:0; opacity:.35; background-image:radial-gradient(rgba(230,169,60,.35) 1px, transparent 1px); background-size:14px 14px;}
@@ -2266,26 +2334,25 @@
         <div>
           <div class="sec-over">Digital games</div>
           <div class="sec-h">Games, keys in your inbox</div>
-          <p class="sec-sub" style="margin:6px 0 0;">Official Steam keys, delivered in seconds. Always below store price.</p>
+          <p class="sec-sub" style="margin:6px 0 0;">Official Steam keys, delivered to your email in seconds.</p>
         </div>
       </div>
 
-      <!-- marquee: featured game (Cyberpunk 2077) -->
-      <div class="marquee kbtn" id="gameMarquee" tabindex="0" role="button" aria-label="Cyberpunk 2077 — view details">
-        <video muted loop playsinline preload="metadata" data-content-ratio="2.4" poster="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg">
-          <source src="https://cdn.akamai.steamstatic.com/steam/apps/257081132/movie480.mp4" type="video/mp4">
+      <!-- marquee: featured game (The Alley, the store's first live key) -->
+      <div class="marquee kbtn" id="gameMarquee" tabindex="0" role="button" aria-label="The Alley, view details">
+        <video muted loop playsinline preload="metadata" data-content-ratio="2.44" poster="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d0b358c9942ec517fc30bca87666590d43d4a6cf/ss_d0b358c9942ec517fc30bca87666590d43d4a6cf.1920x1080.jpg?t=1785292935">
+          <source src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/7f78bad2f28d53d075296999c123e118.webm?t=1785292935" type="video/webm">
+          <source src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/7f78bad2f28d53d075296999c123e118.mp4?t=1785292935" type="video/mp4">
         </video>
-        <img class="mk-poster" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg" alt="Cyberpunk 2077 key art">
+        <img class="mk-poster" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d0b358c9942ec517fc30bca87666590d43d4a6cf/ss_d0b358c9942ec517fc30bca87666590d43d4a6cf.1920x1080.jpg?t=1785292935" alt="The Alley key art">
         <div class="mk-fade" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <span class="lime-chip mk-corner">-65% OFF</span>
         <div class="mk-content">
           <div class="mk-left">
-            <img class="mk-logo" src="assets/lab/cp2077-logo.png" alt="Cyberpunk 2077">
+            <img class="mk-logo" src="assets/lab/alley-logo.png" alt="The Alley" style="max-width:440px;">
           </div>
           <div class="mk-right">
             <div class="mk-price-row">
-              <span class="px-strike tabular">€69.99</span>
-              <span class="px-now tabular">€24.49</span>
+              <span class="px-now tabular" id="mkPrice">$8.99</span>
             </div>
             <button class="btn" id="marqueeGetKey">Buy now <span aria-hidden="true">&#8594;</span></button>
           </div>
@@ -2353,7 +2420,7 @@
       <div class="sec">
         <div class="sec-over">Horcus</div>
         <div class="sec-h">Streams &amp; Videos</div>
-        <div class="sec-sub">Watch before you buy — or just hang out.</div>
+        <div class="sec-sub">Watch before you buy, or just hang out.</div>
         <div class="creator-grid">
           <a class="cr-card" href="https://www.twitch.tv/videos/2805090103" target="_blank">
             <div class="cr-thumb" style="background:#000; padding:0;">
@@ -2574,11 +2641,11 @@
             </div>
             <div class="mp-offer">
               <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
-              <div class="mp-offer-tx"><b>Bundle deal</b> — pair this with any Horcus tee and get an extra <b class="hl">5% off</b> the merch.</div>
+              <div class="mp-offer-tx"><b>Bundle deal</b>: pair this with any Horcus tee and get an extra <b class="hl">5% off</b> the merch.</div>
             </div>
             <div class="mp-offer">
               <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
-              <div class="mp-offer-tx"><b>Instant delivery</b> — your code lands in your email <b class="hl">within seconds</b> of payment.</div>
+              <div class="mp-offer-tx"><b>Instant delivery</b>: your code lands in your email <b class="hl">within seconds</b> of payment.</div>
             </div>
           </div>
         </div>
@@ -2675,7 +2742,7 @@
             </div>
             <div class="mp-offer">
               <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
-              <div class="mp-offer-tx"><b>Bundle deal</b> — add any gift card to this order and get an extra <b class="hl">5% off</b> the merch.</div>
+              <div class="mp-offer-tx"><b>Bundle deal</b>: add any gift card to this order and get an extra <b class="hl">5% off</b> the merch.</div>
             </div>
             <div class="mp-offer">
               <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
@@ -2795,31 +2862,35 @@
 
       <div class="gp-wrap" style="margin-top:18px;">
         <!-- LEFT: media gallery -->
-        <div>
-          <div class="gp-stage" id="gpStage" tabindex="0" role="group" aria-label="Media gallery — use arrow keys to browse"><!-- filled by JS --></div>
+        <div class="gp-gallery">
+          <div class="gp-stage" id="gpStage" tabindex="0" role="group" aria-label="Media gallery, use arrow keys to browse"><!-- filled by JS --></div>
           <div class="gp-strip" id="gpStrip"><!-- filled by JS --></div>
         </div>
 
         <!-- RIGHT: buy box -->
-        <div>
+        <div class="gp-buybox">
           <div class="mp-name" id="gpTitle">Game title</div>
           <div class="gp-pills" id="gpPills"><!-- filled by JS --></div>
-          <div class="mp-rate-row"><b id="gpRating">4.6</b><span class="st">&#9733;</span><span class="cnt" id="gpRatingCount">1.2k ratings</span></div>
-
-          <hr class="mp-hr">
+          <div class="mp-rate-row" id="gpRateRow"><!-- filled by JS --></div>
           <div class="mp-price-row" id="gpPriceRow"><!-- filled by JS --></div>
           <div class="gp-under" id="gpUnder"><!-- filled by JS --></div>
 
-          <div id="gpCtas"><button class="btn" id="gpBuy" style="width:100%; margin-top:16px;">Buy now <span aria-hidden="true">&#8594;</span></button></div>
-
-          <div class="mp-trust" style="grid-template-columns:1fr; margin-top:16px;">
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--success);"><polyline points="20 6 9 17 4 12"/></svg>Activates worldwide &mdash; <span id="gpRegionTxt">Global</span></div>
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>Code on this screen and in your email within seconds</div>
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg>Official key, sourced from authorized distribution</div>
-            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-9-9"/><polyline points="21 3 21 9 15 9"/></svg>Full refund until the code is revealed</div>
+          <div class="mp-trust" id="gpTrust" style="grid-template-columns:1fr;">
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--success);"><polyline points="20 6 9 17 4 12"/></svg><span id="gpRegionTxt">Activates worldwide (Global)</span></div>
+            <div class="mp-trust-i" id="gpSteamOnly"></div>
+            <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg><span id="gpTrustSourceTxt">Official key, sourced from authorized distribution</span></div>
           </div>
 
-          <div class="mp-offers" style="margin-top:16px;">
+          <div id="gpCtas" style="display:flex; gap:10px;">
+            <button class="btn" id="gpBuy" style="flex:1;">Buy now <span aria-hidden="true">&#8594;</span></button>
+            <button class="btn outline" id="gpWish" aria-label="Add to wishlist">&#9825; Wishlist</button>
+          </div>
+
+        </div>
+
+        <!-- offers rides in its own grid cell so its bottom pins to the redeem row's bottom -->
+        <div class="gp-offercol">
+          <div class="mp-offers" id="gpOffers">
             <div class="mp-offers-hd">
               <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg>
               Available offers
@@ -2827,35 +2898,28 @@
             </div>
             <div class="mp-offer">
               <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
-              <div class="mp-offer-tx"><b>Bundle deal</b> — pair with a <span class="lnk" id="gpGiftCardLink" style="color:var(--brand); cursor:pointer;">Steam Gift Card</span> and get an extra <b class="hl">5% off</b> the card.</div>
+              <div class="mp-offer-tx"><b>Early-bird offer</b>: order before <b class="hl">15 Aug</b> and get an extra <b class="hl">5% off</b>.</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- ===== HOW TO REDEEM ===== -->
-      <div class="sec">
-        <div class="sec-h" style="font-size:22px;">How to redeem on Steam</div>
-        <div class="steps">
-          <div class="step"><div class="n">1</div><div class="st-h">Open Steam</div><div class="st-p">Launch Steam and sign in.</div></div>
-          <div class="step"><div class="n">2</div><div class="st-h">Activate a product</div><div class="st-p">Games &rarr; Activate a Product on Steam.</div></div>
-          <div class="step"><div class="n">3</div><div class="st-h">Enter your code</div><div class="st-p">Paste the code from your email.</div></div>
-          <div class="step"><div class="n">4</div><div class="st-h">Download and play</div><div class="st-p">Steam installs the game automatically.</div></div>
+        <!-- ===== HOW TO REDEEM (left column, under the gallery) ===== -->
+        <div class="sec gp-redeem" style="margin-top:32px;">
+          <div class="sec-h" style="font-size:22px;">How to redeem on Steam</div>
+          <div class="steps">
+            <div class="step"><div class="n">1</div><div class="st-h">Open Steam</div><div class="st-p">Launch Steam and sign in.</div></div>
+            <div class="step"><div class="n">2</div><div class="st-h">Activate a product</div><div class="st-p">Games &rarr; Activate a Product on Steam.</div></div>
+            <div class="step"><div class="n">3</div><div class="st-h">Enter your code</div><div class="st-p">Paste the code from your email.</div></div>
+            <div class="step"><div class="n">4</div><div class="st-h">Download and play</div><div class="st-p">Steam installs the game automatically.</div></div>
+          </div>
         </div>
-      </div>
-
-      <!-- ===== ABOUT ===== -->
-      <div class="sec">
-        <div class="sec-h" style="font-size:22px;">About</div>
-        <p class="mp-body-copy" id="gpAbout" style="max-width:640px;"></p>
-        <div class="mp-specs" id="gpMeta" style="margin-top:18px;"><!-- filled by JS --></div>
       </div>
 
       <!-- ===== SYSTEM REQUIREMENTS ===== -->
       <div class="sec">
         <div class="sec-h" style="font-size:22px;">System requirements</div>
-        <div class="mp-acc" data-acc="sysreq">
-          <div class="mp-acc-h">Minimum &amp; recommended <span class="mp-acc-hint">OS, CPU, RAM, GPU, storage</span><span class="car">&#9662;</span></div>
+        <div class="mp-acc open mp-acc--fixed" data-acc="sysreq">
+          <div class="mp-acc-h">Minimum &amp; recommended <span class="mp-acc-hint">OS, CPU, RAM, GPU, storage</span></div>
           <div class="mp-acc-b">
             <div class="gp-sysreq">
               <div class="gp-sys-col"><div class="gp-sysreq-h">Minimum</div><div id="gpSysreqMin"><!-- filled by JS --></div></div>
@@ -3758,6 +3822,7 @@
       }
     }
     renderSkus();
+    refreshGamesForRegion();   // digital games reprice off the same nav region
   }
 
   renderSkus(); renderDenoms(); renderQty(); updateBuy();
@@ -3881,7 +3946,7 @@
       var g = gcoCurrent; gcoCurrent = null;
       renderConfirmation({ title: g.title, sku: g.platform+' · '+g.region, vp:'Digital key', qty:1, price: g.price });
       document.getElementById('confirmTitle').textContent = 'Key delivered!';
-      document.getElementById('confirmSub').textContent = 'Your Steam key for '+g.title+' has been sent to your email — check the code below.';
+      document.getElementById('confirmSub').textContent = 'Your Steam key for '+g.title+' has been sent to your email. Check the code below.';
       goScreen('confirm');
       return;
     }
@@ -4478,7 +4543,7 @@
       colors:[{n:'Jet Black',hex:'#1b1d22'},{n:'White',hex:'#EDEDED'}],
       sizes:['S','M','L','XL','XXL'], out:[],
       specs:{'Fabric':'220 GSM combed cotton','Fit':'Regular','Neck':'Ribbed crew neck','Sleeve':'Half sleeve','Print':'Screen print','Country of origin':'India'},
-      fit:'Classic regular fit — not slim, not oversized. True to size.',
+      fit:'Classic regular fit: not slim, not oversized. True to size.',
       care:'100% combed ring-spun cotton, pre-shrunk. Machine wash cold inside out, tumble dry low, do not iron directly on the print.' };
     for(var k in o) base[k]=o[k];
     if(!base.img) base.img = 'assets/merch/'+base.id+'-card.jpg';
@@ -5201,9 +5266,106 @@
   function steamCdn(appid, file){ return 'https://cdn.cloudflare.steamstatic.com/steam/apps/'+appid+'/'+file; }
 
   var DIGITAL_GAMES = [
+    { id:'alley', appid:4181410, title:'The Alley', platform:'Steam', region:'India', direct:true, posterLandscape:true,
+      genre:'Horror', tags:['Adventure','Indie','Simulation'],
+      cur:'₹', price:435, mrp:null,
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:435, mrp:565, usd:'$4.99'},
+        {id:'latam', label:'LATAM', cur:'$', price:4.99, mrp:6.49},
+        {id:'row', label:'UK / US / Europe', cur:'$', price:8.99, mrp:11.99}
+      ],
+      release:'23 Jul, 2026', dev:'AIXLAB', pub:'Smilegate · Thermite Games',
+      about:'After class, you step into the familiar alley on your way home, then suddenly find yourself trapped in an endless maze. Search for Aberrations, signs of something beyond reality, and separate them from the eerie but ordinary Deceptions that surround you. Unravel the mystery hidden within the alley, outrun the ghosts that hunt you, and escape with your life.',
+      langs:'English, Korean (full audio), Japanese, Simplified Chinese, Traditional Chinese, Russian',
+      controller:'Full controller support',
+      achievements:10,
+      ageRating:'16+ (Horror)',
+      features:['Single-player','Steam Achievements','Full controller support','Family Sharing'],
+      disclosure:'Disclosure from the developer: some of the game\'s texture assets are AI-generated.',
+      sections:[
+        {h:'A bracelet that detects Aberrations', p:'Check the glow of the bracelet given to you by your Mudang grandmother to detect the presence of supernatural traces.', mp4:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/1862088a4c39a99a6a640ef47646c806.mp4?t=1785292935'},
+        {h:'Aberrations and Deceptions', p:'Every corner of the alley is littered with Aberrations, signs of an existence beyond reality, mixed among Deceptions that look eerie but can still be explained by the real world. Photograph suspicious phenomena to determine which is which. Reporting Aberrations earns you Keys.', mp4:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/26fbd7ff5df6aef13a99ae9c66c1bf86.mp4?t=1785292935'},
+        {h:'Stories', p:'Use your Keys to unlock the Chest of Truth and reveal the dark secrets hidden behind the haunting. Journey into secret spaces that conceal the truth behind the ghosts, and confront another kind of fear.', mp4:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/31434558f0b114539bbabd8469ad00ce.mp4?t=1785292935'},
+        {h:'Ghost pursuit', p:'The ghosts pursue you relentlessly, driven by an obsession that only grows stronger. If you feel a presence nearby, the ghost is close. Don\'t look back. Just run.', mp4:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/7f78bad2f28d53d075296999c123e118.mp4?t=1785292935'},
+        {h:'Cat. A cute but scary cat.', p:'', mp4:'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/4ed6bcf147e74f92a0fc1d41d143059a.mp4?t=1785292935'}
+      ],
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'Core i5-6500 / AMD FX 8350', ram:'16 GB', gpu:'GTX 1070 / RX 6600 or higher', storage:'Not specified'},
+        rec:{os:'Windows 10/11 64-bit', cpu:'Not specified', ram:'Not specified', gpu:'RTX 3060', storage:'Not specified'}
+      },
+      media:{
+        // Steam serves this app's trailer as HLS/DASH only (no legacy movie480.mp4), so the
+        // stage stays screens-only; the extras mp4 loops play inside the About feature sections
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d0b358c9942ec517fc30bca87666590d43d4a6cf/ss_d0b358c9942ec517fc30bca87666590d43d4a6cf.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/c820fd68086b3407a9427f50146f6bfed9c53c13/ss_c820fd68086b3407a9427f50146f6bfed9c53c13.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d177c1c9e4daf6e3138cf4a940384af5d7344a97/ss_d177c1c9e4daf6e3138cf4a940384af5d7344a97.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/9af9fa97acb06547b6a122c7214a6c0042cb3edc/ss_9af9fa97acb06547b6a122c7214a6c0042cb3edc.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/eb5c7b8db5eaa007b3ef0aca2f10e446bf9a6711/ss_eb5c7b8db5eaa007b3ef0aca2f10e446bf9a6711.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/61883b777a2b57bb933c2d338b2f8081042cf683/ss_61883b777a2b57bb933c2d338b2f8081042cf683.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/1d117bc4553e2d9064067b06f712496883ae649f/ss_1d117bc4553e2d9064067b06f712496883ae649f.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/50f138d24ee46022a2600bae39e01b02aacb0af7/ss_50f138d24ee46022a2600bae39e01b02aacb0af7.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/fe27951e8196b5c9e610136bc46ce4a7b3fabf67/ss_fe27951e8196b5c9e610136bc46ce4a7b3fabf67.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/e444f0c3da8dc86c07f6d1472c3ed04a709317cb/ss_e444f0c3da8dc86c07f6d1472c3ed04a709317cb.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/8190cc646b310c4fe2f5faf786d61d2de6101952/ss_8190cc646b310c4fe2f5faf786d61d2de6101952.1920x1080.jpg?t=1785292935',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/68aea04076892b14052ceecc97ac9267675ba469/ss_68aea04076892b14052ceecc97ac9267675ba469.1920x1080.jpg?t=1785292935'
+        ],
+        // this app has no portrait library_600x900 / library_hero asset yet (steamCdn 404s) — the API only
+        // returns a landscape header image, so header.jpg is reused for both hero and poster as the closest fallback
+        cover: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/fd0df0b0caa97d966a9c8f76b9de8a1370975ecd/capsule_616x353.jpg',
+        hero: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/2fc2e44dbb11a2b0230f049ed73e5debd50976f7/header.jpg?t=1785292935',
+        poster: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/2fc2e44dbb11a2b0230f049ed73e5debd50976f7/header.jpg?t=1785292935',
+        header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/2fc2e44dbb11a2b0230f049ed73e5debd50976f7/header.jpg?t=1785292935',
+        capsule: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/fd0df0b0caa97d966a9c8f76b9de8a1370975ecd/capsule_616x353.jpg'
+      }
+    },
+    { id:'detained', appid:1394650, title:'Detained: Too Good for School', platform:'Steam', region:'Global', wishlistOnly:true,
+      genre:'Action RPG', tags:['Action','Adventure','RPG','Early Access'],
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:880},
+        {id:'latam', label:'LATAM', cur:'$', price:13.99},
+        {id:'row', label:'UK / US / Europe', cur:'$', price:19.99}
+      ],
+      release:'2026', dev:'O.T.K Games', pub:'Thermite Games',
+      about:'A 2D action RPG delinquent schoolgirl simulator. Freshly out of six months in juvenile detainment, you enter Swinster City with one goal: revenge. Attend classes, fight gangsters, work part-time jobs, and cause all manner of mischief however you choose.',
+      langs:'English, Simplified Chinese, Japanese, Traditional Chinese, Spanish, Portuguese (Brazil), Korean',
+      controller:'Full controller support (DualShock / DualSense)',
+      ageRating:'12+ (Fantasy violence, drugs)',
+      features:['Single-player','Steam Achievements','Full controller support','Steam Cloud'],
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'3.0 GHz or better', ram:'4 GB', gpu:'GTX 760 / R9 270X', storage:'2.5 GB'},
+        rec:{os:'Windows 10 64-bit', cpu:'3.0 GHz or better', ram:'8 GB', gpu:'GTX 960 / R9 380', storage:'2.5 GB'}
+      },
+      media:{
+        // trailer is HLS/DASH-only on Steam's CDN — screens + key art tier
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/7469985a5169624c129dd074f8233863ed577c8f/ss_7469985a5169624c129dd074f8233863ed577c8f.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/97d30ced3ad916f434a72500608b4cd43cdb8e51/ss_97d30ced3ad916f434a72500608b4cd43cdb8e51.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/6bc1d6a734e82f6b01a8ae607d3c33464c997c7c/ss_6bc1d6a734e82f6b01a8ae607d3c33464c997c7c.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/5df99732697d8de8e0e55e20b597a70290e41ca2/ss_5df99732697d8de8e0e55e20b597a70290e41ca2.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/96c1113dcac118f95ec59bb40450ecbe63f666b2/ss_96c1113dcac118f95ec59bb40450ecbe63f666b2.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/3c8839484475dbb0ca28ceda70354dbcf56770c8/ss_3c8839484475dbb0ca28ceda70354dbcf56770c8.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/c44b190d706c267da02d2548f70e46617ca1c4d4/ss_c44b190d706c267da02d2548f70e46617ca1c4d4.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/446ca1ea491683c65723c52b709325b455051429/ss_446ca1ea491683c65723c52b709325b455051429.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/8f953db389e92625051a62216df0bd9a4c4efc7c/ss_8f953db389e92625051a62216df0bd9a4c4efc7c.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/287be267b0235e1d77b232c6c6c190b133dba238/ss_287be267b0235e1d77b232c6c6c190b133dba238.1920x1080.jpg?t=1785207496'
+        ],
+        cover: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/header.jpg?t=1785207496',
+        hero: steamCdn(1394650,'library_hero.jpg'),
+        poster: steamCdn(1394650,'library_600x900.jpg'),
+        header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/header.jpg?t=1785207496'
+      }
+    },
     { id:'cyberpunk', appid:1091500, title:'Cyberpunk 2077', platform:'Steam', region:'Global',
       genre:'RPG', tags:['Open World','Story Rich','Singleplayer'],
       price:24.49, mrp:69.99, rating:4.4, ratings:'186,412', release:'9 Dec, 2020',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:1049, mrp:2999},
+        {id:'latam', label:'LATAM', cur:'$', price:17.49, mrp:49.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:24.49, mrp:69.99}
+      ],
       dev:'CD PROJEKT RED', pub:'CD PROJEKT RED',
       about:'Open-world RPG set in Night City. You play V, a mercenary chasing an implant that promises immortality, navigating gangs, corporations and body modification along the way.',
       redeem:'steam',
@@ -5227,9 +5389,35 @@
         logo:'assets/lab/cp2077-logo.png'
       }
     },
+    { id:'silksong', appid:1030300, title:'Hollow Knight: Silksong', platform:'Steam', region:'Global', wishlistOnly:true,
+      genre:'Metroidvania', tags:['Action','Adventure','Indie'],
+      release:'4 Sep, 2025', dev:'Team Cherry', pub:'Team Cherry',
+      about:'Discover a vast, haunted kingdom in Hollow Knight: Silksong. Explore, fight and survive as Hornet ascends to the peak of a land ruled by silk and song.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'Core i3-3240 / FX-4300', ram:'4 GB', gpu:'GTX 560 / Radeon HD 6870', storage:'9 GB'},
+        rec:{os:'Windows 10/11 64-bit', cpu:'Core i5-4570 / Ryzen 3 1200', ram:'8 GB', gpu:'GTX 960 / RX 470', storage:'9 GB SSD'}
+      },
+      media:{
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/26950369fe4b03c2268620eb9815c8a246aa0b06/ss_26950369fe4b03c2268620eb9815c8a246aa0b06.1920x1080.jpg?t=1776125736',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/09ccaa6c16f158f9df8298feb5d196098506a028/ss_09ccaa6c16f158f9df8298feb5d196098506a028.1920x1080.jpg?t=1776125736',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/d1a893ec6357b347a55ed929833ba793b57a79d2/ss_d1a893ec6357b347a55ed929833ba793b57a79d2.1920x1080.jpg?t=1776125736',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/856e33e755a0b9a785c645d116036516ea08812b/ss_856e33e755a0b9a785c645d116036516ea08812b.1920x1080.jpg?t=1776125736',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1030300/8e09f2b2eedd3fa9b4479dd5c26d8bdf60562478/ss_8e09f2b2eedd3fa9b4479dd5c26d8bdf60562478.1920x1080.jpg?t=1776125736'
+        ],
+        hero: steamCdn(1030300,'library_hero.jpg'),
+        poster: steamCdn(1030300,'library_600x900.jpg')
+      }
+    },
     { id:'elden-ring', appid:1245620, title:'Elden Ring', platform:'Steam', region:'Global',
       genre:'Action RPG', tags:['Souls-like','Open World','Difficult'],
       price:34.99, mrp:59.99, rating:4.8, ratings:'671,204', release:'24 Feb, 2022',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:1499, mrp:2499},
+        {id:'latam', label:'LATAM', cur:'$', price:24.49, mrp:41.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:34.99, mrp:59.99}
+      ],
       dev:'FromSoftware, Inc.', pub:'Bandai Namco Entertainment',
       about:'Fantasy action RPG from FromSoftware. Explore the Lands Between on foot or horseback, alone or with friends, and rise to become an Elden Lord.',
       redeem:'steam',
@@ -5254,6 +5442,11 @@
     { id:'bg3', appid:1086940, title:"Baldur's Gate 3", platform:'Steam', region:'Global',
       genre:'RPG', tags:['Turn-Based','Story Rich','Co-op'],
       price:47.99, mrp:59.99, rating:4.9, ratings:'712,558', release:'3 Aug, 2023',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:2639, mrp:3299},
+        {id:'latam', label:'LATAM', cur:'$', price:31.99, mrp:39.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:47.99, mrp:59.99}
+      ],
       dev:'Larian Studios', pub:'Larian Studios',
       about:'Party-based RPG set in the Forgotten Realms. Build a group of companions and make choices that shape both their arcs and the ending — solo or in co-op.',
       redeem:'steam',
@@ -5276,6 +5469,11 @@
     { id:'stardew', appid:413150, title:'Stardew Valley', platform:'Steam', region:'Global',
       genre:'Simulation', tags:['Farming','Indie','Relaxing'],
       price:9.75, mrp:13.99, rating:4.9, ratings:'227,331', release:'26 Feb, 2016',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:345, mrp:494},
+        {id:'latam', label:'LATAM', cur:'$', price:6.99, mrp:9.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:9.75, mrp:13.99}
+      ],
       dev:'ConcernedApe', pub:'ConcernedApe',
       about:"You inherit your grandfather's old farm. Grow crops, fish, mine and build relationships with the town, over as many seasons as you like.",
       redeem:'steam',
@@ -5298,6 +5496,11 @@
     { id:'sekiro', appid:814380, title:'Sekiro: Shadows Die Twice', platform:'Steam', region:'Global',
       genre:'Action', tags:['Souls-like','Ninja','Difficult'],
       price:32.99, mrp:59.99, rating:4.8, ratings:'148,902', release:'21 Mar, 2019',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:2089, mrp:3799},
+        {id:'latam', label:'LATAM', cur:'$', price:24.74, mrp:44.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:32.99, mrp:59.99}
+      ],
       dev:'FromSoftware, Inc.', pub:'Activision',
       about:'Third-person action game from FromSoftware. Play a one-armed shinobi bound to a young lord, mastering stealth, vertical traversal and precise sword combat.',
       redeem:'steam',
@@ -5320,6 +5523,11 @@
     { id:'hades2', appid:1145350, title:'Hades II', platform:'Steam', region:'Global',
       genre:'Roguelike', tags:['Action','Indie','Roguelike'],
       price:28.99, mrp:null, rating:4.7, ratings:'42,118', release:'25 Sep, 2025',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:1750},
+        {id:'latam', label:'LATAM', cur:'$', price:22.49},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:28.99}
+      ],
       dev:'Supergiant Games', pub:'Supergiant Games',
       about:'Roguelike dungeon crawler and sequel to Hades. Battle through the Underworld and beyond using dark sorcery to take on the Titan of Time.',
       redeem:'steam',
@@ -5342,6 +5550,11 @@
     { id:'celeste', appid:504230, title:'Celeste', platform:'Steam', region:'Global',
       genre:'Platformer', tags:['Indie','Difficult','Story Rich'],
       price:4.99, mrp:19.99, rating:4.9, ratings:'38,760', release:'25 Jan, 2018',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:141, mrp:565},
+        {id:'latam', label:'LATAM', cur:'$', price:3.74, mrp:14.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:4.99, mrp:19.99}
+      ],
       dev:'Maddy Makes Games Inc.', pub:'Maddy Makes Games Inc.',
       about:"Tight, hand-crafted platformer. Help Madeline climb Celeste Mountain across hundreds of challenges, with a soundtrack of over 20 original songs.",
       redeem:'steam',
@@ -5365,6 +5578,11 @@
     { id:'silksong', appid:1030300, title:'Hollow Knight: Silksong', platform:'Steam', region:'Global',
       genre:'Metroidvania', tags:['Indie','Difficult','Atmospheric'],
       price:19.50, mrp:null, rating:4.8, ratings:'29,540', release:'4 Sep, 2025',
+      regions:[
+        {id:'in', label:'India', cur:'₹', price:1100},
+        {id:'latam', label:'LATAM', cur:'$', price:14.99},
+        {id:'row', label:'UK / US / Europe', cur:'€', price:19.50}
+      ],
       dev:'Team Cherry', pub:'Team Cherry',
       about:'Metroidvania sequel to Hollow Knight. Play Hornet, exploring a haunted, silk-bound kingdom across a large, connected map full of new enemies.',
       redeem:'steam',
@@ -5377,32 +5595,102 @@
         // exercises the "portrait on blurred self" fallback tier on the PDP.
         poster: steamCdn(1030300,'library_600x900.jpg')
       }
+    },
+    { id:'detained', appid:1394650, title:'Detained: Too Good for School', platform:'Steam', region:'Global',
+      comingSoon:true,
+      genre:'Action RPG', tags:['Action','RPG','Adventure'],
+      release:'Coming 2026', dev:'O.T.K Games', pub:'Thermite Games',
+      about:'A 2D action RPG delinquent-schoolgirl simulator. Take control of a schoolgirl freshly released after six months behind bars — attend classes, fight gangsters and work part-time jobs across the city, causing mischief however you choose.',
+      redeem:'steam',
+      sysreq:{
+        min:{os:'Windows 10 64-bit', cpu:'3.0 GHz or better', ram:'4 GB', gpu:'GTX 760 / AMD R9 270X', storage:'2.5 GB'},
+        rec:{os:'Windows 10 64-bit', cpu:'3.0 GHz or better', ram:'8 GB', gpu:'GTX 960 / AMD R9 380', storage:'2.5 GB'}
+      },
+      media:{
+        trailer:'https://cdn.akamai.steamstatic.com/steam/apps/257021924/movie480.mp4',
+        trailerPoster: steamCdn(1394650,'library_hero.jpg'),
+        screens:[
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/7469985a5169624c129dd074f8233863ed577c8f/ss_7469985a5169624c129dd074f8233863ed577c8f.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/97d30ced3ad916f434a72500608b4cd43cdb8e51/ss_97d30ced3ad916f434a72500608b4cd43cdb8e51.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/6bc1d6a734e82f6b01a8ae607d3c33464c997c7c/ss_6bc1d6a734e82f6b01a8ae607d3c33464c997c7c.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/5df99732697d8de8e0e55e20b597a70290e41ca2/ss_5df99732697d8de8e0e55e20b597a70290e41ca2.1920x1080.jpg?t=1785207496',
+          'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1394650/96c1113dcac118f95ec59bb40450ecbe63f666b2/ss_96c1113dcac118f95ec59bb40450ecbe63f666b2.1920x1080.jpg?t=1785207496'
+        ],
+        hero: steamCdn(1394650,'library_hero.jpg'),
+        poster: steamCdn(1394650,'library_600x900.jpg')
+      }
     }
   ];
 
   function gamesById(id){ return DIGITAL_GAMES.filter(function(g){ return g.id===id; })[0]; }
-  function gamePct(g){ return g.mrp ? Math.round((1 - g.price/g.mrp)*100) : null; }
+
+  /* ---- shared "GreenManGaming style" platform strip + steam glyph (single path, currentColor) ---- */
+  var STEAM_SVG_PATH = 'M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z';
+  function steamGlyph(size){ return '<svg viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="currentColor"><path d="'+STEAM_SVG_PATH+'"/></svg>'; }
+  function gamePlatStrip(){
+    return '<div class="gp-platstrip">'+steamGlyph(12)+'<span class="pw">STEAM</span><span class="pc-lbl">PC</span></div>';
+  }
+  function gameHeaderImg(g){ return (g.media && g.media.header) || steamCdn(g.appid,'header.jpg'); }
+  function gameCapsuleImg(g){ return (g.media && g.media.capsule) || steamCdn(g.appid,'capsule_616x353.jpg'); }
+
+  /* ---- price formatting: region-aware. ₹ shows no decimals, everything else shows 2dp ---- */
+  function fmtGamePrice(cur, val){ return cur + (cur==='₹' ? Math.round(val) : val.toFixed(2)); }
+  /* nav region → game price zone. Everything without dedicated pricing buys at row (rest of world). */
+  function gameZoneOf(country){
+    if(country==='India') return 'in';
+    if(country==='Brazil' || country==='Mexico') return 'latam';
+    return 'row';
+  }
+  function gameRegionIdxFor(g){
+    if(!g.regions) return 0;
+    var zone = gameZoneOf(selected);
+    for(var i=0;i<g.regions.length;i++){ if(g.regions[i].id===zone) return i; }
+    for(var j=0;j<g.regions.length;j++){ if(g.regions[j].id==='row') return j; }
+    return 0;
+  }
+  /* card price follows the nav region selector */
+  function gameCardPrice(g){
+    if(g.comingSoon || g.wishlistOnly) return null;
+    if(g.regions){ var r = g.regions[gameRegionIdxFor(g)] || g.regions[0]; return {cur:r.cur, price:r.price}; }
+    return {cur:g.cur||'€', price:g.price};
+  }
+  /* live PDP price: gpRegionIdx is derived from the nav region on open and on region change.
+     Steam TOS: keys can sell below the Steam store price but must never be MARKETED as such —
+     so digital games render a single clean price. No strike-through MRP, no -% chip, no save line. */
+  function gpDisplayPrice(g){
+    if(g.regions){
+      var r = g.regions[gpRegionIdx] || g.regions[0];
+      return {cur:r.cur, price:r.price, label:r.label};
+    }
+    return {cur:g.cur||'€', price:g.price, label:g.region};
+  }
   function gamePriceRow(g){
-    var pct = gamePct(g);
-    return (pct ? '<span class="lime-chip">-'+pct+'%</span>' : '')+
-      (g.mrp ? '<span class="mp-mrp"><s>€'+g.mrp.toFixed(2)+'</s></span>' : '')+
-      '<span class="mp-now">€'+g.price.toFixed(2)+'</span>';
+    var d = gpDisplayPrice(g);
+    var r = g.regions ? (g.regions[gpRegionIdx] || g.regions[0]) : g;
+    var html = '<span class="mp-now">'+fmtGamePrice(d.cur,d.price)+'</span>';
+    if(r.mrp){
+      var pct = Math.round((1 - d.price/r.mrp)*100);
+      html += '<span class="gp-was"><span class="mp-mrp"><s>'+fmtGamePrice(d.cur,r.mrp)+'</s></span>'+
+        '<span class="gp-save">&minus;'+pct+'%</span></span>';
+    }
+    return html;
   }
 
   /* ---- home shelf (4 cards) ---- */
-  var GAMES_SHELF_IDS = ['elden-ring','bg3','stardew','sekiro'];
+  var GAMES_SHELF_IDS = ['detained','elden-ring','bg3','stardew'];
   function gameShelfCard(g){
-    var pct = gamePct(g);
-    return '<div class="g-card liftcard" data-gid="'+g.id+'" role="button" tabindex="0" aria-label="'+g.title+'">'+
+    var cp = gameCardPrice(g);
+    return '<div class="g-card" data-gid="'+g.id+'" role="button" tabindex="0" aria-label="'+g.title+'">'+
       '<div class="g-art">'+
-        '<img src="'+steamCdn(g.appid,'header.jpg')+'" alt="" loading="lazy">'+
-        '<img class="alt" src="'+steamCdn(g.appid,'capsule_616x353.jpg')+'" alt="" loading="lazy">'+
-        '<span class="plat-pill g-plat">'+g.platform+'</span>'+
-        (pct ? '<span class="lime-chip sm g-chip">-'+pct+'%</span>' : '')+
+        '<img src="'+gameHeaderImg(g)+'" alt="" loading="lazy">'+
+        (g.comingSoon ? '<span class="soon-tag g-chip">Coming soon</span>' : '')+
+        gamePlatStrip()+
       '</div>'+
       '<div class="g-body">'+
         '<div class="g-title">'+g.title+'</div>'+
-        '<div class="g-price-row">'+(g.mrp?'<span class="px-strike tabular">€'+g.mrp.toFixed(2)+'</span>':'')+'<span class="px-now tabular">€'+g.price.toFixed(2)+'</span></div>'+
+        (cp
+          ? '<div class="g-price-row"><span class="px-now tabular">'+fmtGamePrice(cp.cur,cp.price)+'</span></div>'
+          : '<div class="g-price-row p-soon">'+g.release+'</div>')+
       '</div>'+
     '</div>';
   }
@@ -5414,14 +5702,14 @@
   }
   var gamesShelfEl = document.getElementById('gamesShelf');
   if(gamesShelfEl){
-    gamesShelfEl.innerHTML = GAMES_SHELF_IDS.map(function(id){ return gameShelfCard(gamesById(id)); }).join('');
+    renderGamesShelf();
     gamesShelfEl.addEventListener('click', handleGameCardActivate);
     gamesShelfEl.addEventListener('keydown', handleGameCardActivate);
   }
 
   /* ---- home marquee (Cyberpunk 2077) ---- */
   var gameMarqueeEl = document.getElementById('gameMarquee');
-  if(gameMarqueeEl){ gameMarqueeEl.addEventListener('click', function(){ openGamePDP('cyberpunk'); }); }
+  if(gameMarqueeEl){ gameMarqueeEl.addEventListener('click', function(){ openGamePDP('alley'); }); }
 
   /* ---- reduced-motion gate for game video elements ---- */
   var gamesReducedMotion = false;
@@ -5469,10 +5757,12 @@
   if(gamesMoreBtn) gamesMoreBtn.addEventListener('click', function(){ renderGamesBrowse(); goScreen('gamesbrowse'); });
 
   /* ================= GAME PDP ================= */
-  var gpCur = null, gpItems = [], gpStageIdx = 0, gpMuted = true;
+  var gpCur = null, gpItems = [], gpStageIdx = 0, gpMuted = true, gpRegionIdx = 0;
 
   function gpGalleryItems(g){
     var items = [];
+    var cover = g.media.cover || g.media.hero;   // key art leads the gallery
+    if(cover) items.push({type:'image', src:cover});
     if(g.media.trailer) items.push({type:'video', src:g.media.trailer, poster:g.media.trailerPoster||g.media.hero||g.media.poster});
     (g.media.screens||[]).forEach(function(s){ items.push({type:'image', src:s}); });
     return items;
@@ -5588,13 +5878,145 @@
 
   function gpSysreqRows(s){
     return [['os','OS'],['cpu','CPU'],['ram','RAM'],['gpu','GPU'],['storage','Storage']].map(function(r){
-      return '<div class="gp-sysreq-row"><span class="k">'+r[1]+'</span><span class="v">'+s[r[0]]+'</span></div>';
+      return '<div class="gp-sysreq-row"><span class="k">'+r[1]+'</span><span class="v">'+(s[r[0]]||'Not specified')+'</span></div>';
     }).join('');
+  }
+
+  /* ---- notify-me (unreleased titles): local, per-game, never touches the sign-in/checkout gate ---- */
+  var GAME_NOTIFY_PREFIX = 'horcus_notify_';
+  function gameNotifyState(id){ try{ return localStorage.getItem(GAME_NOTIFY_PREFIX+id)==='1'; }catch(e){ return false; } }
+  function setGameNotify(id){ try{ localStorage.setItem(GAME_NOTIFY_PREFIX+id,'1'); }catch(e){} }
+
+  function gpRenderPills(g){
+    var regionLabel = g.regions ? g.regions[gpRegionIdx].label : g.region;
+    document.getElementById('gpPills').innerHTML =
+      '<span class="plat-pill steam-x">'+steamGlyph(12)+'Steam &middot; PC</span>'+
+      '<span class="plat-pill">'+regionLabel+'</span>'+
+      (g.wishlistOnly ? '<span class="plat-pill pp-soon">Coming soon to this store</span>' : '<span class="plat-pill pp-fast">Instant delivery</span>');
+  }
+
+  function gpRenderRating(g){
+    var el = document.getElementById('gpRateRow');
+    if(g.comingSoon){
+      el.innerHTML = '';
+      el.style.display = 'none';
+    } else if(g.rating){
+      el.style.display = '';
+      el.innerHTML = '<b>'+g.rating.toFixed(1)+'</b><span class="st">&#9733;</span><span class="cnt">'+g.ratings+' ratings</span>';
+    } else {
+      el.style.display = '';
+      el.innerHTML = '<span class="plat-pill" style="background:rgba(var(--brand-rgb),.15); border-color:rgba(var(--brand-rgb),.4); color:var(--brand-2);">New release</span>';
+    }
+  }
+
+  function gpRenderPriceBlock(g){
+    var activateTxt = document.getElementById('gpRegionTxt');
+    if(g.comingSoon){
+      document.getElementById('gpPriceRow').innerHTML = '<span class="mp-now">'+g.release+'</span>';
+      document.getElementById('gpUnder').innerHTML = '<div class="l1"><span class="tx">We\'ll email you the moment it unlocks.</span></div>';
+      document.getElementById('gpTrust').style.display = 'none';
+      document.getElementById('gpOffers').style.display = 'none';
+    } else if(g.wishlistOnly){
+      document.getElementById('gpPriceRow').innerHTML = g.regions
+        ? gamePriceRow(g)
+        : '<span class="mp-now" style="font-size:22px;">Not on sale here yet</span>';
+      document.getElementById('gpUnder').innerHTML = '<div class="l1"><span class="tx">'+
+        (g.regions ? 'Expected launch price. Not on sale here yet: wishlist it and we\'ll email you the moment keys land.'
+                   : 'Add it to your wishlist and we\'ll email you the moment keys land.')+'</span></div>';
+      document.getElementById('gpTrust').style.display = 'none';
+      document.getElementById('gpOffers').style.display = 'none';
+    } else {
+      document.getElementById('gpTrust').style.display = '';
+      document.getElementById('gpOffers').style.display = '';
+      document.getElementById('gpPriceRow').innerHTML = gamePriceRow(g);
+      document.getElementById('gpUnder').innerHTML = '<div class="l1"><span class="tx">Inclusive of all taxes</span></div>';
+      activateTxt.textContent = g.regions
+        ? ('Activates in '+g.regions[gpRegionIdx].label)
+        : ('Activates worldwide, '+g.region);
+      document.getElementById('gpSteamOnly').innerHTML =
+        steamGlyph(18)+'<span>PC only. Runs exclusively through Steam.</span>';
+      document.getElementById('gpTrustSourceTxt').textContent = g.direct
+        ? 'Key supplied directly by the publisher'
+        : 'Official key, sourced from authorized distribution';
+    }
+  }
+
+  function gpRenderCta(g){
+    var buy = document.getElementById('gpBuy'), bar = document.getElementById('gpBarBuy');
+    var wish = document.getElementById('gpWish');
+    if(g.comingSoon){
+      var notified = gameNotifyState(g.id);
+      var label = notified ? '&#10003; We’ll email you at launch' : 'Notify me';
+      buy.style.display = '';
+      buy.className = 'btn outline'+(notified?' confirmed':'');
+      buy.innerHTML = label;
+      bar.className = 'btn outline'+(notified?' confirmed':'');
+      bar.innerHTML = label;
+      wish.style.display = 'none';
+    } else if(g.wishlistOnly){
+      /* not purchasable here yet: the wishlist button IS the CTA — full width, with text */
+      buy.style.display = 'none';
+      wish.style.display = '';
+      bar.className = 'btn outline';
+      bar.innerHTML = gameWishState(g.id) ? heartSvg(true)+' Added to wishlist' : heartSvg(false)+' Add to wishlist';
+      gpRenderWish(g);
+    } else {
+      /* price rides in the CTA, same pattern as the gift-card PDP's "Buy now · €9.49" */
+      var d = gpDisplayPrice(g);
+      buy.style.display = '';
+      buy.className = 'btn';
+      buy.innerHTML = 'Buy now &middot; '+fmtGamePrice(d.cur, d.price);
+      bar.className = 'btn';
+      bar.innerHTML = 'Buy now <span aria-hidden="true">&#8594;</span>';
+      wish.style.display = '';
+      gpRenderWish(g);
+    }
+  }
+
+  /* ---- wishlist: local, per-game. Icon button beside Buy now; full-width labelled CTA when the game isn't sold yet ---- */
+  var GAME_WISH_PREFIX = 'horcus_wish_';
+  function gameWishState(id){ try{ return localStorage.getItem(GAME_WISH_PREFIX+id)==='1'; }catch(e){ return false; } }
+  function heartSvg(fill){
+    return '<svg viewBox="0 0 24 24" width="17" height="17" fill="'+(fill?'currentColor':'none')+'" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/></svg>';
+  }
+  function gpRenderWish(g){
+    var wish = document.getElementById('gpWish');
+    var on = gameWishState(g.id);
+    if(g.wishlistOnly){
+      wish.className = 'btn outline gp-wish-full';
+      wish.innerHTML = heartSvg(on)+'<span>'+(on ? 'Added to wishlist' : 'Add to wishlist')+'</span>';
+      wish.removeAttribute('title');
+    } else {
+      wish.className = 'btn outline gp-wish-ic';
+      wish.innerHTML = heartSvg(on);
+      wish.title = on ? 'Remove from wishlist' : 'Add to wishlist';
+    }
+    wish.setAttribute('aria-label', on ? 'Remove from wishlist' : 'Add to wishlist');
+  }
+  document.getElementById('gpWish').addEventListener('click', function(){
+    if(!gpCur) return;
+    var on = gameWishState(gpCur.id);
+    try{ localStorage.setItem(GAME_WISH_PREFIX+gpCur.id, on?'0':'1'); }catch(e){}
+    gpRenderCta(gpCur);   // refreshes the button and, for wishlist-only games, the sticky bar
+    toast(on
+      ? 'Removed from wishlist'
+      : (gpCur.wishlistOnly
+        ? 'We\'ll email you when it\'s available to purchase'
+        : 'We\'ll email you offers and promotions on this game'));
+  });
+
+  function gpUpdateBar(g){
+    document.getElementById('gpBarName').textContent = g.title;
+    document.getElementById('gpBarNow').textContent = g.comingSoon ? g.release
+      : (g.wishlistOnly && !g.regions) ? 'Coming soon here'
+      : fmtGamePrice(gpDisplayPrice(g).cur, gpDisplayPrice(g).price);
+    document.getElementById('gpBarThumb').innerHTML = '<img src="'+gameHeaderImg(g)+'" alt="">';
   }
 
   function openGamePDP(id){
     var g = gamesById(id); if(!g) return;
     gpCur = g;
+    gpRegionIdx = gameRegionIdxFor(g);
     gpItems = gpGalleryItems(g);
     gpStageIdx = 0;
     gpMuted = true;
@@ -5602,39 +6024,44 @@
 
     document.getElementById('gpCrumb').textContent = g.title;
     document.getElementById('gpTitle').textContent = g.title;
-    document.getElementById('gpPills').innerHTML =
-      '<span class="plat-pill">'+g.platform+'</span>'+
-      '<span class="plat-pill">'+g.region+'</span>'+
-      '<span class="plat-pill">&#9889; Instant delivery</span>';
-    document.getElementById('gpRating').textContent = g.rating.toFixed(1);
-    document.getElementById('gpRatingCount').textContent = g.ratings+' ratings';
-    document.getElementById('gpPriceRow').innerHTML = gamePriceRow(g);
-    document.getElementById('gpUnder').innerHTML = g.mrp
-      ? '<div class="l1"><span class="sv">You save €'+(g.mrp-g.price).toFixed(2)+'</span><span class="dot">&middot;</span><span class="tx">Inclusive of all taxes</span></div>'+
-        '<div class="gp-ends">Sale ends 8 Aug</div>'
-      : '<div class="l1"><span class="tx">Inclusive of all taxes</span></div>';
-    document.getElementById('gpRegionTxt').textContent = g.region;
-    document.getElementById('gpAbout').textContent = g.about;
-    var metaRows = [['Release',g.release],['Developer',g.dev],['Publisher',g.pub],['Platform',g.platform],['Region',g.region]];
-    document.getElementById('gpMeta').innerHTML = metaRows.map(function(r){
-      return '<div class="mp-spec"><div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div></div>';
-    }).join('');
+    gpRenderPills(g);
+    document.getElementById('gpRateRow').style.display = 'none';   // ratings pulled off the game PDP
+    gpRenderPriceBlock(g);
+    gpRenderCta(g);
     if(g.sysreq){
       document.getElementById('gpSysreqMin').innerHTML = gpSysreqRows(g.sysreq.min);
       document.getElementById('gpSysreqRec').innerHTML = gpSysreqRows(g.sysreq.rec);
     }
-    document.querySelectorAll('#gamepdp .mp-acc').forEach(function(a){ a.classList.remove('open'); });
-    var similarGames = DIGITAL_GAMES.filter(function(x){ return x.id!==g.id; })
-      .sort(function(a,b){ return (b.genre===g.genre?1:0)-(a.genre===g.genre?1:0); }).slice(0,4);
-    document.getElementById('gpSimilar').innerHTML = similarGames.map(gameShelfCard).join('');
+    gpRenderSimilar(g);
 
     // sticky buy bar
-    document.getElementById('gpBarName').textContent = g.title;
-    document.getElementById('gpBarNow').textContent = '€'+g.price.toFixed(2);
-    document.getElementById('gpBarThumb').innerHTML = '<img src="'+steamCdn(g.appid,'header.jpg')+'" alt="">';
+    gpUpdateBar(g);
     document.getElementById('gpBar').classList.remove('show');
 
     goScreen('gamepdp');
+  }
+  /* nav region changed: reprice game cards everywhere and any open game PDP */
+  function renderGamesShelf(){
+    if(gamesShelfEl) gamesShelfEl.innerHTML = GAMES_SHELF_IDS.map(function(id){ return gameShelfCard(gamesById(id)); }).join('');
+    var mk = document.getElementById('mkPrice');
+    if(mk){ var mp = gameCardPrice(gamesById('alley')); if(mp) mk.textContent = fmtGamePrice(mp.cur, mp.price); }
+  }
+  function gpRenderSimilar(g){
+    var similarGames = DIGITAL_GAMES.filter(function(x){ return x.id!==g.id; })
+      .sort(function(a,b){ return (b.genre===g.genre?1:0)-(a.genre===g.genre?1:0); }).slice(0,4);
+    document.getElementById('gpSimilar').innerHTML = similarGames.map(gameShelfCard).join('');
+  }
+  function refreshGamesForRegion(){
+    renderGamesShelf();
+    renderGamesBrowse();
+    if(gpCur && !gpCur.comingSoon){
+      gpRegionIdx = gameRegionIdxFor(gpCur);
+      gpRenderPills(gpCur);
+      gpRenderPriceBlock(gpCur);
+      gpRenderCta(gpCur);
+      gpUpdateBar(gpCur);
+      gpRenderSimilar(gpCur);
+    }
   }
   document.getElementById('gpSimilar').addEventListener('click', handleGameCardActivate);
   document.getElementById('gpSimilar').addEventListener('keydown', handleGameCardActivate);
@@ -5643,18 +6070,17 @@
     goScreen('home');
     setTimeout(function(){ var s=document.getElementById('gamesSection'); if(s) s.scrollIntoView({behavior:'smooth'}); }, 350);
   });
-  document.getElementById('gpGiftCardLink').addEventListener('click', function(){
-    goScreen('home');
-    setTimeout(function(){ var s=document.getElementById('catalogueSection'); if(s) s.scrollIntoView({behavior:'smooth'}); }, 350);
-  });
 
-  /* collapsible info blocks (system requirements) */
+  /* collapsible info blocks — system requirements is mp-acc--fixed (always open), skip it */
   document.querySelectorAll('#gamepdp .mp-acc-h').forEach(function(h){
+    if(h.parentElement.classList.contains('mp-acc--fixed')) return;
     h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
   });
 
   /* sticky buy bar: reveal once the buy box CTA scrolls away */
-  document.getElementById('gpBarBuy').addEventListener('click', function(){ document.getElementById('gpBuy').click(); });
+  document.getElementById('gpBarBuy').addEventListener('click', function(){
+    document.getElementById(gpCur && gpCur.wishlistOnly ? 'gpWish' : 'gpBuy').click();
+  });
   if('IntersectionObserver' in window){
     var gpBarEl = document.getElementById('gpBar');
     var gpIo = new IntersectionObserver(function(entries){
@@ -5670,18 +6096,25 @@
   var gcoCurrent = null;
   function openGameCheckoutPopup(g){
     gcoCurrent = g;
+    var d = gpDisplayPrice(g);
+    var amt = fmtGamePrice(d.cur, d.price);
     document.getElementById('coUser').textContent = document.getElementById('userName').textContent;
     document.getElementById('coTitle').textContent = g.title;
-    document.getElementById('coSku').textContent = g.platform+' · '+g.region+' key';
+    document.getElementById('coSku').textContent = g.platform+' · '+d.label+' key';
     document.getElementById('coQtyLine').textContent = 'Digital key × 1';
-    document.getElementById('coSub').textContent = '€'+g.price.toFixed(2);
-    document.getElementById('coTotal').textContent = '€'+g.price.toFixed(2);
-    document.getElementById('coPay').textContent = 'Pay €'+g.price.toFixed(2);
+    document.getElementById('coSub').textContent = amt;
+    document.getElementById('coTotal').textContent = amt;
+    document.getElementById('coPay').textContent = 'Pay '+amt;
     document.getElementById('coWarn').style.display = 'none';
     coModal.classList.add('open');
   }
   document.getElementById('gpBuy').addEventListener('click', function(){
     if(!gpCur) return;
+    if(gpCur.comingSoon){
+      if(!gameNotifyState(gpCur.id)) setGameNotify(gpCur.id);
+      gpRenderCta(gpCur);
+      return;   // notify-me never goes through the sign-in/checkout gate
+    }
     if(!isLoggedIn){
       pendingBuy = true;
       pendingGameBuy = gpCur;
@@ -5690,23 +6123,36 @@
     }
     openGameCheckoutPopup(gpCur);
   });
-  document.getElementById('marqueeGetKey').addEventListener('click', function(e){ e.stopPropagation(); openGamePDP('cyberpunk'); });
+  document.getElementById('marqueeGetKey').addEventListener('click', function(e){ e.stopPropagation(); openGamePDP('alley'); });
+
+  /* deep-link: #game/<id> opens that game's PDP on load and on hash change */
+  function gpFollowHash(){
+    var m = location.hash.match(/^#game\/([\w-]+)$/);
+    if(m) openGamePDP(m[1]);
+  }
+  window.addEventListener('hashchange', gpFollowHash);
+  gpFollowHash();
 
   /* ================= GAMES BROWSE (poster wall) ================= */
   var gamesFilter = 'All';
   var gamesSearch = '';
   function gamePosterCard(g){
-    var pct = gamePct(g);
+    var cp = gameCardPrice(g);
     return '<div class="p-card liftcard" data-gid="'+g.id+'" role="button" tabindex="0" aria-label="'+g.title+'">'+
       '<div class="p-art">'+
-        '<img src="'+g.media.poster+'" alt="'+g.title+'" loading="lazy">'+
-        (pct ? '<span class="lime-chip sm p-chip">-'+pct+'%</span>' : '')+
-        '<div class="p-plats"><span class="plat-pill">'+g.platform+'</span></div>'+
+        (g.posterLandscape
+          ? '<img class="blur-fill" src="'+g.media.poster+'" alt="" aria-hidden="true" loading="lazy">'+
+            '<img class="p-art-contain" src="'+g.media.poster+'" alt="'+g.title+'" loading="lazy">'
+          : '<img src="'+g.media.poster+'" alt="'+g.title+'" loading="lazy">')+
+        (g.comingSoon ? '<span class="soon-tag p-chip">Coming soon</span>' : '')+
+        gamePlatStrip()+
       '</div>'+
       '<div class="p-body">'+
         '<div class="p-cat">'+g.genre+'</div>'+
         '<div class="p-title">'+g.title+'</div>'+
-        '<div class="p-price-row">'+(g.mrp?'<span class="px-strike tabular">€'+g.mrp.toFixed(2)+'</span>':'')+'<span class="px-now tabular">€'+g.price.toFixed(2)+'</span></div>'+
+        (cp
+          ? '<div class="p-price-row"><span class="px-now tabular">'+fmtGamePrice(cp.cur,cp.price)+'</span></div>'
+          : '<div class="p-price-row p-soon">'+g.release+'</div>')+
       '</div>'+
     '</div>';
   }
