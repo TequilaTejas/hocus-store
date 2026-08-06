@@ -1732,6 +1732,12 @@
   .gp-buybox{grid-area:buybox; min-width:0;}
   .gp-redeem{grid-area:redeem; min-width:0;}
   .gp-offercol{grid-area:offers; min-width:0; align-self:end;}
+  /* wishlist-only PDPs have no offers card, so redeem spans the full width, steps 4-across */
+  .gp-wrap.wl-only{grid-template-areas:"gallery buybox" "redeem redeem";}
+  .gp-wrap.wl-only .gp-offercol{display:none;}
+  #gamepdp .gp-wrap.wl-only .steps{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:1000px){#gamepdp .gp-wrap.wl-only .steps{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:560px){#gamepdp .gp-wrap.wl-only .steps{grid-template-columns:1fr;}}
   @media(max-width:900px){.gp-wrap{grid-template-columns:1fr; grid-template-areas:"gallery" "buybox" "offers" "redeem";}}
   .gp-stage{position:relative; aspect-ratio:16/9; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#000;}
   .gp-stage:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
@@ -6022,6 +6028,7 @@
     gpMuted = true;
     gpRenderStage(); gpRenderStrip();
 
+    document.querySelector('#gamepdp .gp-wrap').classList.toggle('wl-only', !!g.wishlistOnly);
     document.getElementById('gpCrumb').textContent = g.title;
     document.getElementById('gpTitle').textContent = g.title;
     gpRenderPills(g);
