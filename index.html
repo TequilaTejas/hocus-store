@@ -1672,6 +1672,8 @@
   .mk-fade>i:nth-child(4){backdrop-filter:blur(20px); -webkit-mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);  mask-image:linear-gradient(0deg,#000 0%,#000 8%,transparent 24%);}
   .mk-fade::after{content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.5) 38%, transparent 100%);}
   .mk-content{position:absolute; left:32px; right:32px; bottom:30px; z-index:2; display:flex; align-items:flex-end; justify-content:space-between; gap:24px;}
+  .marquee .mk-logo{opacity:0; transition:opacity .9s var(--ease-in-out);}
+  .marquee.playing .mk-logo{opacity:1;}
   .mk-logo{max-width:760px; max-height:280px; width:64%; object-fit:contain; object-position:left bottom; margin-bottom:0; filter:drop-shadow(0 6px 24px rgba(0,0,0,.7));}
   .mk-title{font-family:var(--font-display); font-size:clamp(40px,6vw,84px); font-weight:800; letter-spacing:-.03em; line-height:1; color:#fff; text-shadow:0 6px 30px rgba(0,0,0,.8);}
   .mk-right{display:flex; flex-direction:column; align-items:flex-end; gap:14px; flex-shrink:0;}
@@ -2343,11 +2345,11 @@
 
       <!-- marquee: featured game (The Alley, the store's first live key) -->
       <div class="marquee kbtn" id="gameMarquee" tabindex="0" role="button" aria-label="The Alley, view details">
-        <video muted loop playsinline preload="metadata" data-content-ratio="2.44" poster="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d0b358c9942ec517fc30bca87666590d43d4a6cf/ss_d0b358c9942ec517fc30bca87666590d43d4a6cf.1920x1080.jpg?t=1785292935">
+        <video muted loop playsinline preload="metadata" data-content-ratio="2.44" poster="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/fd0df0b0caa97d966a9c8f76b9de8a1370975ecd/capsule_616x353.jpg">
           <source src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/7f78bad2f28d53d075296999c123e118.webm?t=1785292935" type="video/webm">
           <source src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/extras/7f78bad2f28d53d075296999c123e118.mp4?t=1785292935" type="video/mp4">
         </video>
-        <img class="mk-poster" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/d0b358c9942ec517fc30bca87666590d43d4a6cf/ss_d0b358c9942ec517fc30bca87666590d43d4a6cf.1920x1080.jpg?t=1785292935" alt="The Alley key art">
+        <img class="mk-poster" src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4181410/fd0df0b0caa97d966a9c8f76b9de8a1370975ecd/capsule_616x353.jpg" alt="The Alley key art">
         <div class="mk-fade" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <div class="mk-content">
           <div class="mk-left">
