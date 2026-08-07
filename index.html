@@ -1619,6 +1619,7 @@
     font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); transition:background-color .15s var(--ease-out);}
   @media(hover:hover){ .mp-acc-h:hover{background:var(--surface2);} }
   .mp-acc-h .mp-acc-hint{font-size:11px; color:var(--mut); font-weight:500; letter-spacing:0; text-transform:none; margin-left:auto;}
+  @media(max-width:700px){ .mp-acc-h .mp-acc-hint{display:none;} }
   .mp-acc-h .car{color:var(--mut); font-size:12px; flex:0 0 auto; transition:transform .2s var(--ease-out);}
   .mp-acc.open .mp-acc-h .car{transform:rotate(180deg);}
   .mp-acc-b{display:none; padding:2px 16px 16px;}
@@ -1683,9 +1684,11 @@
   .mk-price-row .px-now{font-size:27px; font-weight:700;}
   .mk-corner{position:absolute; top:20px; right:20px; z-index:2;}
   @media(max-width:700px){
-    .mk-content{flex-direction:column; align-items:flex-start;}
-    .mk-logo{width:78%;}
-    .mk-right{align-items:flex-start;}
+    .mk-content{left:14px; right:14px; bottom:14px; align-items:flex-end;}
+    .mk-logo{max-width:150px; width:42vw;}
+    .mk-right{gap:8px;}
+    .mk-price-row .px-now{font-size:20px;}
+    .mk-right .btn{padding:9px 16px; font-size:13px;}
   }
 
   /* ---- shelf (home, 4-across) ---- */
