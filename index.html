@@ -1726,19 +1726,12 @@
 
   /* ---- game PDP: two-column ~58/42 buy box; redeem fills the left column under the gallery ---- */
   .gp-wrap{display:grid; grid-template-columns:1.38fr 1fr; gap:0 36px; align-items:start;
-    grid-template-areas:"gallery buybox" "redeem offers";}
+    grid-template-areas:"gallery buybox" "redeem redeem";}
   /* min-width:0 so the non-wrapping thumb strip scrolls instead of blowing the column out */
   .gp-gallery{grid-area:gallery; min-width:0;}
   .gp-buybox{grid-area:buybox; min-width:0;}
   .gp-redeem{grid-area:redeem; min-width:0;}
-  .gp-offercol{grid-area:offers; min-width:0; align-self:end;}
-  /* wishlist-only PDPs have no offers card, so redeem spans the full width, steps 4-across */
-  .gp-wrap.wl-only{grid-template-areas:"gallery buybox" "redeem redeem";}
-  .gp-wrap.wl-only .gp-offercol{display:none;}
-  #gamepdp .gp-wrap.wl-only .steps{grid-template-columns:repeat(4,1fr);}
-  @media(max-width:1000px){#gamepdp .gp-wrap.wl-only .steps{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:560px){#gamepdp .gp-wrap.wl-only .steps{grid-template-columns:1fr;}}
-  @media(max-width:900px){.gp-wrap{grid-template-columns:1fr; grid-template-areas:"gallery" "buybox" "offers" "redeem";}}
+  @media(max-width:900px){.gp-wrap{grid-template-columns:1fr; grid-template-areas:"gallery" "buybox" "redeem";}}
   .gp-stage{position:relative; aspect-ratio:16/9; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:#000;}
   .gp-stage:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
   .gp-stage img, .gp-stage video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
@@ -1781,6 +1774,9 @@
   .gp-wish-ic{flex:0 0 auto; width:48px; padding:0; display:inline-flex; align-items:center; justify-content:center;}
   .gp-wish-ic svg, .gp-wish-full svg{display:block;}
   .gp-wish-full{flex:1; display:inline-flex; align-items:center; justify-content:center; gap:9px;}
+
+  .gp-desc{color:var(--ink-2); font-size:13px; line-height:1.65; margin:16px 0 0; max-width:52ch;}
+  .gp-desc:empty{display:none;}
 
   /* roomier buy-box rhythm: title → pills → price → CTA breathe more */
   #gamepdp .gp-pills{margin:14px 0 0; gap:8px;}
@@ -1832,7 +1828,8 @@
   .gp-sys-col.rec{background:linear-gradient(180deg, var(--brand-50), rgba(var(--brand-rgb),0.02)); box-shadow:inset 0 0 0 1px rgba(var(--brand-rgb),.28);}
   .gp-sys-col.rec .gp-sysreq-h{color:var(--brand-2);}
   /* open redeem steps: no card chrome, whitespace does the separating */
-  #gamepdp .steps{grid-template-columns:repeat(2,1fr); gap:26px 32px;}
+  #gamepdp .steps{grid-template-columns:repeat(4,1fr); gap:26px 32px;}
+  @media(max-width:1000px){#gamepdp .steps{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:560px){#gamepdp .steps{grid-template-columns:1fr;}}
   #gamepdp .step{display:grid; grid-template-columns:auto 1fr; column-gap:14px; align-items:start; background:transparent; border:none; border-radius:0; padding:0;}
   #gamepdp .step .n{grid-row:span 2;}
@@ -2877,6 +2874,7 @@
         <div class="gp-buybox">
           <div class="mp-name" id="gpTitle">Game title</div>
           <div class="gp-pills" id="gpPills"><!-- filled by JS --></div>
+          <p class="gp-desc" id="gpDesc"><!-- filled by JS --></p>
           <div class="mp-rate-row" id="gpRateRow"><!-- filled by JS --></div>
           <div class="mp-price-row" id="gpPriceRow"><!-- filled by JS --></div>
           <div class="gp-under" id="gpUnder"><!-- filled by JS --></div>
@@ -2885,6 +2883,7 @@
             <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--success);"><polyline points="20 6 9 17 4 12"/></svg><span id="gpRegionTxt">Activates worldwide (Global)</span></div>
             <div class="mp-trust-i" id="gpSteamOnly"></div>
             <div class="mp-trust-i"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6l-8-4z"/><path d="m9 12 2 2 4-4"/></svg><span id="gpTrustSourceTxt">Official key, sourced from authorized distribution</span></div>
+            <div class="mp-trust-i" id="gpOffers"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg><span><b style="color:#fff;">Early-bird offer</b>: order before <b style="color:#fff;">15 Aug</b> and get an extra <b style="color:#fff;">5% off</b></span></div>
           </div>
 
           <div id="gpCtas" style="display:flex; gap:10px;">
@@ -2892,21 +2891,6 @@
             <button class="btn outline" id="gpWish" aria-label="Add to wishlist">&#9825; Wishlist</button>
           </div>
 
-        </div>
-
-        <!-- offers rides in its own grid cell so its bottom pins to the redeem row's bottom -->
-        <div class="gp-offercol">
-          <div class="mp-offers" id="gpOffers">
-            <div class="mp-offers-hd">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg>
-              Available offers
-              <span class="mp-offers-n">1</span>
-            </div>
-            <div class="mp-offer">
-              <span class="mp-offer-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5" fill="currentColor"/></svg></span>
-              <div class="mp-offer-tx"><b>Early-bird offer</b>: order before <b class="hl">15 Aug</b> and get an extra <b class="hl">5% off</b>.</div>
-            </div>
-          </div>
         </div>
 
         <!-- ===== HOW TO REDEEM (left column, under the gallery) ===== -->
@@ -5281,7 +5265,7 @@
         {id:'row', label:'UK / US / Europe', cur:'$', price:8.99, mrp:11.99}
       ],
       release:'23 Jul, 2026', dev:'AIXLAB', pub:'Smilegate · Thermite Games',
-      about:'After class, you step into the familiar alley on your way home, then suddenly find yourself trapped in an endless maze. Search for Aberrations, signs of something beyond reality, and separate them from the eerie but ordinary Deceptions that surround you. Unravel the mystery hidden within the alley, outrun the ghosts that hunt you, and escape with your life.',
+      about:'A first-person psychological horror game. Explore a maze-like alleyway, using your camera to distinguish between supernatural "Aberrations" and deceptive "Deceptions" while escaping the relentless pursuit of a vengeful ghost.',
       langs:'English, Korean (full audio), Japanese, Simplified Chinese, Traditional Chinese, Russian',
       controller:'Full controller support',
       achievements:10,
@@ -5736,7 +5720,7 @@
       } else {
         mk.classList.add('playing');
       }
-    }, 6000);
+    }, 4000);
   })();
 
   /* ---- marquee video: zoom so the letterboxed picture fills the 16:9 frame ---- */
@@ -6028,9 +6012,9 @@
     gpMuted = true;
     gpRenderStage(); gpRenderStrip();
 
-    document.querySelector('#gamepdp .gp-wrap').classList.toggle('wl-only', !!g.wishlistOnly);
     document.getElementById('gpCrumb').textContent = g.title;
     document.getElementById('gpTitle').textContent = g.title;
+    document.getElementById('gpDesc').textContent = g.about || '';
     gpRenderPills(g);
     document.getElementById('gpRateRow').style.display = 'none';   // ratings pulled off the game PDP
     gpRenderPriceBlock(g);
